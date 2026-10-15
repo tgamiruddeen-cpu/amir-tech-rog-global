@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://tgamiruddeen-cpu.github.io/amir-tech-rog-global/sitemap.xml
