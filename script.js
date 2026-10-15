@@ -1,1 +1,32 @@
-(()=>{const btn=document.querySelector('#menu'),nav=document.querySelector('#nav');if(btn&&nav){btn.addEventListener('click',()=>{const open=nav.classList.toggle('open');btn.setAttribute('aria-expanded',String(open));btn.setAttribute('aria-label',open?'Tutup menu':'Buka menu')});nav.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{nav.classList.remove('open');btn.setAttribute('aria-expanded','false')}))}const year=document.querySelector('#year');if(year)year.textContent=new Date().getFullYear();const form=document.querySelector('#quote');if(form)form.addEventListener('submit',e=>{e.preventDefault();if(!form.reportValidity())return;const d=new FormData(form);const msg=['Assalamualaikum AMIR TECH ROG GLOBAL.','Saya ingin bertanya tentang servis aircond kereta.','',`Nama: ${d.get('name')}`,`Model kereta: ${d.get('car')}`,`Masalah/servis: ${d.get('service')}`,d.get('notes')?`Maklumat tambahan: ${d.get('notes')}`:''].filter(Boolean).join('\n');window.open('https://wa.me/60133133519?text='+encodeURIComponent(msg),'_blank','noopener,noreferrer');const s=document.querySelector('#status');if(s)s.textContent='WhatsApp dibuka. Sila semak mesej dan tekan Hantar.'})})();
+(() => {
+  const button = document.getElementById('menuToggle');
+  const nav = document.getElementById('nav');
+  const closeMenu = () => {
+    if (!button || !nav) return;
+    nav.classList.remove('open');
+    button.setAttribute('aria-expanded', 'false');
+    button.setAttribute('aria-label', 'Buka menu');
+    button.firstChild.textContent = '☰ ';
+  };
+  if (button && nav) {
+    button.addEventListener('click', () => {
+      const open = nav.classList.toggle('open');
+      button.setAttribute('aria-expanded', String(open));
+      button.setAttribute('aria-label', open ? 'Tutup menu' : 'Buka menu');
+      button.firstChild.textContent = open ? '✕ ' : '☰ ';
+    });
+    nav.querySelectorAll('a').forEach(a => a.addEventListener('click', closeMenu));
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeMenu(); });
+  }
+  const form = document.getElementById('quote');
+  if (form) form.addEventListener('submit', e => {
+    e.preventDefault();
+    const name = document.getElementById('nama').value.trim();
+    const car = document.getElementById('kereta').value.trim();
+    const issue = document.getElementById('masalah').value;
+    const text = `Assalamualaikum AMIR TECH ROG GLOBAL.\nNama: ${name}\nModel kereta: ${car}\nMasalah: ${issue}\nSaya ingin bertanya harga servis/repair aircond.`;
+    window.location.href = `https://wa.me/60133133519?text=${encodeURIComponent(text)}`;
+  });
+  const year = document.getElementById('year');
+  if (year) year.textContent = String(new Date().getFullYear());
+})();
