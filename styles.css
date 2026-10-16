@@ -30,3 +30,12 @@
 
 /* V6 video workflow gallery */
 .video-upload-btn{display:inline-flex;align-items:center;justify-content:center;margin-top:12px;text-decoration:none}.upload-help{max-width:760px;margin:12px auto 0;color:var(--muted);font-size:.9rem}.video-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;margin-top:32px}.video-card{overflow:hidden;background:linear-gradient(145deg,#15171d,#0f1116);border:1px solid #30333c;border-radius:16px}.video-card video{display:block;width:100%;aspect-ratio:16/9;background:#050608;object-fit:contain}.video-copy{padding:16px 18px 20px}.video-copy span{font-size:.72rem;letter-spacing:.1em;color:var(--gold2);font-weight:700}.video-copy h3{margin:9px 0 6px}.video-copy p{color:var(--muted);margin:0;font-size:.92rem}@media(max-width:720px){.video-grid{grid-template-columns:1fr}.video-copy{padding:14px}}
+
+/* V7 video update password panel */
+.video-admin-panel{margin:18px 0;padding:18px;border:1px solid #8c7748;border-radius:14px;background:#111318;max-width:620px}
+.video-admin-panel[hidden]{display:none!important}
+.video-admin-panel label{display:block;margin-bottom:8px;color:var(--gold2);font-weight:700}
+.video-admin-panel input{display:block;width:100%;box-sizing:border-box;padding:13px 14px;border:1px solid #41434b;border-radius:9px;background:#08090c;color:#fff;margin-bottom:12px}
+.video-admin-panel .btn{cursor:pointer}
+.video-admin-message{margin:10px 0;color:#f0d58b}
+.video-file-list{overflow-wrap:anywhere;font-size:.85rem;color:#b7bbc4}
