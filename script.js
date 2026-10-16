@@ -202,4 +202,35 @@
     const message = `Assalamualaikum AMIR TECH ROG GLOBAL. Saya ingin bertanya tentang aircond kereta.\nNama: ${name}\nModel/tahun kereta: ${car}\nSimptom: ${issue}\nMohon panduan pemeriksaan dan anggaran kos. Saya faham punca sebenar perlu disahkan melalui pemeriksaan.`;
     window.location.href = 'https://wa.me/60133133519?text=' + encodeURIComponent(message);
   });
+
+  // V7: password gate for the convenience upload button.
+  // IMPORTANT: front-end passwords can be read from source and are not real security.
+  const openVideoAdmin = $('openVideoAdmin');
+  const videoAdminPanel = $('videoAdminPanel');
+  const videoAdminPassword = $('videoAdminPassword');
+  const unlockVideoUpload = $('unlockVideoUpload');
+  const videoAdminMessage = $('videoAdminMessage');
+  if (openVideoAdmin && videoAdminPanel) {
+    openVideoAdmin.addEventListener('click', () => {
+      videoAdminPanel.hidden = !videoAdminPanel.hidden;
+      if (!videoAdminPanel.hidden) videoAdminPassword?.focus();
+    });
+  }
+  if (unlockVideoUpload && videoAdminPassword) {
+    unlockVideoUpload.addEventListener('click', () => {
+      // User-selected UI passcode. This is only a convenience gate, not authentication.
+      if (videoAdminPassword.value === 'Amir5037') {
+        if (videoAdminMessage) videoAdminMessage.textContent = 'Kata laluan diterima. Membuka halaman GitHub...';
+        window.open('https://github.com/tgamiruddeen-cpu/amir-tech-rog-global/upload/main/assets', '_blank', 'noopener');
+      } else {
+        if (videoAdminMessage) videoAdminMessage.textContent = 'Kata laluan tidak betul. Cuba semula.';
+        videoAdminPassword.value = '';
+        videoAdminPassword.focus();
+      }
+    });
+    videoAdminPassword.addEventListener('keydown', event => {
+      if (event.key === 'Enter') unlockVideoUpload.click();
+    });
+  }
+
 })();
