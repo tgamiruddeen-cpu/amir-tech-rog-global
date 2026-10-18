@@ -307,6 +307,67 @@ html.motion-user-opt-in .ai-orb,html.motion-user-opt-in .hero .eyebrow:before{an
 @media(max-width:480px){.motion-rail{font-size:.6rem;padding:5px 12px}.motion-rail-btn{padding:5px 8px}.hero:after{width:48%;filter:blur(10px)}}
 @media(prefers-reduced-motion:reduce){.motion-rail:after{animation:none}.motion-rail-dot{animation:none}.hero:after{display:none}}
 
+
+
+/* AI MOTION EXPERIENCE V7 — obvious touch response, light trails and responsive neon highlights */
+:root{--pulse-cyan:#7df0ff;--pulse-blue:#249bff;--pulse-gold:#ffe17a;--tap-ring-size:30px}
+.motion-rail{min-height:39px;background:linear-gradient(100deg,#04121d 0%,#0a334b 34%,#071522 65%,#06253a 100%);background-size:240% 100%;animation:railColorFlow 5.4s linear infinite;box-shadow:0 3px 22px rgba(0,185,255,.13);border-bottom-color:rgba(111,223,255,.35)}
+.motion-rail-copy{position:relative;z-index:2;text-shadow:0 0 14px rgba(100,222,255,.25)}
+.motion-rail-btn{position:relative;z-index:2;box-shadow:0 0 0 1px rgba(130,234,255,.08),0 0 18px rgba(71,192,255,.12);transition:transform .2s ease,box-shadow .2s ease,background .2s ease}
+.motion-rail-btn:active{transform:scale(.94);box-shadow:0 0 0 3px rgba(125,240,255,.18),0 0 28px rgba(125,240,255,.45)}
+.motion-rail:after{height:3px;box-shadow:0 0 16px #8ceeff,0 0 28px rgba(65,184,255,.7);animation:motionRailSweep 2.05s linear infinite}
+.hero{background:radial-gradient(ellipse at 80% 16%,rgba(22,172,222,.38),transparent 40%),radial-gradient(ellipse at 14% 85%,rgba(20,108,178,.22),transparent 36%),linear-gradient(120deg,#051321 0%,#0b3048 38%,#061522 70%,#092c43 100%);background-size:220% 220%;animation:heroAmbient 5.8s ease-in-out infinite alternate;box-shadow:inset 0 0 0 1px rgba(117,223,255,.035)}
+.hero:before{opacity:.42;background-image:linear-gradient(rgba(139,231,255,.13) 1px,transparent 1px),linear-gradient(90deg,rgba(139,231,255,.13) 1px,transparent 1px);background-size:30px 30px;animation:gridDrift 10s linear infinite;mask-image:linear-gradient(to bottom,black,transparent 94%)}
+.hero:after{content:"";position:absolute;z-index:0;pointer-events:none;top:0;bottom:0;left:-52%;width:45%;background:linear-gradient(90deg,transparent,rgba(125,240,255,.06) 24%,rgba(125,240,255,.25) 49%,rgba(255,255,255,.44) 52%,rgba(64,177,255,.15) 70%,transparent);filter:blur(5px);transform:skewX(-17deg);animation:heroScanV7 4.6s cubic-bezier(.42,0,.58,1) infinite}
+.hero-grid,.hero-foot{position:relative;z-index:1}
+.hero h1 em{background-image:linear-gradient(100deg,#79e4ff 0%,#f1fdff 23%,#6bdcff 47%,#bcf5ff 65%,#5acafa 82%,#79e4ff 100%);background-size:300% auto;animation:iceText 3.8s linear infinite;text-shadow:0 0 22px rgba(94,216,255,.14)}
+.art{animation:artFloat 3.4s ease-in-out infinite;border-color:rgba(125,240,255,.62);box-shadow:0 22px 60px rgba(0,0,0,.32),0 0 0 1px rgba(117,223,255,.09) inset,0 0 24px rgba(33,181,255,.12)}
+.art:after{inset:10px;border-color:rgba(158,240,255,.33);box-shadow:inset 0 0 25px rgba(73,186,255,.08);animation:borderBreathe 2.2s ease-in-out infinite}
+.art:before{background:linear-gradient(100deg,transparent 22%,rgba(146,236,255,.06) 35%,rgba(255,255,255,.36) 49%,rgba(89,209,255,.2) 54%,transparent 72%);animation:scanSweep 4.3s ease-in-out infinite}
+.owner-photo img{animation:portraitFloat 3.4s ease-in-out infinite;filter:drop-shadow(0 14px 25px rgba(0,0,0,.25)) drop-shadow(0 0 9px rgba(90,217,255,.1))}
+.art-tag{border-color:rgba(147,239,255,.64);box-shadow:0 0 18px rgba(77,198,255,.15),0 8px 28px rgba(0,0,0,.24)}
+.art-tag.top{animation:tagDrift 3.8s ease-in-out infinite}.art-tag.bottom{animation:tagDrift 4.1s ease-in-out infinite reverse}
+.hero .eyebrow:before,.live-head .eyebrow:before,.heading .eyebrow:before{animation:statusPulse 1.35s ease-out infinite}
+.live-tools{background:radial-gradient(ellipse at 10% 12%,rgba(18,164,222,.31),transparent 42%),radial-gradient(ellipse at 90% 78%,rgba(54,115,255,.14),transparent 37%),linear-gradient(140deg,#061522,#0b2a40 54%,#071725);background-size:150% 150%;animation:diagnosisAmbient 10s ease-in-out infinite alternate}
+.live-tools:before{background:radial-gradient(circle at 84% 22%,rgba(125,240,255,.2),transparent 22%),radial-gradient(circle at 12% 82%,rgba(246,209,107,.11),transparent 23%);animation:glowDrift 8s ease-in-out infinite alternate}
+.live-card{box-shadow:0 13px 38px rgba(0,0,0,.18),inset 0 0 0 1px rgba(127,231,255,.025)}
+.live-card:first-child{animation:cardBreathe 5.7s ease-in-out infinite}
+.ai-status{border-color:rgba(125,240,255,.45);box-shadow:0 0 23px rgba(56,190,255,.12),inset 0 0 18px rgba(48,153,215,.08)}
+.ai-orb{width:10px;height:10px;background:#aaf6ff;box-shadow:0 0 8px rgba(125,240,255,.8);animation:statusPulse 1.15s ease-out infinite}
+.btn.gold,.btn.ai-button,.btn.whatsapp-submit{box-shadow:0 6px 22px rgba(246,209,107,.22)}
+.btn.gold:hover,.btn.ai-button:hover,.btn.whatsapp-submit:hover{box-shadow:0 0 0 1px rgba(255,255,255,.35),0 0 18px rgba(121,224,255,.38),0 12px 29px rgba(5,44,66,.18)}
+.cards article,.pricecard,.package,.steps article,.operation-card,.video-card{position:relative;isolation:isolate;overflow:hidden}
+.cards article:before,.pricecard:before,.package:before,.steps article:before,.operation-card:before,.video-card:before{content:"";position:absolute;z-index:0;pointer-events:none;top:-65%;left:-50%;width:40%;height:230%;opacity:0;background:linear-gradient(90deg,transparent,rgba(111,223,255,.17),rgba(255,255,255,.22),transparent);transform:skewX(-21deg);transition:opacity .24s ease}
+.cards article:hover:before,.pricecard:hover:before,.package:hover:before,.steps article:hover:before,.operation-card:hover:before,.video-card:hover:before,.cards article:focus-within:before,.package:focus-within:before{opacity:1;animation:cardLightSweep 1.15s ease-out}
+.assist-options button:active,.btn:active{filter:brightness(1.12);box-shadow:0 0 0 3px rgba(116,224,255,.16),0 0 24px rgba(74,192,255,.3)}
+/* Touch feedback: a bright bloom, expanding rings and small light streaks at the finger tap. */
+.tap-screen-flash{position:fixed;inset:0;z-index:9997;pointer-events:none;opacity:0;mix-blend-mode:screen;background:radial-gradient(circle at var(--tap-x,50%) var(--tap-y,50%),rgba(169,246,255,.45) 0%,rgba(100,220,255,.23) 8%,rgba(42,153,255,.13) 19%,transparent 47%);animation:tapScreenFlash .78s ease-out forwards}
+.tap-ring{position:fixed;z-index:9998;left:var(--tap-x);top:var(--tap-y);width:var(--ring-size,28px);height:var(--ring-size,28px);border:2px solid rgba(219,252,255,.98);border-radius:50%;pointer-events:none;transform:translate(-50%,-50%) scale(.25);box-shadow:0 0 9px rgba(125,240,255,.95),0 0 22px rgba(75,195,255,.78),inset 0 0 8px rgba(255,255,255,.48);animation:tapRingExpand .82s cubic-bezier(.13,.74,.21,1) forwards}
+.tap-ring:after{content:"";position:absolute;inset:5px;border:1px solid rgba(255,231,148,.96);border-radius:50%;box-shadow:0 0 14px rgba(255,221,115,.72)}
+.tap-core{position:fixed;z-index:9999;left:var(--tap-x);top:var(--tap-y);width:7px;height:7px;border-radius:50%;background:#fff;pointer-events:none;transform:translate(-50%,-50%);box-shadow:0 0 8px #fff,0 0 18px #9cf2ff,0 0 34px #35aaff;animation:tapCoreBlink .42s ease-out forwards}
+.tap-spark{position:fixed;z-index:9998;left:var(--tap-x);top:var(--tap-y);width:3px;height:var(--spark-len,18px);border-radius:999px;transform:translate(-50%,-50%) rotate(var(--spark-angle,0deg)) translateY(0);transform-origin:center;background:linear-gradient(to top,rgba(115,221,255,0),#a9f6ff 35%,#fff);pointer-events:none;filter:drop-shadow(0 0 5px #7defff);animation:tapSparkBurst .62s cubic-bezier(.15,.72,.2,1) forwards}
+.touch-trail{position:fixed;z-index:9996;left:var(--trail-x);top:var(--trail-y);width:var(--trail-size,7px);height:var(--trail-size,7px);border-radius:50%;pointer-events:none;transform:translate(-50%,-50%);background:radial-gradient(circle,#fff 0%,#a9f5ff 22%,#2eafff 55%,rgba(30,138,255,0) 100%);box-shadow:0 0 9px rgba(125,240,255,.82);animation:trailFade .46s ease-out forwards}
+@keyframes tapScreenFlash{0%{opacity:0}13%{opacity:1}42%{opacity:.76}100%{opacity:0}}
+@keyframes tapRingExpand{0%{opacity:1;transform:translate(-50%,-50%) scale(.25)}100%{opacity:0;transform:translate(-50%,-50%) scale(7.5)}}
+@keyframes tapCoreBlink{0%{opacity:1;transform:translate(-50%,-50%) scale(.6)}45%{opacity:1;transform:translate(-50%,-50%) scale(2.1)}100%{opacity:0;transform:translate(-50%,-50%) scale(.1)}}
+@keyframes tapSparkBurst{0%{opacity:0;transform:translate(-50%,-50%) rotate(var(--spark-angle)) translateY(0) scaleY(.35)}18%{opacity:1}100%{opacity:0;transform:translate(-50%,-50%) rotate(var(--spark-angle)) translateY(calc(var(--spark-distance,46px) * -1)) scaleY(1.1)}}
+@keyframes trailFade{0%{opacity:.9;transform:translate(-50%,-50%) scale(1.2)}100%{opacity:0;transform:translate(-50%,-50%) scale(.05)}}
+@keyframes heroScanV7{0%,100%{left:-52%;opacity:0}13%{opacity:.25}42%{opacity:1}68%{opacity:.22}90%{left:112%;opacity:0}}
+@keyframes railColorFlow{0%{background-position:0% 50%}100%{background-position:240% 50%}}
+@keyframes diagnosisAmbient{0%{background-position:0% 35%}100%{background-position:100% 65%}}
+@keyframes cardLightSweep{0%{left:-45%}100%{left:130%}}
+@media(hover:none){.cards article:active,.package:active,.pricecard:active{border-color:rgba(125,240,255,.85);box-shadow:0 0 0 1px rgba(125,240,255,.3),0 0 22px rgba(34,166,255,.18)}}
+@media(prefers-reduced-motion:reduce){
+  html.motion-user-opt-in .motion-rail{animation:railColorFlow 5.4s linear infinite!important}
+  html.motion-user-opt-in .motion-rail:after{animation:motionRailSweep 2.05s linear infinite!important}
+  html.motion-user-opt-in .hero{animation:heroAmbient 5.8s ease-in-out infinite alternate!important}
+  html.motion-user-opt-in .hero:before{animation:gridDrift 10s linear infinite!important}
+  html.motion-user-opt-in .hero:after{display:block!important;animation:heroScanV7 4.6s ease-in-out infinite!important}
+  html.motion-user-opt-in .hero h1 em{animation:iceText 3.8s linear infinite!important}
+  html.motion-user-opt-in .art,html.motion-user-opt-in .owner-photo img{animation:artFloat 3.4s ease-in-out infinite!important}
+  html.motion-user-opt-in .ai-orb{animation:statusPulse 1.15s ease-out infinite!important}
+}
+
 </style>
 <script type="application/ld+json">
 {
@@ -338,7 +399,7 @@ html.motion-user-opt-in .ai-orb,html.motion-user-opt-in .hero .eyebrow:before{an
 <body>
 <a class="skip-link" href="#home">Langkau ke kandungan utama</a>
 <div class="topline">❄ SERVIS AIRCOND KERETA · KOTA BHARU, KELANTAN</div>
-<div class="motion-rail" id="motionRail" role="status"><span class="motion-rail-copy"><span class="motion-rail-dot" aria-hidden="true"></span><span>AMIR TECH · AI MOTION SYSTEM</span></span><button class="motion-rail-btn" id="motionToggle" type="button" aria-pressed="true">Gerakan: HIDUP</button></div>
+<div class="motion-rail" id="motionRail" role="status"><span class="motion-rail-copy"><span class="motion-rail-dot" aria-hidden="true"></span><span>AMIR TECH · SENTUH SKRIN UNTUK CAHAYA ✦</span></span><button class="motion-rail-btn" id="motionToggle" type="button" aria-pressed="true">Gerakan: HIDUP</button></div>
 <header class="header">
 <a class="brand" href="#home"><img src="./assets/amir-tech-logo.jpg" alt="Logo Amir Tech" decoding="async" onerror="this.style.display='none'"><span><b>AMIR TECH</b><small>ROG GLOBAL · AIRCOND KERETA SPECIALIST</small></span></a>
 <button class="menu" id="menuToggle" type="button" aria-label="Buka menu" aria-controls="nav" aria-expanded="false">☰ <span>MENU</span></button>
@@ -606,6 +667,54 @@ nav?.querySelectorAll('a').forEach(link=>link.addEventListener('click',()=>{if(n
  };
  apply();
  btn.addEventListener('click',()=>{enabled=!enabled;apply()});
+})();
+</script>
+
+
+<script>
+(()=>{
+ const root=document.documentElement;
+ const reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+ const active=()=>!root.classList.contains('motion-paused')&&(!reduce||root.classList.contains('motion-user-opt-in'));
+ const pos=(x,y)=>({'--tap-x':`${Math.max(0,Math.min(innerWidth,x))}px`,'--tap-y':`${Math.max(0,Math.min(innerHeight,y))}px`});
+ const add=(cls,x,y,extra={})=>{
+   const el=document.createElement('span');el.className=cls;
+   const values={...pos(x,y),...extra};
+   for(const [k,v] of Object.entries(values))el.style.setProperty(k,v);
+   el.setAttribute('aria-hidden','true');document.body.appendChild(el);
+   const cleanup=()=>el.remove();el.addEventListener('animationend',cleanup,{once:true});window.setTimeout(cleanup,1300);return el;
+ };
+ let lastTap=0;
+ document.addEventListener('pointerdown',e=>{
+   if(!active())return;
+   if(e.pointerType==='mouse'&&e.button!==0)return;
+   const now=performance.now();if(now-lastTap<75)return;lastTap=now;
+   const x=e.clientX,y=e.clientY;
+   add('tap-screen-flash',x,y);
+   add('tap-ring',x,y,{'--ring-size':`${Math.max(25,Math.min(42,innerWidth*.075))}px`});
+   add('tap-core',x,y);
+   const sparks=innerWidth<600?8:6;
+   for(let i=0;i<sparks;i++){
+     const angle=(360/sparks)*i+(Math.random()*14-7);
+     const distance=32+Math.random()*24;
+     add('tap-spark',x,y,{'--spark-angle':`${angle}deg`,'--spark-distance':`${distance}px`,'--spark-len':`${12+Math.random()*13}px`});
+   }
+ },{passive:true});
+ let pointerHeld=false,lastTrail=0;
+ document.addEventListener('pointerdown',e=>{pointerHeld=true},{passive:true});
+ document.addEventListener('pointerup',()=>{pointerHeld=false},{passive:true});
+ document.addEventListener('pointercancel',()=>{pointerHeld=false},{passive:true});
+ document.addEventListener('pointermove',e=>{
+   if(!active()||(!pointerHeld&&e.pointerType!=='mouse'))return;
+   const now=performance.now();if(now-lastTrail<42)return;lastTrail=now;
+   add('touch-trail',e.clientX,e.clientY,{'--trail-x':`${e.clientX}px`,'--trail-y':`${e.clientY}px`,'--trail-size':`${5+Math.random()*6}px`});
+ },{passive:true});
+ // Also light up keyboard activation at the center of important controls, without duplicating pointer taps.
+ document.addEventListener('click',e=>{
+   if(!active()||e.detail!==0)return;
+   const el=e.target.closest('button,a,[role="button"]');if(!el)return;
+   const r=el.getBoundingClientRect();add('tap-screen-flash',r.left+r.width/2,r.top+r.height/2);add('tap-ring',r.left+r.width/2,r.top+r.height/2);
+ },true);
 })();
 </script>
 
