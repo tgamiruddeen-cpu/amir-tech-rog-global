@@ -270,6 +270,43 @@ html.motion-ready [data-reveal].is-visible{opacity:1;transform:translateY(0)}
 @media(hover:none){.btn:after{display:none}.cards article:hover,.pricecard:hover,.package:hover,.steps article:hover,.operation-card:hover,.video-card:hover{transform:none}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important}html.motion-ready [data-reveal]{opacity:1!important;transform:none!important}.btn:after{display:none}}
 
+
+/* MOTION-RAIL-V6: more visible animation with a user-controlled toggle */
+.motion-rail{position:relative;z-index:51;display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:34px;padding:5px max(4%,calc((100% - 1240px)/2));background:#061724;color:#c8f5ff;border-bottom:1px solid #24516a;font-size:.68rem;font-weight:850;letter-spacing:.09em;overflow:hidden}
+.motion-rail-copy{display:flex;align-items:center;gap:8px;min-width:0}
+.motion-rail-dot{width:8px;height:8px;flex:0 0 auto;border-radius:50%;background:#80ebff;box-shadow:0 0 0 0 rgba(128,235,255,.65);animation:motionDotPulse 1.4s ease-out infinite}
+.motion-rail-btn{flex:0 0 auto;border:1px solid #5ba8c7;border-radius:999px;background:#0c3045;color:#e9faff;padding:5px 10px;font:inherit;letter-spacing:.02em;cursor:pointer}
+.motion-rail-btn:focus-visible{outline:3px solid #f5d36b;outline-offset:2px}
+.motion-rail:after{content:"";position:absolute;left:-34%;bottom:0;height:2px;width:34%;background:linear-gradient(90deg,transparent,#82edff,#fff,transparent);box-shadow:0 0 13px #78e4ff;pointer-events:none;animation:motionRailSweep 2.8s linear infinite}
+.hero{background-size:220% 220%;animation:heroAmbient 6.8s ease-in-out infinite alternate}
+.hero:before{opacity:.34;background-size:30px 30px;animation:gridDrift 12s linear infinite}
+.hero:after{content:"";position:absolute;z-index:0;pointer-events:none;top:0;bottom:0;left:-45%;width:36%;background:linear-gradient(90deg,transparent,rgba(115,226,255,.14),rgba(214,250,255,.19),transparent);filter:blur(8px);transform:skewX(-14deg);animation:heroScanV6 5.2s ease-in-out infinite}
+.hero-grid,.hero-foot{position:relative;z-index:1}
+.hero h1 em,.heading h2 em,.live-head h2 em{background-size:260% auto;animation:iceText 4.2s linear infinite}
+.art{animation:artFloat 4.2s ease-in-out infinite}
+.art:before{animation:scanSweep 5.4s ease-in-out infinite}
+.art:after{animation:borderBreathe 3s ease-in-out infinite}
+.owner-photo img{animation:portraitFloat 3.8s ease-in-out infinite}
+.art-tag.top{animation:tagDrift 4.1s ease-in-out infinite}
+.art-tag.bottom{animation:tagDrift 4.7s ease-in-out infinite reverse}
+.hero .eyebrow:before,.live-head .eyebrow:before,.heading .eyebrow:before{animation:statusPulse 1.5s ease-out infinite}
+.ai-orb{animation:statusPulse 1.25s ease-out infinite}
+.floatwa{animation:waBreath 2.7s ease-in-out infinite}
+@keyframes motionRailSweep{0%{left:-34%}100%{left:100%}}
+@keyframes motionDotPulse{0%{box-shadow:0 0 0 0 rgba(128,235,255,.7);transform:scale(.88)}70%{box-shadow:0 0 0 8px rgba(128,235,255,0);transform:scale(1)}100%{box-shadow:0 0 0 0 rgba(128,235,255,0);transform:scale(.88)}}
+@keyframes heroScanV6{0%,100%{left:-45%;opacity:0}15%{opacity:.35}48%{opacity:1}75%{opacity:.15}90%{left:110%;opacity:0}}
+html.motion-paused *,html.motion-paused *:before,html.motion-paused *:after{animation-play-state:paused!important}
+html.motion-user-opt-in .motion-rail-dot{animation:motionDotPulse 1.4s ease-out infinite!important}
+html.motion-user-opt-in .motion-rail:after{animation:motionRailSweep 2.8s linear infinite!important}
+html.motion-user-opt-in .hero{animation:heroAmbient 6.8s ease-in-out infinite alternate!important}
+html.motion-user-opt-in .hero:before{animation:gridDrift 12s linear infinite!important}
+html.motion-user-opt-in .hero:after{display:block!important;animation:heroScanV6 5.2s ease-in-out infinite!important}
+html.motion-user-opt-in .hero h1 em{animation:iceText 4.2s linear infinite!important}
+html.motion-user-opt-in .art,html.motion-user-opt-in .owner-photo img{animation:artFloat 4.2s ease-in-out infinite!important}
+html.motion-user-opt-in .ai-orb,html.motion-user-opt-in .hero .eyebrow:before{animation:statusPulse 1.4s ease-out infinite!important}
+@media(max-width:480px){.motion-rail{font-size:.6rem;padding:5px 12px}.motion-rail-btn{padding:5px 8px}.hero:after{width:48%;filter:blur(10px)}}
+@media(prefers-reduced-motion:reduce){.motion-rail:after{animation:none}.motion-rail-dot{animation:none}.hero:after{display:none}}
+
 </style>
 <script type="application/ld+json">
 {
@@ -301,6 +338,7 @@ html.motion-ready [data-reveal].is-visible{opacity:1;transform:translateY(0)}
 <body>
 <a class="skip-link" href="#home">Langkau ke kandungan utama</a>
 <div class="topline">❄ SERVIS AIRCOND KERETA · KOTA BHARU, KELANTAN</div>
+<div class="motion-rail" id="motionRail" role="status"><span class="motion-rail-copy"><span class="motion-rail-dot" aria-hidden="true"></span><span>AMIR TECH · AI MOTION SYSTEM</span></span><button class="motion-rail-btn" id="motionToggle" type="button" aria-pressed="true">Gerakan: HIDUP</button></div>
 <header class="header">
 <a class="brand" href="#home"><img src="./assets/amir-tech-logo.jpg" alt="Logo Amir Tech" decoding="async" onerror="this.style.display='none'"><span><b>AMIR TECH</b><small>ROG GLOBAL · AIRCOND KERETA SPECIALIST</small></span></a>
 <button class="menu" id="menuToggle" type="button" aria-label="Buka menu" aria-controls="nav" aria-expanded="false">☰ <span>MENU</span></button>
@@ -549,4 +587,26 @@ const aiBtn=$('runAiAnalysis');if(aiBtn){aiBtn.addEventListener('click',()=>{aiB
 nav?.querySelectorAll('a').forEach(link=>link.addEventListener('click',()=>{if(nav.classList.contains('open')){nav.classList.remove('open');menu?.setAttribute('aria-expanded','false')}}));
 })();
 </script>
+
+<script>
+(()=> {
+ const root=document.documentElement;
+ const btn=document.getElementById('motionToggle');
+ if(!btn)return;
+ const reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+ let enabled=!reduce;
+ const apply=()=>{
+   root.classList.toggle('motion-paused',!enabled);
+   root.classList.toggle('motion-user-opt-in',enabled&&reduce);
+   btn.setAttribute('aria-pressed',String(enabled));
+   btn.textContent=enabled?'Gerakan: HIDUP':'Gerakan: MATI';
+   btn.title=enabled?'Tekan untuk menghentikan animasi':'Tekan untuk menghidupkan animasi';
+   const status=document.getElementById('motionRail');
+   if(status)status.setAttribute('aria-label',enabled?'Animasi website dihidupkan':'Animasi website dihentikan');
+ };
+ apply();
+ btn.addEventListener('click',()=>{enabled=!enabled;apply()});
+})();
+</script>
+
 </body></html>
