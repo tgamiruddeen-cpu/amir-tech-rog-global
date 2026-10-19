@@ -479,7 +479,7 @@ html.motion-user-opt-in .ai-orb,html.motion-user-opt-in .hero .eyebrow:before{an
 <section class="section" id="proses"><div class="heading center"><p class="eyebrow">CARA KERJA KAMI</p><h2>Empat langkah yang<br><em>mudah difahami.</em></h2></div><div class="steps"><article><b>01</b><h3>Ceritakan simptom</h3><p>Maklumkan bila aircond kurang sejuk, berbau atau berbunyi.</p></article><article><b>02</b><h3>Pemeriksaan</h3><p>Kami periksa keadaan sistem dan maklumat berkaitan.</p></article><article><b>03</b><h3>Penerangan & harga</h3><p>Cadangan kerja dan kos diterangkan terlebih dahulu.</p></article><article><b>04</b><h3>Servis & semakan</h3><p>Kerja yang dipersetujui dilakukan dan prestasi disemak.</p></article></div></section>
 
 <section class="section v5-section" id="galeri">
-  <div class="heading"><p class="eyebrow">VIDEO KERJA BENGKEL</p><h2>Lihat proses kerja<br><em>AMIR TECH ROG GLOBAL.</em></h2><p>Rakaman proses pemeriksaan, servis dan bacaan alat di bengkel.</p><button class="btn outline" id="openProtectedVideoFolder" type="button" aria-haspopup="dialog">🔒 Buka folder video di GitHub ↗</button></div>
+  <div class="heading"><p class="eyebrow">VIDEO KERJA BENGKEL</p><h2>Lihat proses kerja<br><em>AMIR TECH ROG GLOBAL.</em></h2><p>Rakaman proses pemeriksaan, servis dan bacaan alat di bengkel.</p><button class="btn outline" id="openProtectedVideoFolder" type="button" aria-haspopup="dialog">✦ Update video kerja</button></div>
   <div class="video-grid">
 <article class="video-card"><video controls preload="none" playsinline poster="./assets/hero-workshop.svg"><source src="./assets/454840.mp4" type="video/mp4">Pelayar anda tidak menyokong video.</video><div class="video-copy"><span>01 · VIDEO KERJA</span><h3>Pemeriksaan awal</h3><p>Pemeriksaan awal / paparan</p></div></article>
 <article class="video-card"><video controls preload="none" playsinline poster="./assets/hero-workshop.svg"><source src="./assets/454677.mp4" type="video/mp4">Pelayar anda tidak menyokong video.</video><div class="video-copy"><span>02 · VIDEO KERJA</span><h3>Pemeriksaan ruang enjin</h3><p>Rakaman pemeriksaan ruang enjin</p></div></article>
@@ -741,17 +741,17 @@ nav?.querySelectorAll('a').forEach(link=>link.addEventListener('click',()=>{if(n
 
 
 <div class="video-gate-backdrop" id="videoGateBackdrop" hidden>
-  <section class="video-gate-dialog" role="dialog" aria-modal="true" aria-labelledby="videoGateTitle" aria-describedby="videoGateDescription">
-    <p class="video-gate-kicker"><span aria-hidden="true">✦</span> Amir Tech · Akses pintasan</p>
-    <h3 id="videoGateTitle">Buka folder video</h3>
-    <p id="videoGateDescription">Masukkan kata laluan untuk meneruskan ke folder aset video di GitHub.</p>
+  <section class="video-gate-dialog" role="dialog" aria-modal="true" aria-labelledby="videoGateTitle" aria-label="Update video kerja">
+    
+    <h3 id="videoGateTitle">Update video kerja</h3>
+    
     <form id="videoGateForm">
       <label for="videoGatePassword">Kata laluan</label>
       <input id="videoGatePassword" name="password" type="password" autocomplete="current-password" inputmode="text" placeholder="Masukkan kata laluan" required>
       <p class="video-gate-message" id="videoGateMessage" role="status" aria-live="polite"></p>
-      <div class="video-gate-actions"><button class="video-gate-unlock" type="submit">Buka folder ↗</button><button class="video-gate-cancel" id="videoGateCancel" type="button">Batal</button></div>
+      <div class="video-gate-actions"><button class="video-gate-unlock" type="submit">Teruskan</button><button class="video-gate-cancel" id="videoGateCancel" type="button">Batal</button></div>
     </form>
-    <small class="video-gate-note">Nota: ini hanya pintasan visual di website. Ia tidak menggantikan keselamatan dan kebenaran akaun GitHub.</small>
+    
   </section>
 </div>
 <script>
@@ -770,7 +770,7 @@ nav?.querySelectorAll('a').forEach(link=>link.addEventListener('click',()=>{if(n
  cancel.addEventListener('click',closeGate);
  backdrop.addEventListener('click',e=>{if(e.target===backdrop)closeGate()});
  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!backdrop.hidden)closeGate()});
- form.addEventListener('submit',e=>{e.preventDefault();if(input.value.trim()==='amir5037'){message.textContent='Kata laluan diterima. Membuka GitHub…';const newTab=window.open(target,'_blank','noopener,noreferrer');if(!newTab){message.textContent='Pelayar menyekat tab baharu. Tekan sekali lagi atau benarkan pop-up.';return}closeGate()}else{message.textContent='Kata laluan tidak betul. Cuba semula.';input.value='';input.focus()}});
+ form.addEventListener('submit',e=>{e.preventDefault();if(input.value.trim()==='amir5037'){message.textContent='Kata laluan diterima. Membuka halaman kemas kini…';const newTab=window.open(target,'_blank','noopener,noreferrer');if(!newTab){message.textContent='Pelayar menyekat tab baharu. Tekan sekali lagi atau benarkan pop-up.';return}closeGate()}else{message.textContent='Kata laluan tidak betul. Cuba semula.';input.value='';input.focus()}});
 })();
 </script>
 
