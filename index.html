@@ -368,6 +368,27 @@ html.motion-user-opt-in .ai-orb,html.motion-user-opt-in .hero .eyebrow:before{an
   html.motion-user-opt-in .ai-orb{animation:statusPulse 1.15s ease-out infinite!important}
 }
 
+
+/* Password gate for the GitHub video-folder shortcut (UI gate, not real repository security) */
+.video-gate-backdrop{position:fixed;inset:0;z-index:1000;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(2,10,18,.78);backdrop-filter:blur(10px)}
+.video-gate-backdrop.is-open{display:flex;animation:gateFadeIn .22s ease-out}
+.video-gate-dialog{width:min(100%,420px);border:1px solid rgba(130,226,255,.55);border-radius:22px;padding:24px;background:linear-gradient(150deg,#0c2b40,#07131f 70%);color:#f5fbff;box-shadow:0 24px 90px rgba(0,0,0,.5),0 0 34px rgba(61,194,239,.16);animation:gatePopIn .26s cubic-bezier(.2,.75,.25,1)}
+.video-gate-kicker{display:flex;align-items:center;gap:8px;margin:0 0 9px;color:#8be7ff;font-size:.72rem;font-weight:900;letter-spacing:.13em;text-transform:uppercase}
+.video-gate-dialog h3{margin:0 0 8px;font-size:1.45rem;color:#fff}
+.video-gate-dialog p{margin:0 0 16px;color:#c5dce8;font-size:.9rem;line-height:1.5}
+.video-gate-dialog label{display:block;margin:0 0 7px;font-size:.83rem;font-weight:800;color:#eefaff}
+.video-gate-dialog input{width:100%;min-height:48px;padding:12px 14px;border:1px solid #47758c;border-radius:12px;background:#030b12;color:#fff;font-size:16px;letter-spacing:.08em;outline:none}
+.video-gate-dialog input:focus{border-color:#8be7ff;box-shadow:0 0 0 3px rgba(139,231,255,.2)}
+.video-gate-message{min-height:23px;margin:9px 0 3px!important;color:#ffd8a3!important;font-size:.82rem!important}
+.video-gate-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+.video-gate-actions button{flex:1 1 120px;min-height:44px;border-radius:12px;padding:10px 14px;font:inherit;font-weight:850;cursor:pointer}
+.video-gate-unlock{border:1px solid #ffe08a;background:linear-gradient(130deg,#ffe384,#f1b72b);color:#182330}
+.video-gate-cancel{border:1px solid #42667a;background:#102a3b;color:#edfaff}
+.video-gate-note{display:block;margin-top:15px;color:#91b0bf;font-size:.72rem;line-height:1.45}
+@keyframes gateFadeIn{from{opacity:0}to{opacity:1}}
+@keyframes gatePopIn{from{opacity:0;transform:translateY(12px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
+@media(prefers-reduced-motion:reduce){.video-gate-backdrop.is-open,.video-gate-dialog{animation:none!important}}
+
 </style>
 <script type="application/ld+json">
 {
@@ -458,7 +479,7 @@ html.motion-user-opt-in .ai-orb,html.motion-user-opt-in .hero .eyebrow:before{an
 <section class="section" id="proses"><div class="heading center"><p class="eyebrow">CARA KERJA KAMI</p><h2>Empat langkah yang<br><em>mudah difahami.</em></h2></div><div class="steps"><article><b>01</b><h3>Ceritakan simptom</h3><p>Maklumkan bila aircond kurang sejuk, berbau atau berbunyi.</p></article><article><b>02</b><h3>Pemeriksaan</h3><p>Kami periksa keadaan sistem dan maklumat berkaitan.</p></article><article><b>03</b><h3>Penerangan & harga</h3><p>Cadangan kerja dan kos diterangkan terlebih dahulu.</p></article><article><b>04</b><h3>Servis & semakan</h3><p>Kerja yang dipersetujui dilakukan dan prestasi disemak.</p></article></div></section>
 
 <section class="section v5-section" id="galeri">
-  <div class="heading"><p class="eyebrow">VIDEO KERJA BENGKEL</p><h2>Lihat proses kerja<br><em>AMIR TECH ROG GLOBAL.</em></h2><p>Rakaman proses pemeriksaan, servis dan bacaan alat di bengkel.</p><p class="gallery-admin-note">Untuk menukar video, buka folder aset website di GitHub. Akaun GitHub yang mempunyai kebenaran repositori diperlukan untuk menyimpan perubahan. Tiada kata laluan laman web diminta di sini.</p><a class="btn outline" href="https://github.com/tgamiruddeen-cpu/amir-tech-rog-global/tree/main/assets" target="_blank" rel="noopener">Buka folder video di GitHub ↗</a></div>
+  <div class="heading"><p class="eyebrow">VIDEO KERJA BENGKEL</p><h2>Lihat proses kerja<br><em>AMIR TECH ROG GLOBAL.</em></h2><p>Rakaman proses pemeriksaan, servis dan bacaan alat di bengkel.</p><p class="gallery-admin-note">Untuk menukar video, masukkan kata laluan pintasan dahulu. Akaun GitHub yang mempunyai kebenaran repositori masih diperlukan untuk menyimpan perubahan.</p><button class="btn outline" id="openProtectedVideoFolder" type="button" aria-haspopup="dialog">🔒 Buka folder video di GitHub ↗</button></div>
   <div class="video-grid">
 <article class="video-card"><video controls preload="none" playsinline poster="./assets/hero-workshop.svg"><source src="./assets/454840.mp4" type="video/mp4">Pelayar anda tidak menyokong video.</video><div class="video-copy"><span>01 · VIDEO KERJA</span><h3>Pemeriksaan awal</h3><p>Pemeriksaan awal / paparan</p></div></article>
 <article class="video-card"><video controls preload="none" playsinline poster="./assets/hero-workshop.svg"><source src="./assets/454677.mp4" type="video/mp4">Pelayar anda tidak menyokong video.</video><div class="video-copy"><span>02 · VIDEO KERJA</span><h3>Pemeriksaan ruang enjin</h3><p>Rakaman pemeriksaan ruang enjin</p></div></article>
@@ -715,6 +736,41 @@ nav?.querySelectorAll('a').forEach(link=>link.addEventListener('click',()=>{if(n
    const el=e.target.closest('button,a,[role="button"]');if(!el)return;
    const r=el.getBoundingClientRect();add('tap-screen-flash',r.left+r.width/2,r.top+r.height/2);add('tap-ring',r.left+r.width/2,r.top+r.height/2);
  },true);
+})();
+</script>
+
+
+<div class="video-gate-backdrop" id="videoGateBackdrop" hidden>
+  <section class="video-gate-dialog" role="dialog" aria-modal="true" aria-labelledby="videoGateTitle" aria-describedby="videoGateDescription">
+    <p class="video-gate-kicker"><span aria-hidden="true">✦</span> Amir Tech · Akses pintasan</p>
+    <h3 id="videoGateTitle">Buka folder video</h3>
+    <p id="videoGateDescription">Masukkan kata laluan untuk meneruskan ke folder aset video di GitHub.</p>
+    <form id="videoGateForm">
+      <label for="videoGatePassword">Kata laluan</label>
+      <input id="videoGatePassword" name="password" type="password" autocomplete="current-password" inputmode="text" placeholder="Masukkan kata laluan" required>
+      <p class="video-gate-message" id="videoGateMessage" role="status" aria-live="polite"></p>
+      <div class="video-gate-actions"><button class="video-gate-unlock" type="submit">Buka folder ↗</button><button class="video-gate-cancel" id="videoGateCancel" type="button">Batal</button></div>
+    </form>
+    <small class="video-gate-note">Nota: ini hanya pintasan visual di website. Ia tidak menggantikan keselamatan dan kebenaran akaun GitHub.</small>
+  </section>
+</div>
+<script>
+(()=>{
+ const openBtn=document.getElementById('openProtectedVideoFolder');
+ const backdrop=document.getElementById('videoGateBackdrop');
+ const form=document.getElementById('videoGateForm');
+ const input=document.getElementById('videoGatePassword');
+ const message=document.getElementById('videoGateMessage');
+ const cancel=document.getElementById('videoGateCancel');
+ const target='https://github.com/tgamiruddeen-cpu/amir-tech-rog-global/tree/main/assets';
+ if(!openBtn||!backdrop||!form||!input||!message||!cancel)return;
+ function showGate(){backdrop.hidden=false;backdrop.classList.add('is-open');input.value='';message.textContent='';document.body.style.overflow='hidden';window.setTimeout(()=>input.focus(),50)}
+ function closeGate(){backdrop.classList.remove('is-open');backdrop.hidden=true;document.body.style.overflow='';openBtn.focus()}
+ openBtn.addEventListener('click',showGate);
+ cancel.addEventListener('click',closeGate);
+ backdrop.addEventListener('click',e=>{if(e.target===backdrop)closeGate()});
+ document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!backdrop.hidden)closeGate()});
+ form.addEventListener('submit',e=>{e.preventDefault();if(input.value.trim()==='amir5037'){message.textContent='Kata laluan diterima. Membuka GitHub…';const newTab=window.open(target,'_blank','noopener,noreferrer');if(!newTab){message.textContent='Pelayar menyekat tab baharu. Tekan sekali lagi atau benarkan pop-up.';return}closeGate()}else{message.textContent='Kata laluan tidak betul. Cuba semula.';input.value='';input.focus()}});
 })();
 </script>
 
