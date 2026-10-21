@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="160" height="160" viewBox="0 0 160 160" fill="none">
+  <defs>
+    <pattern id="songket" width="80" height="80" patternUnits="userSpaceOnUse">
+      <path d="M40 5 47 27 68 40 47 53 40 75 33 53 12 40 33 27 40 5Z" stroke="#e8c36b" stroke-width="1.2"/>
+      <path d="M40 20 45 35 60 40 45 45 40 60 35 45 20 40 35 35 40 20Z" stroke="#70dff5" stroke-width=".8"/>
+      <path d="M0 0 15 15M80 0 65 15M0 80 15 65M80 80 65 65" stroke="#e8c36b" stroke-width=".8"/>
+      <path d="M0 24 12 40 0 56M80 24 68 40 80 56M24 0 40 12 56 0M24 80 40 68 56 80" stroke="#70dff5" stroke-width=".8"/>
+      <circle cx="40" cy="40" r="2" fill="#e8c36b"/>
+    </pattern>
+  </defs>
+  <rect width="160" height="160" fill="url(#songket)"/>
+</svg>
