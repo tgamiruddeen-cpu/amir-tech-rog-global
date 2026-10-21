@@ -429,25 +429,31 @@ html.motion-user-opt-in .ai-orb,html.motion-user-opt-in .hero .eyebrow:before{an
 </script>
 
 
-<style id="amirtech-3d-daynight-v2">
-:root{--at-bg:#eff8ff;--at-text:#102d43;--at-glow:rgba(25,155,235,.15)}
-html{background:var(--at-bg);transition:background-color .55s,color .55s;color-scheme:light}
-body{background-color:var(--at-bg);color:var(--at-text);transition:background-color .55s,color .55s}
-body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(ellipse at 12% 8%,var(--at-glow),transparent 40%),radial-gradient(ellipse at 88% 25%,rgba(72,210,255,.10),transparent 34%);transition:background .55s}
-html[data-at-theme="night"]{--at-bg:#071522;--at-text:#e6f6ff;--at-glow:rgba(20,110,190,.22);color-scheme:dark}
-html[data-at-theme="night"] body{background-color:var(--at-bg);color:var(--at-text)}
-html[data-at-theme="night"] body::before{background:radial-gradient(ellipse at 12% 8%,rgba(28,111,190,.28),transparent 40%),radial-gradient(ellipse at 88% 25%,rgba(19,67,115,.24),transparent 34%)}
-html[data-at-theme="night"] header,html[data-at-theme="night"] nav,html[data-at-theme="night"] .card,html[data-at-theme="night"] article,html[data-at-theme="night"] .pricecard,html[data-at-theme="night"] .package,html[data-at-theme="night"] .review-panel,html[data-at-theme="night"] .operation-card,html[data-at-theme="night"] .video-card,html[data-at-theme="night"] .hero-location,html[data-at-theme="night"] .location,html[data-at-theme="night"] .contact,html[data-at-theme="night"] .panel{color:var(--at-text)}
-html[data-at-theme="night"] input,html[data-at-theme="night"] textarea,html[data-at-theme="night"] select{background:#102b40;color:#eaf8ff;border-color:#2d5a76}
-html[data-at-theme="night"] a:not(.btn):not(button){color:#72d5ff}
-[data-at-3d]{transform-style:preserve-3d;backface-visibility:hidden;transition:transform .24s ease,box-shadow .24s ease,border-color .24s ease;will-change:transform}
-[data-at-3d]>*{transform:translateZ(8px)}
-@media(hover:hover) and (pointer:fine){[data-at-3d]:hover{box-shadow:0 20px 44px rgba(0,105,170,.17);border-color:rgba(31,170,255,.4)}}
-.at-theme-toggle{position:fixed;right:14px;bottom:calc(14px + env(safe-area-inset-bottom));z-index:99999;display:flex;align-items:center;gap:8px;padding:11px 14px;border:1px solid rgba(112,207,255,.5);border-radius:999px;background:rgba(7,34,53,.94);color:#fff;font:600 13px/1.1 system-ui,sans-serif;box-shadow:0 8px 28px rgba(0,0,0,.23);backdrop-filter:blur(12px);cursor:pointer}
-.at-theme-toggle:focus-visible{outline:3px solid #5bc9ff;outline-offset:3px}
-.at-theme-toggle .at-icon{font-size:18px}.at-theme-toggle small{display:block;font-size:10px;opacity:.78;font-weight:500;margin-top:3px}
-@media(max-width:520px){.at-theme-toggle{right:10px;bottom:calc(10px + env(safe-area-inset-bottom));padding:10px 12px}}
-@media(prefers-reduced-motion:reduce){html,body,body::before,[data-at-3d]{transition:none!important;animation:none!important;transform:none!important;scroll-behavior:auto!important}.at-theme-toggle{backdrop-filter:none}}
+<style id="at-3d-scene-v3">
+:root{--at3d-bg:#edf8ff;--at3d-fg:#0c2c43;--at3d-panel:rgba(255,255,255,.82);--at3d-border:rgba(42,161,226,.26)}
+html{background:var(--at3d-bg);color-scheme:light;transition:background .7s}
+body{background:var(--at3d-bg);color:var(--at3d-fg);perspective:1400px;transition:background .7s,color .7s}
+body:before{content:"";position:fixed;inset:-10%;z-index:-1;pointer-events:none;background:radial-gradient(circle at 12% 12%,rgba(62,190,255,.3),transparent 35%),radial-gradient(circle at 85% 42%,rgba(20,129,230,.13),transparent 38%),linear-gradient(140deg,transparent 35%,rgba(255,255,255,.38));animation:at3d-ambient 14s ease-in-out infinite alternate}
+@keyframes at3d-ambient{from{transform:translate3d(-1%,0,0) scale(1)}to{transform:translate3d(1%,1.2%,0) scale(1.04)}}
+html[data-at3d-theme=night]{--at3d-bg:#04101d;--at3d-fg:#e9f8ff;--at3d-panel:rgba(9,30,49,.88);--at3d-border:rgba(66,193,255,.36);color-scheme:dark}
+html[data-at3d-theme=night] body{background:var(--at3d-bg);color:var(--at3d-fg)}
+html[data-at3d-theme=night] body:before{background:radial-gradient(circle at 12% 12%,rgba(0,125,230,.3),transparent 35%),radial-gradient(circle at 85% 42%,rgba(25,70,145,.25),transparent 38%),linear-gradient(140deg,transparent 35%,rgba(25,130,210,.08));}
+html[data-at3d-theme=night] input,html[data-at3d-theme=night] textarea,html[data-at3d-theme=night] select{background:#0b263d;color:#f0faff;border-color:#2a5675}
+html[data-at3d-theme=night] .card,html[data-at3d-theme=night] article,html[data-at3d-theme=night] .pricecard,html[data-at3d-theme=night] .package,html[data-at3d-theme=night] .review-panel,html[data-at3d-theme=night] .operation-card,html[data-at3d-theme=night] .video-card,html[data-at3d-theme=night] .hero-location{color:var(--at3d-fg)}
+/* Desktop pointer tilt, plus a visible layered 3D treatment on touch devices */
+[data-at3d-card]{position:relative;isolation:isolate;transform-style:preserve-3d;backface-visibility:hidden;transition:transform .35s cubic-bezier(.2,.7,.2,1),box-shadow .35s,border-color .35s;box-shadow:0 12px 0 -7px rgba(8,115,173,.12),0 22px 42px rgba(8,65,105,.12);border:1px solid var(--at3d-border);border-radius:inherit}
+[data-at3d-card]:before{content:"";position:absolute;inset:0;z-index:-1;border-radius:inherit;pointer-events:none;background:linear-gradient(135deg,rgba(255,255,255,.32),transparent 46%,rgba(38,174,255,.08));transform:translateZ(-8px)}
+[data-at3d-card]>*{transform:translateZ(16px)}
+[data-at3d-card] .at3d-depth{transform:translateZ(32px)}
+@media(hover:hover) and (pointer:fine){[data-at3d-card]:hover{box-shadow:0 30px 0 -15px rgba(0,111,175,.15),0 34px 62px rgba(0,82,140,.23);border-color:rgba(27,169,255,.62)}}
+@media(max-width:700px){[data-at3d-card]{box-shadow:0 5px 0 -2px rgba(6,100,155,.16),0 13px 25px rgba(0,73,125,.14);border-color:rgba(38,161,226,.3)}[data-at3d-card]>*{transform:translateZ(5px)}}
+.at3d-orb{position:fixed;width:160px;height:160px;border-radius:50%;right:-65px;top:24%;z-index:-1;pointer-events:none;background:radial-gradient(circle at 30% 28%,rgba(255,255,255,.92),rgba(49,186,255,.48) 20%,rgba(16,108,205,.15) 52%,transparent 72%);filter:blur(1px);opacity:.42;animation:at3d-float 9s ease-in-out infinite alternate}
+.at3d-orb.second{width:110px;height:110px;right:auto;left:-50px;top:66%;animation-delay:-4s;opacity:.3}
+@keyframes at3d-float{from{transform:translate3d(0,-15px,0) rotate(0deg)}to{transform:translate3d(-18px,18px,0) rotate(14deg)}}
+.at3d-theme{position:fixed;right:14px;bottom:calc(14px + env(safe-area-inset-bottom));z-index:99999;display:flex;align-items:center;gap:9px;padding:12px 15px;border:1px solid rgba(102,208,255,.7);border-radius:18px;background:linear-gradient(145deg,#123d5d,#061a2a);color:white;font:700 13px/1.1 system-ui,sans-serif;box-shadow:0 8px 0 rgba(0,0,0,.15),0 15px 36px rgba(0,60,110,.32);cursor:pointer}
+.at3d-theme:active{transform:translateY(3px);box-shadow:0 3px 0 rgba(0,0,0,.16),0 8px 18px rgba(0,60,110,.25)}
+.at3d-theme small{display:block;font-size:10px;font-weight:500;opacity:.8;margin-top:4px}
+@media(prefers-reduced-motion:reduce){body:before,.at3d-orb{animation:none!important}[data-at3d-card],.at3d-theme{transition:none!important}}
 </style>
 
 </head>
@@ -902,19 +908,31 @@ nav?.querySelectorAll('a').forEach(link=>link.addEventListener('click',()=>{if(n
 </script>
 
 
-<script id="amirtech-3d-daynight-v2-js">
+<script id="at-3d-scene-v3-js">
 (function(){
 'use strict';
-var root=document.documentElement,mode='auto',button=document.createElement('button');
-button.type='button';button.className='at-theme-toggle';button.setAttribute('aria-label','Tukar tema siang atau malam');
-button.innerHTML='<span class="at-icon" aria-hidden="true">☀️</span><span><span class="at-label">Mod Siang</span><small class="at-sub">Auto ikut waktu Malaysia</small></span>';
+var root=document.documentElement,mode='auto';
+var button=document.createElement('button');
+button.type='button';button.className='at3d-theme';button.setAttribute('aria-label','Tukar tema siang malam');
+button.innerHTML='<span class="at3d-icon">☀️</span><span><span class="at3d-label">MOD SIANG</span><small class="at3d-sub">Tekan: malam / siang / auto</small></span>';
 function hourMY(){try{return Number(new Intl.DateTimeFormat('en-GB',{timeZone:'Asia/Kuala_Lumpur',hour:'2-digit',hourCycle:'h23'}).format(new Date()))}catch(e){return (new Date().getUTCHours()+8)%24}}
-function applyTheme(){var h=hourMY(),night=mode==='night'||(mode==='auto'&&(h<6||h>=19));root.setAttribute('data-at-theme',night?'night':'day');button.querySelector('.at-icon').textContent=night?'🌙':'☀️';button.querySelector('.at-label').textContent=night?'Mod Malam':'Mod Siang';button.querySelector('.at-sub').textContent=mode==='auto'?'Auto ikut waktu Malaysia':'Tekan untuk tukar tema';button.title='Tema '+(night?'malam':'siang')+' · waktu Malaysia'}
-button.addEventListener('click',function(){mode=mode==='auto'?'night':mode==='night'?'day':'auto';applyTheme()});
-function add3D(){if(window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;var sel='.cards article,.pricecard,.package,.steps article,.video-card,.review-panel,.operation-card,.hero-location,.location > *, .contact > *, .cards > *, .hero-grid > *';document.querySelectorAll(sel).forEach(function(el){if(el.dataset.at3dDone)return;el.dataset.at3dDone='1';el.setAttribute('data-at-3d','');if(!window.matchMedia('(hover:hover) and (pointer:fine)').matches)return;el.addEventListener('pointermove',function(e){var r=el.getBoundingClientRect(),x=(e.clientX-r.left)/r.width,y=(e.clientY-r.top)/r.height;el.style.transform='perspective(900px) rotateX('+((.5-y)*4.5).toFixed(2)+'deg) rotateY('+((x-.5)*5.5).toFixed(2)+'deg) translateY(-2px)'});el.addEventListener('pointerleave',function(){el.style.transform=''})})}
-function init(){document.body.appendChild(button);applyTheme();add3D()}
+function theme(){var night=mode==='night'||(mode==='auto'&&(hourMY()<6||hourMY()>=19));root.setAttribute('data-at3d-theme',night?'night':'day');button.querySelector('.at3d-icon').textContent=night?'🌙':'☀️';button.querySelector('.at3d-label').textContent=night?'MOD MALAM':'MOD SIANG';button.querySelector('.at3d-sub').textContent=mode==='auto'?'AUTO · WAKTU MALAYSIA':'TEKAN UNTUK TUKAR MOD';}
+button.addEventListener('click',function(){mode=mode==='auto'?'night':mode==='night'?'day':'auto';theme()});
+function init(){
+document.body.appendChild(button);
+['at3d-orb','at3d-orb second'].forEach(function(cls){var d=document.createElement('div');d.className=cls;d.setAttribute('aria-hidden','true');document.body.appendChild(d)});
+theme();
+var selectors='.cards article,.pricecard,.package,.steps article,.video-card,.review-panel,.operation-card,.hero-location,.location > *, .contact > *, .cards > *, .hero-grid > *, main section .card';
+document.querySelectorAll(selectors).forEach(function(el){
+if(el.dataset.at3dReady)return;el.dataset.at3dReady='1';el.setAttribute('data-at3d-card','');
+if(window.matchMedia('(hover:hover) and (pointer:fine)').matches&&!window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+el.addEventListener('pointermove',function(e){var r=el.getBoundingClientRect(),x=(e.clientX-r.left)/r.width,y=(e.clientY-r.top)/r.height;el.style.transform='perspective(1000px) rotateX('+((.5-y)*7).toFixed(2)+'deg) rotateY('+((x-.5)*8).toFixed(2)+'deg) translateY(-5px)';});
+el.addEventListener('pointerleave',function(){el.style.transform='';});
+}
+});
+}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
-setInterval(function(){if(mode==='auto')applyTheme()},60000);
+setInterval(function(){if(mode==='auto')theme()},60000);
 })();
 </script>
 
