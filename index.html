@@ -916,53 +916,64 @@ nav?.querySelectorAll('a').forEach(link=>link.addEventListener('click',()=>{if(n
 .business-registration-inner p{margin:8px 0;line-height:1.55}
 @media(max-width:600px){.business-registration-inner{padding:18px 16px}.business-registration-inner h2{font-size:1.08rem}}
 
-/* Lightweight, accessible motion for AMIR TECH ROG GLOBAL */
-@media (prefers-reduced-motion: no-preference) {
-  html { scroll-behavior: smooth; }
-  .motion-ready [data-motion="reveal"] {
-    opacity: 0; transform: translateY(20px);
-    transition: opacity .6s ease, transform .6s cubic-bezier(.2,.7,.2,1);
-  }
-  .motion-ready [data-motion="reveal"].is-visible { opacity: 1; transform: none; }
-  .motion-ready [data-motion-delay="1"] { transition-delay: .08s; }
-  .motion-ready [data-motion-delay="2"] { transition-delay: .16s; }
-  .motion-ready [data-motion-delay="3"] { transition-delay: .24s; }
-  .btn, .button, .actions a, .hero-location a, .brand img {
-    transition: transform .22s ease, box-shadow .22s ease, filter .22s ease;
-  }
-  .btn:hover, .button:hover, .actions a:hover, .hero-location a:hover {
-    transform: translateY(-2px);
-  }
-  .brand:hover img { transform: scale(1.04); }
-  .hero h1 { animation: amirHeroIn .7s ease both; }
-  .hero .eyebrow { animation: amirFadeIn .55s ease both; }
+
+
+
+/* AMIR TECH ROG GLOBAL — polished, accessible motion refinement */
+[data-motion="reveal"] { opacity: 1; transform: none; }
+.motion-ready [data-motion="reveal"] {
+  opacity: 0;
+  transform: translate3d(0, 24px, 0);
+  transition: opacity .72s cubic-bezier(.2,.65,.25,1), transform .72s cubic-bezier(.2,.65,.25,1);
+  will-change: opacity, transform;
 }
-@keyframes amirHeroIn { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
-@keyframes amirFadeIn { from { opacity: 0; } to { opacity: 1; } }
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
-    scroll-behavior: auto !important; animation: none !important;
-    transition: none !important;
-  }
+.motion-ready [data-motion="reveal"].is-visible { opacity: 1; transform: translate3d(0,0,0); }
+.motion-ready [data-motion-delay="1"] { transition-delay: 90ms; }
+.motion-ready [data-motion-delay="2"] { transition-delay: 170ms; }
+.motion-ready [data-motion-delay="3"] { transition-delay: 250ms; }
+@media (hover:hover) and (prefers-reduced-motion:no-preference) {
+  .btn:hover, .button:hover, .actions a:hover, .hero-location a:hover { transform: translateY(-3px); box-shadow: 0 12px 26px rgba(8,45,71,.22); }
+  .cards article:hover, .pricecard:hover, .package:hover, .video-card:hover, .steps article:hover, .operation-card:hover { transform: translateY(-5px); box-shadow: 0 18px 34px rgba(8,45,71,.14); }
+  .brand img:hover { transform: scale(1.05) rotate(-2deg); }
+}
+@keyframes amirHeroEntrance { from { opacity:0; transform:translateY(18px); } to { opacity:1; transform:translateY(0); } }
+@media (prefers-reduced-motion:no-preference) {
+  .hero .eyebrow { animation: amirHeroEntrance .5s ease-out both; }
+  .hero h1 { animation: amirHeroEntrance .72s .06s ease-out both; }
+  .hero .lead { animation: amirHeroEntrance .72s .14s ease-out both; }
+}
+@media (prefers-reduced-motion:reduce) {
+  html { scroll-behavior:auto !important; }
+  *, *::before, *::after { animation:none !important; transition:none !important; scroll-behavior:auto !important; }
+  [data-motion="reveal"], .motion-ready [data-motion="reveal"] { opacity:1 !important; transform:none !important; }
 }
 
 </style>
 
 <script>
 
-/* Scroll reveal: no external libraries; safely degrades if unsupported. */
+
+
+</script>
+<script>
+
+/* Robust motion initializer: content stays visible if anything fails. */
 (function () {
   try {
-    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    if (!('IntersectionObserver' in window)) return;
-    var items = document.querySelectorAll('main section, .cards article, .pricecard, .package, .video-card, .steps article, .service-card, .gallery-item');
+    var root = document.documentElement;
+    var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var selectors = 'main section, .hero-grid > *, .hero-foot, .heading, .cards article, .pricecard, .package, .steps article, .video-card, .review-panel, .operation-card, .location > *, .contact > *, .hero-location';
+    var items = Array.prototype.slice.call(document.querySelectorAll(selectors));
+    items = items.filter(function (el) {
+      return !el.closest('header, footer') && !el.hasAttribute('data-motion');
+    });
+    if (reduce || !('IntersectionObserver' in window)) return;
     items.forEach(function (el, i) {
-      if (el.closest('header, footer') || el.hasAttribute('data-motion')) return;
       el.setAttribute('data-motion', 'reveal');
       var delay = i % 4;
       if (delay) el.setAttribute('data-motion-delay', String(delay));
     });
-    document.documentElement.classList.add('motion-ready');
+    root.classList.add('motion-ready');
     var observer = new IntersectionObserver(function (entries) {
       entries.forEach(function (entry) {
         if (entry.isIntersecting) {
@@ -970,12 +981,13 @@ nav?.querySelectorAll('a').forEach(link=>link.addEventListener('click',()=>{if(n
           observer.unobserve(entry.target);
         }
       });
-    }, { threshold: 0.12, rootMargin: '0px 0px -30px 0px' });
+    }, { threshold: 0.08, rootMargin: '0px 0px -24px 0px' });
+    items.forEach(function (el) { observer.observe(el); });
+  } catch (error) {
+    document.documentElement.classList.remove('motion-ready');
     document.querySelectorAll('[data-motion="reveal"]').forEach(function (el) {
-      observer.observe(el);
+      el.classList.add('is-visible');
     });
-  } catch (err) {
-    /* Animation errors must never block the website. */
   }
 })();
 
