@@ -1,0 +1,4 @@
+project_id = "amir-tech-rog-global"
+
+[functions.aircond-ai]
+verify_jwt = false
