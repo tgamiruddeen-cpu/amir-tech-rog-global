@@ -548,7 +548,7 @@ footer{background:#050607!important;border-top:1px solid #71592c!important;color
 <header class="header">
 <a class="brand" href="#home"><img src="./assets/amir-tech-logo.jpg" alt="Logo Amir Tech" decoding="async" onerror="this.style.display='none'"><span><b>AMIR TECH</b><small>ROG GLOBAL · AIRCOND KERETA SPECIALIST</small></span></a>
 <button class="menu" id="menuToggle" type="button" aria-label="Buka menu" aria-controls="nav" aria-expanded="false">☰ <span>MENU</span></button>
-<nav id="nav" aria-label="Menu utama"><a href="#servis">Servis</a><a href="#harga">Harga</a><a href="#repair">Repair</a><a href="#pembantu-digital">Pembantu Digital</a><a href="#galeri">Galeri</a><a href="#ulasan">Ulasan</a><a href="#proses">Proses</a><a href="#alamat-bengkel">Alamat</a><a href="#lokasi">Lokasi</a><a href="#ssm">Pendaftaran SSM</a><a class="navbtn" href="https://wa.me/60133133519" target="_blank" rel="noopener">WhatsApp ↗</a></nav>
+<nav id="nav" aria-label="Menu utama"><a href="#servis">Servis</a><a href="#harga">Harga</a><a href="#repair">Repair</a><a href="#pembantu-digital">Pembantu Digital</a><a href="#galeri">Galeri</a><a href="#ulasan">Ulasan</a><a href="#proses">Proses</a><a href="#alamat-bengkel">Alamat</a><a href="#lokasi">Lokasi</a><a href="#panduan-3d">Panduan 3D</a><a href="#ssm">Pendaftaran SSM</a><a class="navbtn" href="https://wa.me/60133133519" target="_blank" rel="noopener">WhatsApp ↗</a></nav>
 </header>
 <section class="heritage-address-strip" id="alamat-bengkel" aria-label="Alamat rasmi bengkel AMIR TECH ROG GLOBAL">
   <div class="heritage-address-mark" aria-hidden="true">⌖</div>
@@ -1019,6 +1019,76 @@ nav?.querySelectorAll('a').forEach(link=>link.addEventListener('click',()=>{if(n
  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!backdrop.hidden)closeGate()});
  form.addEventListener('submit',e=>{e.preventDefault();if(input.value.trim()==='amir5037'){message.textContent='';const newTab=window.open(target,'_blank','noopener,noreferrer');if(!newTab){message.textContent='Pelayar menyekat tab baharu. Tekan sekali lagi atau benarkan pop-up.';return}closeGate()}else{message.textContent='Kata laluan tidak betul. Cuba semula.';input.value='';input.focus()}});
 })();
+</script>
+
+<style>
+/* 3D workshop guide */
+.route3d{padding:72px max(5%,calc((100% - 1180px)/2));background:linear-gradient(140deg,#071b2b,#0c3550 65%,#08131f);color:#f5fbff}
+.route3d .route3d-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:26px;align-items:center}
+.route3d .route3d-copy p{color:#c5deec}.route3d .route3d-copy h2{font-size:clamp(2rem,4vw,3.4rem);line-height:1.1;margin:12px 0}
+.route3d-stage{position:relative;min-height:350px;border:1px solid #2c7294;border-radius:24px;overflow:hidden;background:radial-gradient(ellipse at 50% 20%,#174d6d,#07111d 75%);box-shadow:0 20px 60px #0005}
+#workshop3d{width:100%;height:350px;display:block}.route3d-caption{position:absolute;left:14px;right:14px;bottom:12px;display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;font-size:.72rem;color:#d8f4ff;pointer-events:none}
+.route3d-pill{padding:6px 9px;border:1px solid #4384a3;background:#071a2bd9;border-radius:999px}
+.route3d-actions{display:flex;gap:10px;flex-wrap:wrap;margin:20px 0}.route3d .btn.outline{color:#eaf8ff}.route3d .route-warning{font-size:.78rem;color:#a9c8da;border-left:3px solid #f3c85b;padding-left:12px}
+@media(max-width:800px){.route3d .route3d-grid{grid-template-columns:1fr}.route3d-stage{min-height:300px}#workshop3d{height:300px}}
+@media(prefers-reduced-motion:reduce){.route3d *{scroll-behavior:auto}}
+</style>
+<section class="route3d" id="panduan-3d" aria-labelledby="route3d-title">
+ <div class="route3d-grid">
+  <div class="route3d-copy">
+   <p class="eyebrow">PANDUAN LOKASI · 3D INTERAKTIF</p>
+   <h2 id="route3d-title">Cari jalan ke <em>bengkel kami</em></h2>
+   <p>Lihat lakaran 3D ringkas lokasi bengkel AMIR TECH ROG GLOBAL. Untuk panduan jalan sebenar dari lokasi anda sekarang, tekan butang peta di bawah.</p>
+   <p><strong>Alamat:</strong><br>Lot 257, Kampung Hutan Banggol, Jalan Pantai Cahaya Bulan, 15350 Kota Bharu, Kelantan.</p>
+   <div class="route3d-actions">
+    <a class="btn gold" href="https://www.google.com/maps/dir/?api=1&amp;destination=Lot%20257%2C%20Kampung%20Hutan%20Banggol%2C%20Jalan%20Pantai%20Cahaya%20Bulan%2C%2015350%20Kota%20Bharu%2C%20Kelantan%2C%20Malaysia" target="_blank" rel="noopener noreferrer">📍 Buka Google Maps</a>
+    <a class="btn outline" href="https://www.waze.com/ul?q=Lot%20257%2C%20Kampung%20Hutan%20Banggol%2C%20Jalan%20Pantai%20Cahaya%20Bulan%2C%2015350%20Kota%20Bharu%2C%20Kelantan&amp;navigate=yes" target="_blank" rel="noopener noreferrer">🚗 Buka Waze</a>
+   </div>
+   <p class="route-warning">Nota: Model 3D ini ialah ilustrasi untuk orientasi, bukan peta berskala atau gambaran tepat simpang jalan. Sahkan laluan dan pin bengkel melalui aplikasi navigasi sebelum bergerak.</p>
+  </div>
+  <div class="route3d-stage">
+   <canvas id="workshop3d" aria-label="Lakaran 3D interaktif jalan menuju bengkel"></canvas>
+   <div class="route3d-caption"><span class="route3d-pill">JALAN UTAMA → BENGKEL</span><span class="route3d-pill">Seret untuk pusing · cubit untuk zum</span></div>
+  </div>
+ </div>
+</section>
+<script type="module">
+import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.161.0/build/three.module.js';
+import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.161.0/examples/jsm/controls/OrbitControls.js';
+const canvas=document.getElementById('workshop3d');
+if(canvas){
+ try{
+  const scene=new THREE.Scene();scene.background=new THREE.Color('#071522');scene.fog=new THREE.Fog('#071522',18,48);
+  const camera=new THREE.PerspectiveCamera(45,1,.1,100);camera.position.set(9,8,12);
+  const renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:false});renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,1.7));renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+  const controls=new OrbitControls(camera,renderer.domElement);controls.enableDamping=true;controls.minDistance=7;controls.maxDistance=22;controls.maxPolarAngle=Math.PI*.48;controls.target.set(0,0,0);
+  scene.add(new THREE.HemisphereLight(0xbfeaff,0x142232,2));
+  const keyLight=new THREE.DirectionalLight(0xffffff,2.6);keyLight.position.set(6,10,5);keyLight.castShadow=true;scene.add(keyLight);
+  const fill=new THREE.PointLight(0x20baff,24,20);fill.position.set(-5,4,2);scene.add(fill);
+  const mat=(color,roughness=.75,metalness=.05)=>new THREE.MeshStandardMaterial({color,roughness,metalness});
+  const ground=new THREE.Mesh(new THREE.PlaneGeometry(60,60),mat('#102536'));ground.rotation.x=-Math.PI/2;ground.position.y=-.13;ground.receiveShadow=true;scene.add(ground);
+  const road=new THREE.Mesh(new THREE.BoxGeometry(5,.08,28),mat('#263744'));road.position.set(0,-.06,0);road.receiveShadow=true;scene.add(road);
+  for(let z=-12;z<13;z+=3){const dash=new THREE.Mesh(new THREE.BoxGeometry(.12,.025,1.2),mat('#d7e9ef'));dash.position.set(0,0,z);scene.add(dash)}
+  const building=new THREE.Mesh(new THREE.BoxGeometry(5.8,2.8,3.8),mat('#0d3550'));building.position.set(5,1.3,-3);building.castShadow=true;building.receiveShadow=true;scene.add(building);
+  const roof=new THREE.Mesh(new THREE.BoxGeometry(6.1,.22,4.1),mat('#f0c45c',.35,.3));roof.position.set(5,2.82,-3);roof.castShadow=true;scene.add(roof);
+  const fascia=new THREE.Mesh(new THREE.BoxGeometry(4.8,.55,.12),mat('#061521'));fascia.position.set(5,2.05,-4.94);scene.add(fascia);
+  const sign=new THREE.Mesh(new THREE.BoxGeometry(3.9,.1,.06),new THREE.MeshStandardMaterial({color:'#54dfff',emissive:'#087ba5',emissiveIntensity:2}));sign.position.set(5,2.07,-5.03);scene.add(sign);
+  const shutter=new THREE.Mesh(new THREE.BoxGeometry(2.1,1.7,.09),mat('#8ba7b6',.5,.25));shutter.position.set(4.4,.88,-4.96);scene.add(shutter);
+  for(let y=.25;y<1.65;y+=.22){const line=new THREE.Mesh(new THREE.BoxGeometry(2.05,.025,.02),mat('#344e60'));line.position.set(4.4,y,-5.02);scene.add(line)}
+  const pole=new THREE.Mesh(new THREE.CylinderGeometry(.06,.08,1.5,8),mat('#a6c5d4'));pole.position.set(1.5,.68,-5.4);scene.add(pole);
+  const pin=new THREE.Mesh(new THREE.ConeGeometry(.35,.75,4),new THREE.MeshStandardMaterial({color:'#ffcc4d',emissive:'#7d4d00',emissiveIntensity:.5}));pin.rotation.y=Math.PI/4;pin.position.set(1.5,1.75,-5.4);scene.add(pin);
+  for(const z of [-10,-4,3,10]){const p=new THREE.Mesh(new THREE.CylinderGeometry(.035,.05,2.1,8),mat('#55788e'));p.position.set(-2.9,1,z);scene.add(p);const lamp=new THREE.Mesh(new THREE.SphereGeometry(.13,12,8),new THREE.MeshStandardMaterial({color:'#9cecff',emissive:'#2aafff',emissiveIntensity:2}));lamp.position.set(-2.9,2.12,z);scene.add(lamp)}
+  const car=new THREE.Group();scene.add(car);
+  const body=new THREE.Mesh(new THREE.BoxGeometry(1.25,.42,2.1),mat('#168bd1',.32,.3));body.position.y=.48;body.castShadow=true;car.add(body);
+  const cabin=new THREE.Mesh(new THREE.BoxGeometry(.95,.42,1.05),mat('#18364a',.25,.2));cabin.position.set(0,.87,-.1);cabin.castShadow=true;car.add(cabin);
+  for(const x of [-.68,.68])for(const z of [-.68,.68]){const wheel=new THREE.Mesh(new THREE.CylinderGeometry(.19,.19,.12,16),mat('#090d12'));wheel.rotation.z=Math.PI/2;wheel.position.set(x,.27,z);car.add(wheel)}
+  const headmat=new THREE.MeshStandardMaterial({color:'#dffaff',emissive:'#3bd4ff',emissiveIntensity:2});for(const x of [-.38,.38]){const light=new THREE.Mesh(new THREE.BoxGeometry(.2,.1,.04),headmat);light.position.set(x,.52,1.07);car.add(light)}
+  const routePts=[];for(let i=0;i<=30;i++){const t=i/30;routePts.push(new THREE.Vector3(-.55+5.25*t,.08,8-11*t))}
+  const routeGeo=new THREE.BufferGeometry().setFromPoints(routePts);const route=new THREE.Line(routeGeo,new THREE.LineDashedMaterial({color:0x58dcff,dashSize:.45,gapSize:.22}));route.computeLineDistances();scene.add(route);
+  const resize=()=>{const w=canvas.clientWidth||600,h=canvas.clientHeight||350;renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix()};if('ResizeObserver' in window)new ResizeObserver(resize).observe(canvas);else window.addEventListener('resize',resize);resize();
+  let start=performance.now();const animate=(now)=>{if(!canvas.isConnected)return;requestAnimationFrame(animate);const t=(now-start)/1000;car.position.set(-.55+Math.sin(t*.22)*.18,.02,6.5-(t%12)*.9);car.rotation.y=Math.sin(t*.22)*.06;controls.update();renderer.render(scene,camera)};requestAnimationFrame(animate);
+ }catch(err){const msg=document.createElement('p');msg.style.cssText='padding:16px;color:#d8f4ff';msg.textContent='Paparan 3D tidak dapat dimuat pada peranti ini. Gunakan butang Google Maps atau Waze untuk navigasi.';canvas.insertAdjacentElement('afterend',msg);}
+}
 </script>
 
 </body></html>
