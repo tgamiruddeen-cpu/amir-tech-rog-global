@@ -1053,11 +1053,14 @@ nav?.querySelectorAll('a').forEach(link=>link.addEventListener('click',()=>{if(n
  </div>
 </section>
 <script type="module">
-import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.161.0/build/three.module.js';
-import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.161.0/examples/jsm/controls/OrbitControls.js';
 const canvas=document.getElementById('workshop3d');
 if(canvas){
  try{
+  const [THREE, controlsModule] = await Promise.all([
+   import('https://esm.sh/three@0.161.0'),
+   import('https://esm.sh/three@0.161.0/examples/jsm/controls/OrbitControls.js')
+  ]);
+  const { OrbitControls } = controlsModule;
   const scene=new THREE.Scene();scene.background=new THREE.Color('#071522');scene.fog=new THREE.Fog('#071522',18,48);
   const camera=new THREE.PerspectiveCamera(45,1,.1,100);camera.position.set(9,8,12);
   const renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:false});renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,1.7));renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;
@@ -1087,7 +1090,7 @@ if(canvas){
   const routeGeo=new THREE.BufferGeometry().setFromPoints(routePts);const route=new THREE.Line(routeGeo,new THREE.LineDashedMaterial({color:0x58dcff,dashSize:.45,gapSize:.22}));route.computeLineDistances();scene.add(route);
   const resize=()=>{const w=canvas.clientWidth||600,h=canvas.clientHeight||350;renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix()};if('ResizeObserver' in window)new ResizeObserver(resize).observe(canvas);else window.addEventListener('resize',resize);resize();
   let start=performance.now();const animate=(now)=>{if(!canvas.isConnected)return;requestAnimationFrame(animate);const t=(now-start)/1000;car.position.set(-.55+Math.sin(t*.22)*.18,.02,6.5-(t%12)*.9);car.rotation.y=Math.sin(t*.22)*.06;controls.update();renderer.render(scene,camera)};requestAnimationFrame(animate);
- }catch(err){const msg=document.createElement('p');msg.style.cssText='padding:16px;color:#d8f4ff';msg.textContent='Paparan 3D tidak dapat dimuat pada peranti ini. Gunakan butang Google Maps atau Waze untuk navigasi.';canvas.insertAdjacentElement('afterend',msg);}
+ }catch(err){const msg=document.createElement('div');msg.style.cssText='position:absolute;inset:12px;display:flex;align-items:center;justify-content:center;text-align:center;padding:18px;color:#d8f4ff;background:#071522eF;border:1px solid #2c7294;border-radius:16px;z-index:5';msg.textContent='Peta 3D gagal dimuat. Semak sambungan internet dan cuba muat semula halaman. Untuk arah sebenar, tekan Buka Google Maps atau Buka Waze.';canvas.parentElement.appendChild(msg);console.error('Peta 3D gagal dimuat:',err);}
 }
 </script>
 
