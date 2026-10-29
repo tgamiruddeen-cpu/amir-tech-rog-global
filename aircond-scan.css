@@ -1,0 +1,82 @@
+#pembantu-digital .live-head{max-width:760px;margin:0 auto 28px;text-align:center}
+#pembantu-digital .live-head>p:not(.eyebrow){max-width:650px;margin-left:auto;margin-right:auto}
+#pembantu-digital .live-grid{display:grid;grid-template-columns:minmax(0,1fr);max-width:900px;margin:0 auto;gap:16px}
+#pembantu-digital .live-grid>.live-diagnostic-card{order:1;padding:clamp(18px,3vw,34px);background:linear-gradient(145deg,#13283b,#0c1724);border-color:#35516b}
+#pembantu-digital .live-grid>.live-clock-card{order:2;display:grid;grid-template-columns:auto 1fr;align-items:center;column-gap:18px;padding:14px 20px}
+#pembantu-digital .live-grid>.live-clock-card .live-tag:first-child{grid-column:1/-1}
+#pembantu-digital .live-grid>.live-clock-card .live-clock{font-size:1.35rem;line-height:1.2}
+#pembantu-digital .live-grid>.live-clock-card .live-date{font-size:.82rem}
+#pembantu-digital .live-grid>.live-clock-card .live-tag:nth-of-type(2),#pembantu-digital .live-grid>.live-clock-card .live-message,#pembantu-digital .live-grid>.live-clock-card .live-note{display:none}
+#pembantu-digital .ai-status{margin-bottom:14px}
+#pembantu-digital .assistant-title{font-size:clamp(1.5rem,3vw,2.1rem);margin:12px 0 8px}
+#pembantu-digital .scan-tips{margin:12px 0 18px;border:1px solid #2a425a;border-radius:12px;background:#0a1623;padding:11px 14px}
+#pembantu-digital .scan-tips>summary{cursor:pointer;color:#bbd7e6;font-weight:750;font-size:.86rem}
+#pembantu-digital .scan-wizard{border:1px solid #304a63;border-radius:18px;background:#091521;padding:clamp(16px,3vw,28px);margin:16px 0}
+#pembantu-digital .scan-progress{display:grid;gap:9px;margin-bottom:22px}
+#pembantu-digital .scan-progress-label{font-size:.77rem;font-weight:850;color:#e9c66e;letter-spacing:.08em;text-transform:uppercase}
+#pembantu-digital .scan-progress-track{height:6px;border-radius:999px;background:#203447;overflow:hidden}
+#pembantu-digital .scan-progress-value{display:block;width:33.333%;height:100%;border-radius:inherit;background:linear-gradient(90deg,#e8c36b,#ffe8a1);transition:width .25s ease}
+#pembantu-digital .scan-step[hidden],#pembantu-digital .scan-summary[hidden]{display:none!important}
+#pembantu-digital .scan-eyebrow{color:#e8c36b!important;font-size:.72rem;font-weight:900;letter-spacing:.14em;margin:0 0 5px}
+#pembantu-digital .scan-step h4{font-size:1.28rem;line-height:1.25;margin:4px 0 6px;color:#f4f8ff}
+#pembantu-digital .scan-help{color:#b8c8d9!important;font-size:.87rem;margin:0 0 16px;line-height:1.55}
+#pembantu-digital .scan-choice-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+#pembantu-digital .scan-choice{min-width:0;min-height:66px;display:grid;align-content:center;text-align:left;gap:3px;padding:11px 13px;border:1px solid #35516b;border-radius:12px;background:#0d1d2b;color:#f4f8ff;cursor:pointer;font:inherit;transition:border-color .15s ease,background .15s ease,transform .15s ease}
+#pembantu-digital .scan-choice:hover{border-color:#91cce3;transform:translateY(-1px)}
+#pembantu-digital .scan-choice[aria-pressed=true]{border-color:#e8c36b;background:#182638;box-shadow:inset 0 0 0 1px #e8c36b}
+#pembantu-digital .scan-choice strong{font-size:.9rem;line-height:1.3}
+#pembantu-digital .scan-choice small{color:#acbfd0;font-size:.74rem;line-height:1.4}
+#pembantu-digital .scan-choice--small{min-height:48px;padding:9px 11px}
+#pembantu-digital .scan-choice--small strong{font-size:.82rem;font-weight:700}
+#pembantu-digital .scan-choice--small small:empty{display:none}
+#pembantu-digital .scan-error{color:#ffc3b7;font-size:.83rem;margin:10px 0 0}
+#pembantu-digital .scan-extra{border:1px solid #2b4358;border-radius:12px;background:#0a1723;padding:12px 14px;margin-top:14px}
+#pembantu-digital .scan-extra>summary{cursor:pointer;color:#d6e5f1;font-size:.86rem;font-weight:750}
+#pembantu-digital .scan-extra[open]>summary{margin-bottom:12px}
+#pembantu-digital .scan-extra .field-grid{margin-top:12px}
+#pembantu-digital .scan-question{margin-top:20px}
+#pembantu-digital .scan-question h5{font-size:.92rem;margin:0 0 10px;color:#f0f6fb}
+#pembantu-digital .scan-question+.scan-question{padding-top:18px;border-top:1px solid #25394c}
+#pembantu-digital .scan-vehicle-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+#pembantu-digital .scan-vehicle-grid label:first-child{grid-column:1/-1}
+#pembantu-digital .scan-vehicle-grid label{display:grid!important;gap:6px!important;color:#f2f8fb!important;font-weight:750!important;min-width:0}
+#pembantu-digital .scan-step-nav{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:20px}
+#pembantu-digital .scan-step-nav:has(.scan-next):not(:has(.scan-back)){justify-content:flex-end}
+#pembantu-digital .scan-back{border:1px solid #47617a;border-radius:10px;background:transparent;color:#e3edf6;padding:11px 15px;font:inherit;font-weight:750;cursor:pointer}
+#pembantu-digital .scan-next{min-width:150px}
+#pembantu-digital .scan-analyze-button{margin-top:6px;background:linear-gradient(135deg,#e8c36b,#fff0b8)!important;color:#1b1b1b!important;border:0!important}
+#pembantu-digital .scan-optional-grid{grid-template-columns:1fr!important}
+#pembantu-digital .scan-advanced>details{margin-top:12px}
+#pembantu-digital .scan-summary{border:1px solid #3e6a7e;border-radius:16px;background:linear-gradient(145deg,#10283a,#091721);padding:clamp(18px,3vw,28px);margin:18px 0}
+#pembantu-digital .scan-summary h3{font-size:1.55rem;margin:6px 0}
+#pembantu-digital .scan-summary h4{margin:20px 0 7px;font-size:.98rem;color:#e8c36b}
+#pembantu-digital .scan-summary-intro{color:#c9d9e7;font-weight:700;margin:0}
+#pembantu-digital .scan-summary ol,#pembantu-digital .scan-summary ul{padding-left:1.35rem;margin:8px 0;color:#e5edf5}
+#pembantu-digital .scan-summary li{padding:3px 0}
+#pembantu-digital .scan-safety-note{border-left:3px solid #e8c36b;padding:9px 12px;background:#182536;color:#dce7ef;border-radius:0 8px 8px 0;font-size:.82rem;margin:18px 0 0}
+#pembantu-digital .scan-result-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+#pembantu-digital .scan-full-report{margin:15px 0;border:1px solid #2e465d;border-radius:12px;background:#0a1623;padding:12px 14px}
+#pembantu-digital .scan-full-report>summary{cursor:pointer;color:#cad9e6;font-weight:750}
+#pembantu-digital .scan-full-report .diagnosis-result{margin-top:12px}
+#pembantu-digital .scan-whatsapp-dialog{width:min(720px,calc(100% - 28px));max-height:min(88vh,900px);padding:0;border:1px solid #42647d;border-radius:18px;background:#0c1925;color:#f2f8ff;box-shadow:0 24px 90px #000b}
+#pembantu-digital .scan-whatsapp-dialog::backdrop{background:#03080dbb;backdrop-filter:blur(4px)}
+#pembantu-digital .scan-dialog-shell{position:relative;padding:24px;display:grid;gap:8px}
+#pembantu-digital .scan-dialog-shell h3{margin:0;font-size:1.35rem}
+#pembantu-digital .scan-dialog-shell .scan-help{margin:0}
+#pembantu-digital .scan-dialog-shell textarea{width:100%;height:38vh;min-height:220px;resize:vertical;background:#07111b;color:#e9f1f8;border:1px solid #35516b;border-radius:10px;padding:12px;font:.83rem/1.5 ui-monospace,SFMono-Regular,Consolas,monospace}
+#pembantu-digital .scan-dialog-close{position:absolute;right:14px;top:12px;width:36px;height:36px;border:1px solid #426078;border-radius:50%;background:#102235;color:#eff7fc;font-size:1.4rem;cursor:pointer}
+body.scan-is-visible .floatwa{opacity:0!important;pointer-events:none!important;transform:translateY(10px)}
+.scan-hero-link{border-color:#e8c36b!important;color:#f7df9c!important}
+#pembantu-digital :focus-visible{outline:3px solid #f0ce78!important;outline-offset:3px}
+@media(max-width:640px){
+  #pembantu-digital .live-grid>.live-clock-card{grid-template-columns:1fr 1fr;row-gap:4px}
+  #pembantu-digital .scan-choice-grid,#pembantu-digital .scan-vehicle-grid{grid-template-columns:1fr}
+  #pembantu-digital .scan-vehicle-grid label:first-child{grid-column:auto}
+  #pembantu-digital .scan-step-nav{align-items:stretch}
+  #pembantu-digital .scan-step-nav .btn,#pembantu-digital .scan-next{min-width:0;flex:1}
+  #pembantu-digital .scan-result-actions>*{flex:1;justify-content:center;text-align:center}
+  #pembantu-digital .scan-dialog-shell{padding:20px 16px}
+}
+@media(prefers-reduced-motion:reduce){#pembantu-digital .scan-progress-value,#pembantu-digital .scan-choice{transition:none}}
+
+#pembantu-digital .scan-full-report[hidden]{display:none!important}

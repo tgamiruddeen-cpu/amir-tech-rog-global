@@ -540,6 +540,7 @@ footer{background:#050607!important;border-top:1px solid #71592c!important;color
 }
 </script>
 
+<link rel="stylesheet" href="./aircond-scan.css">
 </head>
 <body>
 <a class="skip-link" href="#home">Langkau ke kandungan utama</a>
@@ -819,6 +820,7 @@ function analyse(){
  if($('diagnosisResult'))$('diagnosisResult').textContent=out;
  return {data:d,assessment:s,text:out,technical:tc};
 }
+window.runAircondDiagnosis = analyse;
 $('runDiagnosis')?.addEventListener('click',()=>{const result=analyse();if(result){const box=$('diagnosisResult');box?.classList.remove('is-updated');requestAnimationFrame(()=>{box?.classList.add('is-updated');box?.scrollIntoView({behavior:'smooth',block:'nearest'})})}});
 $('assistForm')?.addEventListener('submit',e=>{e.preventDefault();const result=analyse();if(!result)return;const d=result.data;const message=`LAPORAN SARINGAN AIRCOND — AMIR TECH ROG GLOBAL
 Nama: ${d.name||'Tidak diberi'}
@@ -1116,4 +1118,5 @@ if(canvas){
 }
 </script>
 
+<script src="./aircond-scan.js"></script>
 </body></html>
