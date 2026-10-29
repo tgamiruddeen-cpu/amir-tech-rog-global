@@ -18,3 +18,7 @@ Responsive widths are approximate because they were reviewed by changing browser
 ## Result
 
 **Result: passed**
+
+## Additional Islamic tools added afterward
+
+The daily hadith card now rotates a short Malay summary from seven Sahih al-Bukhari / Sahih Muslim references by the visitor's local date. Prayer times use AlAdhan by GPS coordinates or a manually entered city and country, and refresh when the local date changes. The UI explains that location/city data is sent to AlAdhan for calculation and that times may differ from local authority schedules. The browser permission flow and live API response were not manually verified in this QA pass.

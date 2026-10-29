@@ -80,3 +80,26 @@ body.scan-is-visible .floatwa{opacity:0!important;pointer-events:none!important;
 @media(prefers-reduced-motion:reduce){#pembantu-digital .scan-progress-value,#pembantu-digital .scan-choice{transition:none}}
 
 #pembantu-digital .scan-full-report[hidden]{display:none!important}
+
+/* Daily hadith and location-based prayer times */
+#pembantu-digital .daily-hadith-card .live-message{margin:18px 0;font-size:1.08rem;line-height:1.65;font-weight:750;color:#f2f8ff}
+#pembantu-digital .hadith-reference{margin:0;color:#b9d3e1;font-size:.82rem}
+#pembantu-digital .hadith-reference a{color:#f6d16b;font-weight:800;text-decoration:underline;text-underline-offset:3px}
+#pembantu-digital .prayer-times-card h3{margin:10px 0 8px;font-size:1.4rem;color:#f2f8ff}
+#pembantu-digital .prayer-status{min-height:2.8em;margin:0 0 12px;color:#c9dce8;font-size:.84rem;line-height:1.5}
+#pembantu-digital .prayer-status.is-error{color:#ffc3b7}
+#pembantu-digital .prayer-locate{width:100%;min-height:46px;margin-bottom:14px}
+#pembantu-digital .prayer-locate[disabled],#pembantu-digital .prayer-city-form button[disabled]{opacity:.65;cursor:wait}
+#pembantu-digital .prayer-times-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+#pembantu-digital .prayer-time{display:flex;align-items:center;justify-content:space-between;gap:8px;min-width:0;padding:10px 12px;border:1px solid #30485e;border-radius:10px;background:#0a1723}
+#pembantu-digital .prayer-time span{color:#c5d5e0;font-size:.82rem}
+#pembantu-digital .prayer-time strong{color:#f6d16b;font-size:1.05rem;font-variant-numeric:tabular-nums}
+#pembantu-digital .prayer-manual{margin-top:14px;border:1px solid #35516b;border-radius:11px;background:#0a1723;padding:11px 13px}
+#pembantu-digital .prayer-manual summary{cursor:pointer;color:#d8edf5;font-size:.85rem;font-weight:800}
+#pembantu-digital .prayer-city-form{display:grid;gap:7px;margin-top:12px}
+#pembantu-digital .prayer-city-form label{color:#d8e7ef;font-size:.82rem;font-weight:700}
+#pembantu-digital .prayer-city-form input{width:100%;min-height:44px;padding:10px 12px;border:1px solid #537086;border-radius:9px;background:#07111b;color:#f4f8ff;font:inherit}
+#pembantu-digital .prayer-city-form input::placeholder{color:#94aaba}
+#pembantu-digital .prayer-city-form button{width:100%;margin-top:5px}
+#pembantu-digital .prayer-disclaimer{margin:13px 0 0;color:#9fb7c5;font-size:.72rem;line-height:1.5}
+@media(min-width:960px){#pembantu-digital .live-grid{grid-template-columns:repeat(2,minmax(0,1fr));max-width:1100px;align-items:start}#pembantu-digital .live-grid>.live-card:nth-child(3){grid-column:1/-1}}
