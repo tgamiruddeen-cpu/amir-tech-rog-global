@@ -8,36 +8,6 @@
   const runButton = $('#runDiagnosis');
   if (!section || !form || !runButton) return;
 
-  const liveHeading = $('.live-head h2', section);
-  const liveDescription = $('.live-head > p:not(.eyebrow)', section);
-  if (liveHeading) liveHeading.innerHTML = 'Saringan aircond<br><em>bermula dengan simptom.</em>';
-  if (liveDescription) liveDescription.textContent = 'Jawab tiga langkah ringkas untuk melihat punca yang mungkin dan pemeriksaan seterusnya. Saringan ini panduan awal, bukan diagnosis muktamad.';
-
-  const assistant = $('.live-grid .live-card:nth-child(2)', section);
-  const clockCard = $('.live-grid .live-card:first-child', section);
-  const liveGrid = $('.live-grid', section);
-  if (assistant && clockCard && liveGrid) {
-    assistant.classList.add('live-diagnostic-card');
-    clockCard.classList.add('live-clock-card');
-    liveGrid.insertBefore(assistant, clockCard);
-  }
-
-  const title = $('.assistant-title', assistant || section);
-  if (title) title.textContent = 'Semak masalah aircond kereta';
-  const intro = $('.assistant-title + .live-note', assistant || section);
-  if (intro) intro.textContent = 'Pilih simptom dan keadaan ia berlaku. Bacaan meter tidak diperlukan untuk saringan awal.';
-
-  const quickOptions = $('.assist-options', assistant || section);
-  const quickAnswer = $('#assistAnswer');
-  if (quickOptions && quickAnswer) {
-    const tips = document.createElement('details');
-    tips.className = 'scan-tips';
-    const summary = document.createElement('summary');
-    summary.textContent = 'Tip ringkas dan pertanyaan servis';
-    tips.append(summary, quickOptions, quickAnswer);
-    form.parentElement.insertBefore(tips, form);
-  }
-
   const grids = $$('.field-grid', form).filter((grid) => !grid.classList.contains('single'));
   const vehicleGrid = grids[0];
   const symptomGrid = grids[1];
