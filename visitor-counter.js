@@ -9,8 +9,7 @@ async function loadVisitorCounter() {
   if (!totalEl || !todayEl) return;
   const headers = {
     "Content-Type": "application/json",
-    "apikey": SUPABASE_ANON_KEY,
-    "Authorization": `Bearer ${SUPABASE_ANON_KEY}`
+    "apikey": SUPABASE_ANON_KEY
   };
   try {
     const alreadyCounted = sessionStorage.getItem("amirtech_visit_counted") === "1";
