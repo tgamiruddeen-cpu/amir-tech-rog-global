@@ -29,4 +29,8 @@ async function loadVisitorCounter() {
     console.error("Kaunter pelawat gagal dimuatkan:", error);
   }
 }
-document.addEventListener("DOMContentLoaded", loadVisitorCounter);
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", loadVisitorCounter, { once: true });
+} else {
+  loadVisitorCounter();
+}

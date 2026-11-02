@@ -546,7 +546,6 @@ footer{background:#050607!important;border-top:1px solid #71592c!important;color
 }
 </script>
 
-<link rel="stylesheet" href="./aircond-scan.css">
 </head>
 <body>
 <a class="skip-link" href="#home">Langkau ke kandungan utama</a>
@@ -718,7 +717,6 @@ footer{background:#050607!important;border-top:1px solid #71592c!important;color
   </div>
   <p style="margin:12px 0 0;color:#c5deec;font-size:.75rem">Lawatan direkod secara agregat, satu sesi pelayar dikira sekali dan tiada alamat IP disimpan.</p>
 </section>
-<script src="./visitor-counter.js" defer></script>
 <footer><a class="brand" href="#home"><img src="./assets/amir-tech-logo.jpg" alt="Logo Amir Tech" width="1400" height="1400" decoding="async" onerror="this.style.display='none'"><span><b>AMIR TECH</b><small>ROG GLOBAL · AIRCOND KERETA SPECIALIST</small></span></a><p>Servis aircond kereta · Kota Bharu, Kelantan</p><small>No. pendaftaran SSM: 202403182465 (KT0572654-K) · Sah sehingga 15 Julai 2027</small><small><a href="#ssm">Lihat lampiran sijil SSM ↗</a></small><a href="https://wa.me/60133133519" target="_blank" rel="noopener">WhatsApp 013-313 3519 ↗</a><small>© <span id="year">2026</span> AMIR TECH ROG GLOBAL. Semua hak terpelihara.</small></footer>
 <a class="floatwa" aria-label="Hubungi AMIR TECH ROG GLOBAL melalui WhatsApp" href="https://wa.me/60133133519?text=Assalamualaikum%2C%20saya%20nak%20bertanya%20tentang%20servis%20aircond%20kereta." target="_blank" rel="noopener">☏ <span>WhatsApp</span></a>
 <script>
@@ -1123,6 +1121,38 @@ if(canvas){
 }
 </script>
 
-<script src="./daily-islamic.js"></script>
-<script src="./aircond-scan.js"></script>
+<script>
+(()=>{
+ const loadScript=(src)=>{const script=document.createElement('script');script.src=src;document.body.append(script)};
+ const loadPrayerAndCounter=()=>{
+  const start=()=>{
+   const schedule=window.requestIdleCallback?callback=>window.requestIdleCallback(callback,{timeout:1800}):callback=>window.setTimeout(callback,900);
+   schedule(()=>{loadScript('./visitor-counter.js');loadScript('./daily-islamic.js')});
+  };
+  if(document.readyState==='complete')start();else window.addEventListener('load',start,{once:true});
+ };
+ loadPrayerAndCounter();
+
+ const section=document.getElementById('pembantu-digital');
+ let scanLoaded=false;
+ const loadScan=()=>{
+  if(scanLoaded||!section)return;
+  scanLoaded=true;
+  const stylesheet=document.createElement('link');
+  stylesheet.rel='stylesheet';
+  stylesheet.href='./aircond-scan.css';
+  const startScan=()=>loadScript('./aircond-scan.js');
+  stylesheet.addEventListener('load',startScan,{once:true});
+  stylesheet.addEventListener('error',startScan,{once:true});
+  document.head.append(stylesheet);
+ };
+ if(section&&'IntersectionObserver' in window){
+  const observer=new IntersectionObserver((entries)=>{if(entries.some(entry=>entry.isIntersecting)){observer.disconnect();loadScan()}},{rootMargin:'600px 0px'});
+  observer.observe(section);
+ }else if(section){
+  const fallback=()=>window.setTimeout(loadScan,1200);
+  if(document.readyState==='complete')fallback();else window.addEventListener('load',fallback,{once:true});
+ }
+})();
+</script>
 </body></html>
