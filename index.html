@@ -728,7 +728,7 @@ body.scan-is-visible .floatwa{opacity:0!important;pointer-events:none!important;
 <button class="btn outline diagnosis-primary" id="runDiagnosis" type="button">Analisa kerosakan aircond</button>
 <div class="diagnosis-result" id="diagnosisResult" aria-live="polite" role="status">Isi jenama, model, tahun dan simptom dahulu. Jika ada bacaan suhu atau tekanan, tambah supaya saringan awal lebih bermaklumat.</div>
 <button class="btn whatsapp-submit" id="sendWhatsAppReport" type="button">Hantar laporan kepada Amir melalui WhatsApp ↗</button>
-<small class="live-note">Selepas menekan Pratonton untuk WhatsApp, WhatsApp akan dibuka dengan laporan yang telah disediakan. Jika diminta, pilih WhatsApp dan tekan Hantar. Analisa dipaparkan terus pada website berdasarkan simptom dan bacaan yang dimasukkan. Lengkapkan data meter untuk saringan yang lebih bermaklumat. Cadangan ini ialah saringan teknikal, bukan pengesahan muktamad atau pengganti spesifikasi servis pengeluar. Untuk menghantar laporan kepada bengkel, tekan butang WhatsApp.</small>
+<small class="live-note">Analisa dipaparkan terus pada website berdasarkan simptom dan bacaan yang dimasukkan. Lengkapkan data meter untuk saringan yang lebih bermaklumat. Cadangan ini ialah saringan teknikal, bukan pengesahan muktamad atau pengganti spesifikasi servis pengeluar. Untuk menghantar laporan kepada bengkel, tekan butang WhatsApp.</small>
 </form></article></div></section>
 <section class="section" id="proses"><div class="heading center"><p class="eyebrow">CARA KERJA KAMI</p><h2>Empat langkah yang<br><em>mudah difahami.</em></h2></div><div class="steps"><article><b>01</b><h3>Ceritakan simptom</h3><p>Maklumkan bila aircond kurang sejuk, berbau atau berbunyi.</p></article><article><b>02</b><h3>Pemeriksaan</h3><p>Kami periksa keadaan sistem dan maklumat berkaitan.</p></article><article><b>03</b><h3>Penerangan & harga</h3><p>Cadangan kerja dan kos diterangkan terlebih dahulu.</p></article><article><b>04</b><h3>Servis & semakan</h3><p>Kerja yang dipersetujui dilakukan dan prestasi disemak.</p></article></div></section>
 
@@ -934,7 +934,7 @@ function analyse(){
 }
 window.runAircondDiagnosis = analyse;
 $('runDiagnosis')?.addEventListener('click',()=>{const result=analyse();if(result){const box=$('diagnosisResult');box?.classList.remove('is-updated');requestAnimationFrame(()=>{box?.classList.add('is-updated');box?.scrollIntoView({behavior:'smooth',block:'nearest'})})}});
-$('sendWhatsAppReport')?.addEventListener('click',()=>{const result=analyse();if(!result)return;const d=result.data;const message=`LAPORAN SARINGAN AIRCOND — AMIR TECH ROG GLOBAL
+$('assistForm')?.addEventListener('submit',e=>{e.preventDefault();const result=analyse();if(!result)return;const d=result.data;const message=`LAPORAN SARINGAN AIRCOND — AMIR TECH ROG GLOBAL
 Nama: ${d.name||'Tidak diberi'}
 Kereta: ${d.brand} ${d.model} (${d.year})${d.engine?' · '+d.engine:''}
 Simptom dipilih: ${result.assessment.title}
@@ -967,7 +967,7 @@ ${result.technical.priorities.map((x,i)=>`${i+1}. ${x}`).join('\n')}
 Kemungkinan ikut simptom: ${result.assessment.causes.join(' | ')}
 Pemeriksaan disyorkan: ${result.assessment.checks.join(' | ')}
 
-Mohon Amir semak bacaan, spesifikasi OEM dan beri quotation selepas pemeriksaan. Laporan ini saringan awal, bukan pengesahan kerosakan muktamad.`;const waUrl='https://api.whatsapp.com/send?phone=60133133519&text='+encodeURIComponent('Untuk perhatian Amir — AMIR TECH ROG GLOBAL\n\n'+message);window.location.href=waUrl;});
+Mohon Amir semak bacaan, spesifikasi OEM dan beri quotation selepas pemeriksaan. Laporan ini saringan awal, bukan pengesahan kerosakan muktamad.`;window.location.href='https://wa.me/60133133519?text='+encodeURIComponent(message);});
 $('quote')?.addEventListener('submit',e=>{e.preventDefault();let n=$('nama').value,c=$('kereta').value,i=$('masalah').value;location.href='https://wa.me/60133133519?text='+encodeURIComponent('Assalamualaikum AMIR TECH ROG GLOBAL. Nama: '+n+'. Model kereta: '+c+'. Masalah: '+i+'. Mohon maklumat servis/quotation.');});
 const modelCatalog={
  'Perodua':['Myvi','Axia','Bezza','Alza','Ativa','Aruz','Kancil','Kelisa','Kenari','Kembara','Viva','Rusa'],
@@ -1039,6 +1039,33 @@ const diagnosisBtn=$('runDiagnosis');const diagnosisOutput=$('diagnosisResult');
 nav?.querySelectorAll('a').forEach(link=>link.addEventListener('click',()=>{if(nav.classList.contains('open')){nav.classList.remove('open');menu?.setAttribute('aria-expanded','false')}}));
 })();
 </script>
+<script>
+/* WhatsApp report handoff — isolated handler for reliable mobile tap */
+(function(){
+  const button=document.getElementById('sendWhatsAppReport');
+  if(!button) return;
+  button.addEventListener('click',function(){
+    try {
+      if(typeof window.runAircondDiagnosis!=='function') {
+        alert('Fungsi analisa belum dimuatkan. Sila muat semula laman dan cuba lagi.');
+        return;
+      }
+      const result=window.runAircondDiagnosis();
+      if(!result || !result.text) {
+        document.getElementById('assistForm')?.scrollIntoView({behavior:'smooth',block:'start'});
+        return;
+      }
+      const message='Assalamualaikum Amir, berikut laporan daripada laman AMIR TECH ROG GLOBAL.\n\n'+result.text+'\n\nMohon semakan dan maklum balas. Terima kasih.';
+      const url='https://api.whatsapp.com/send?phone=60133133519&text='+encodeURIComponent(message);
+      window.location.assign(url);
+    } catch(error) {
+      console.error('WhatsApp report error:',error);
+      alert('Laporan belum dapat dibuka. Sila cuba semula atau gunakan butang WhatsApp hijau untuk hubungi Amir.');
+    }
+  },{passive:true});
+})();
+</script>
+
 
 <script>
 (()=> {
