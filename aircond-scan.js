@@ -314,7 +314,7 @@
     const preview = document.createElement('button');
     preview.type = 'button';
     preview.className = 'btn gold';
-    preview.textContent = 'Pratonton untuk WhatsApp';
+    preview.textContent = 'Hantar kepada Amir';
     preview.addEventListener('click', openWhatsAppPreview);
     actions.append(revise, preview);
     summaryPanel.append(actions);

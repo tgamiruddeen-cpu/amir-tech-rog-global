@@ -1245,7 +1245,7 @@ if(canvas){
  const loadScan=()=>{
   if(scanLoaded||!section)return;
   scanLoaded=true;
-  loadScript('./aircond-scan.js');
+  loadScript('./aircond-scan.js?v=20261105-send-to-amir');
  };
  const scheduleScan=()=>{
   const schedule=window.requestIdleCallback?callback=>window.requestIdleCallback(callback,{timeout:2500}):callback=>window.setTimeout(callback,1200);
