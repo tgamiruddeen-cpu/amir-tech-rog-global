@@ -5,8 +5,9 @@
   const $$ = (selector, root = document) => Array.from(root.querySelectorAll(selector));
   const section = $('#pembantu-digital');
   const form = $('#assistForm');
+  const assistant = form?.closest('.live-card');
   const runButton = $('#runDiagnosis');
-  if (!section || !form || !runButton) return;
+  if (!section || !form || !assistant || !runButton) return;
 
   const grids = $$('.field-grid', form).filter((grid) => !grid.classList.contains('single'));
   const vehicleGrid = grids[0];
