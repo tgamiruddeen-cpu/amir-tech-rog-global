@@ -359,8 +359,16 @@
     const dialog = $('#scanWhatsAppDialog');
     const textArea = $('#scanWhatsAppText');
     const continueLink = $('#scanWhatsAppContinue');
+    const copyButton = $('#scanWhatsAppCopy');
+    const copyStatus = $('#scanWhatsAppCopyStatus');
     textArea.value = latestResult.text;
-    continueLink.href = 'https://wa.me/60133133519?text=' + encodeURIComponent(latestResult.text);
+    const d = latestResult.data;
+    const assessment = latestResult.assessment;
+    const technical = latestResult.technical;
+    const shortReport = `LAPORAN SARINGAN AIRCOND — AMIR TECH ROG GLOBAL\n\nKereta: ${d.brand} ${d.model} (${d.year})${d.engine ? ' · ' + d.engine : ''}\nSimptom: ${assessment.title}\nKeterangan: ${d.symptomText || 'Tidak diberi'}\nBila berlaku: ${d.when || 'Tidak dinyatakan'}\n\nBACAAN\nVent/ambient: ${d.vent || '?'}°C / ${d.ambient || '?'}°C · LP/HP: ${d.lp || '?'} / ${d.hp || '?'} psi\nEnjin: ${d.engineTemp || '?'}°C · SH/SC: ${d.sh || '?'} / ${d.sc || '?'}°C\n\nPETUNJUK\n${technical.cues.slice(0, 2).map((x, i) => `${i + 1}. ${x}`).join('\n') || 'Bacaan teknikal belum mencukupi.'}\n\nPemeriksaan disyorkan: ${assessment.checks.slice(0, 2).join('; ')}\nKemungkinan awal: ${assessment.causes.slice(0, 2).join('; ')}\n\nMohon Amir semak dan sahkan melalui pemeriksaan serta spesifikasi OEM. Ini saringan awal, bukan diagnosis muktamad.`;
+    continueLink.href = 'https://wa.me/60133133519?text=' + encodeURIComponent(shortReport);
+    if (copyStatus) copyStatus.textContent = '';
+    if (copyButton) copyButton.textContent = 'Salin laporan penuh';
     if (typeof dialog.showModal === 'function') dialog.showModal();
     else dialog.setAttribute('open', '');
   }
@@ -375,7 +383,19 @@
   dialog.className = 'scan-whatsapp-dialog';
   dialog.id = 'scanWhatsAppDialog';
   dialog.setAttribute('aria-labelledby', 'scanWhatsAppTitle');
-  dialog.innerHTML = '<form method="dialog" class="scan-dialog-shell"><button class="scan-dialog-close" aria-label="Tutup pratonton">×</button><p class="scan-eyebrow">PRATONTON</p><h3 id="scanWhatsAppTitle">Semak laporan sebelum WhatsApp</h3><p class="scan-help">Laporan ini hanya dihantar selepas anda menekan butang WhatsApp.</p><textarea id="scanWhatsAppText" readonly aria-label="Pratonton laporan"></textarea><div class="scan-result-actions"><button class="scan-back" value="cancel">Kembali ke hasil</button><a class="btn gold" id="scanWhatsAppContinue" href="#" target="_blank" rel="noopener">Teruskan ke WhatsApp ↗</a></div></form>';
+  dialog.innerHTML = '<form method="dialog" class="scan-dialog-shell"><button class="scan-dialog-close" aria-label="Tutup pratonton">×</button><p class="scan-eyebrow">PRATONTON</p><h3 id="scanWhatsAppTitle">Semak laporan sebelum WhatsApp</h3><p class="scan-help">WhatsApp dibuka dengan ringkasan padat. Salin laporan penuh jika anda mahu hantar semua bacaan teknikal.</p><textarea id="scanWhatsAppText" readonly aria-label="Pratonton laporan penuh"></textarea><div class="scan-result-actions"><button class="scan-back" value="cancel">Kembali ke hasil</button><button class="scan-back" type="button" id="scanWhatsAppCopy">Salin laporan penuh</button><a class="btn gold" id="scanWhatsAppContinue" href="#" target="_blank" rel="noopener">Hantar kepada Amir ↗</a></div><p class="scan-help" id="scanWhatsAppCopyStatus" role="status" aria-live="polite"></p></form>';
+  dialog.querySelector('#scanWhatsAppCopy').addEventListener('click', async () => {
+    const textArea = dialog.querySelector('#scanWhatsAppText');
+    const status = dialog.querySelector('#scanWhatsAppCopyStatus');
+    try {
+      await navigator.clipboard.writeText(textArea.value);
+      status.textContent = 'Laporan penuh disalin. Tampal ke WhatsApp selepas membuka chat Amir.';
+    } catch {
+      textArea.focus();
+      textArea.select();
+      status.textContent = 'Pilih dan salin laporan penuh secara manual, kemudian tampal ke WhatsApp.';
+    }
+  });
   assistant.append(dialog);
   dialog.addEventListener('click', (event) => {
     if (event.target === dialog) dialog.close();
