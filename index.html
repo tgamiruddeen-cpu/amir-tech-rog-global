@@ -584,6 +584,22 @@ html.motion-user-opt-in .ai-orb,html.motion-user-opt-in .hero .eyebrow:before{an
 <section class="contact" id="hubungi"><div><p class="eyebrow">JOM SEMAK MASALAH</p><h2>Aircond tak seperti biasa?<br><em>Bincang dengan kami.</em></h2><p>Isi maklumat ringkas dan teruskan pertanyaan melalui WhatsApp.</p></div><form id="quote"><label>Nama<input id="nama" required placeholder="Nama anda"></label><label>Model kereta<input id="kereta" required placeholder="Contoh: Perodua Myvi 2019"></label><label>Masalah aircond<select id="masalah" required><option value="" selected>Pilih masalah</option><option>Kurang sejuk</option><option>Sejuk ketika memandu sahaja</option><option>Berbau</option><option>Langsung tidak sejuk</option><option>Nak buat flushing</option><option>Nak repair / tukar komponen</option><option>Lain-lain / pemeriksaan</option></select></label><button class="btn gold" type="submit">Hantar pertanyaan WhatsApp ↗</button><small>WhatsApp akan dibuka dengan mesej yang disediakan.</small></form></section>
 <section class="location section" id="lokasi"><div><p class="eyebrow">KUNJUNGI BENGKEL</p><h2>Jumpa kami di<br><em>Kota Bharu.</em></h2><p><b>AMIR TECH ROG GLOBAL</b><br>Lot 257, Kampung Hutan Banggol,<br>Jalan Pantai Cahaya Bulan,<br>15350 Kota Bharu, Kelantan.</p><a class="textlink" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=AMIR%20TECH%20ROG%20GLOBAL%20Kampung%20Hutan%20Banggol%20Kota%20Bharu">Buka Google Maps ↗</a></div><div class="map"><span>⌖</span><small>KAMPUNG HUTAN BANGGOL</small><b>KOTA BHARU, KELANTAN</b></div></section>
 </main>
+<!-- Kaunter pelawat: jumlah agregat, tiada alamat IP disimpan. -->
+<section id="statistik-pelawat" aria-labelledby="visitor-heading" style="padding:34px 5%;background:#082d47;color:#f5fbff;text-align:center;border-top:1px solid #2c6682">
+  <p style="margin:0 0 6px;color:#a9edff;font-size:.75rem;font-weight:800;letter-spacing:.12em">STATISTIK WEBSITE</p>
+  <h2 id="visitor-heading" style="margin:0 0 18px;font-size:clamp(1.4rem,4vw,2rem)">Pelawat AMIR TECH ROG GLOBAL</h2>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;max-width:700px;margin:0 auto">
+    <div style="padding:20px;border:1px solid #2c6682;border-radius:16px;background:#0b3d5b">
+      <div style="font-size:.85rem;color:#d2e5ee">Jumlah lawatan terkumpul</div>
+      <div id="visitor-total" aria-live="polite" style="font-size:2rem;font-weight:900;color:#a9edff">Memuatkan…</div>
+    </div>
+    <div style="padding:20px;border:1px solid #2c6682;border-radius:16px;background:#0b3d5b">
+      <div style="font-size:.85rem;color:#d2e5ee">Lawatan hari ini</div>
+      <div id="visitor-today" aria-live="polite" style="font-size:2rem;font-weight:900;color:#f6cf62">Memuatkan…</div>
+    </div>
+  </div>
+  <p style="margin:12px 0 0;color:#c5deec;font-size:.75rem">Jumlah dipaparkan secara agregat; alamat IP pelawat tidak disimpan.</p>
+</section>
 <footer><a class="brand" href="#home"><img src="./assets/amir-tech-logo.jpg" alt="Logo Amir Tech" decoding="async" onerror="this.style.display='none'"><span><b>AMIR TECH</b><small>ROG GLOBAL · AIRCOND KERETA SPECIALIST</small></span></a><p>Servis aircond kereta · Kota Bharu, Kelantan</p><a href="https://wa.me/60133133519" target="_blank" rel="noopener">WhatsApp 013-313 3519 ↗</a><small>© <span id="year">2026</span> AMIR TECH ROG GLOBAL. Semua hak terpelihara.</small></footer>
 <a class="floatwa" aria-label="Hubungi AMIR TECH ROG GLOBAL melalui WhatsApp" href="https://wa.me/60133133519?text=Assalamualaikum%2C%20saya%20nak%20bertanya%20tentang%20servis%20aircond%20kereta." target="_blank" rel="noopener">☏ <span>WhatsApp</span></a>
 <script>
@@ -1273,4 +1289,5 @@ const hadiths=[{text:'Sebaik-baik kamu ialah orang yang paling baik akhlaknya.',
 const renderHadith=()=>{const p=getParts(),day=Math.floor(Date.UTC(Number(p.year),Number(p.month)-1,Number(p.day))/86400000),item=hadiths[((day%hadiths.length)+hadiths.length)%hadiths.length];setText('dailyHadith',`“${item.text}”`);setText('hadithSource',item.source);setText('hadithDate',formatDate());const link=document.getElementById('hadithSourceLink');if(link)link.href=item.url};renderHadith();window.setInterval(renderHadith,60*1000);
 })();
 </script><script src="./assets/hvac-3d.js" defer></script>
+<script src="./visitor-counter.js?v=20261105-counter" defer></script>
 </body></html>
