@@ -1,0 +1,50 @@
+/* AMIR TECH ROG GLOBAL — interactive HVAC illustration */
+#sistem-aircond{overflow:hidden}
+.system-mode{display:flex;gap:10px;flex-wrap:wrap;margin:18px 0}
+.system-mode button,.hvac3d-controls button{border:1px solid #b6d7e6;background:#fff;color:#16415b;border-radius:12px;padding:10px 15px;font:inherit;font-weight:800;cursor:pointer}
+.system-mode button[aria-pressed=true]{background:#0b4b70;color:#fff;border-color:#0b4b70}
+.system-mode-description{color:#506a7d;font-size:.9rem;min-height:2.5em}
+.hvac-3d{--hvac-blue:#1686b4;--hvac-dark:#082d47;max-width:1180px;margin:24px auto;padding:clamp(16px,3vw,28px);border:1px solid #c6dfec;border-radius:24px;background:linear-gradient(145deg,#fff,#edf7fb);box-shadow:0 18px 45px #0b3c5d12;color:#17384d}
+.hvac3d-head{display:flex;justify-content:space-between;align-items:flex-start;gap:18px;margin-bottom:20px}.hvac3d-head h3{font-size:clamp(1.3rem,3vw,2rem);margin:4px 0 8px}.hvac3d-head p:not(.eyebrow){color:#526f82;margin:0;max-width:650px}.hvac3d-badge{background:#dff3fb;color:#075985;border:1px solid #b6ddea;padding:8px 12px;border-radius:99px;font-size:.68rem;font-weight:900;white-space:nowrap}
+.hvac3d-layout{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(220px,.8fr);gap:18px;align-items:stretch}
+.hvac-stage{position:relative;min-height:420px;overflow:hidden;border-radius:20px;border:1px solid #245a78;background:radial-gradient(ellipse at 50% 40%,#1c5d7d 0,#0d344e 48%,#061c2c 100%);touch-action:pan-y;cursor:grab;isolation:isolate}
+.hvac-stage:active{cursor:grabbing}.hvac-stage:before{content:"";position:absolute;inset:0;background-image:linear-gradient(#a9edff13 1px,transparent 1px),linear-gradient(90deg,#a9edff13 1px,transparent 1px);background-size:32px 32px;mask-image:linear-gradient(transparent,#000)}
+.hvac-world{position:absolute;left:50%;top:48%;width:540px;height:330px;max-width:92%;transform-style:preserve-3d;transform-origin:center;filter:drop-shadow(0 20px 22px #0007)}
+.hvac-floor{position:absolute;left:4%;top:20%;width:92%;height:70%;border:1px solid #8bdcf355;border-radius:28px;transform:rotateX(68deg) translateZ(-65px);background:linear-gradient(135deg,#1b6888aa,#09263a88);box-shadow:inset 0 0 45px #65d9ff22}
+.hvac-part{position:absolute;transform-style:preserve-3d;cursor:pointer;transition:filter .2s;filter:drop-shadow(0 8px 7px #00152299)}
+.hvac-part.is-selected{filter:drop-shadow(0 0 12px #9af0ff)}
+.hvac-part-label{position:absolute;left:50%;top:calc(100% + 8px);transform:translateX(-50%);font-size:9px;letter-spacing:.08em;font-weight:900;color:#dff8ff;white-space:nowrap;text-shadow:0 2px 4px #001}
+.hvac-compressor{left:5%;top:42%;width:120px;height:92px;transform:translateZ(28px) rotateY(-15deg)}
+.compressor-shell{position:absolute;inset:12px 8px 10px 20px;border-radius:24px 17px 18px 24px;background:linear-gradient(135deg,#c8d7df,#54758a 42%,#1a3548 75%,#9cb6c4);border:3px solid #d2e5ee;box-shadow:inset -8px -8px 12px #102c3c}
+.compressor-rear{position:absolute;left:0;top:27px;width:32px;height:40px;border-radius:9px;background:linear-gradient(90deg,#29495e,#a4c1d0);border:2px solid #b8d7e4}
+.compressor-pulley{position:absolute;right:-8px;top:22px;width:44px;height:44px;border-radius:50%;border:8px double #d7e8ed;background:radial-gradient(circle,#23445b 0 22%,#91aeba 24% 36%,#28485d 38%);box-shadow:0 0 0 4px #294b60}
+.compressor-bolt{position:absolute;right:8px;top:39px;width:12px;height:12px;border-radius:50%;background:#d9e7eb}
+.hvac-condenser{left:32%;top:13%;width:145px;height:112px;transform:translateZ(-10px) rotateY(12deg);border:7px solid #9dbdc9;border-radius:8px;background:repeating-linear-gradient(90deg,#274e62 0 4px,#8ab6c7 5px 7px);box-shadow:inset 0 0 0 4px #173d54}
+.radiator-tube{position:absolute;left:0;right:0;height:7px;background:linear-gradient(#c7edf6,#3c7187);border-radius:5px}.radiator-tube.top{top:8px}.radiator-tube.bottom{bottom:8px}
+.hvac-dryer{left:72%;top:17%;width:55px;height:95px;transform:translateZ(25px) rotateZ(8deg)}
+.dryer-can{position:absolute;inset:12px 8px;border-radius:20px;background:linear-gradient(90deg,#24475b,#b6cbd3 42%,#53778a 70%,#17364b);border:2px solid #d5e9ef}
+.dryer-cap{position:absolute;left:13px;width:37px;height:12px;border-radius:5px;background:#b7d2dc}.dryer-cap.top{top:4px}.dryer-cap.bottom{bottom:4px}
+.dryer-port{position:absolute;left:25px;width:10px;height:15px;background:#d2e9ef}.dryer-port.top{top:-5px}.dryer-port.bottom{bottom:-5px}
+.hvac-txv{left:67%;top:65%;width:68px;height:60px;transform:translateZ(48px) rotateY(22deg)}
+.txv-body{position:absolute;left:13px;top:18px;width:48px;height:35px;background:linear-gradient(135deg,#d8e5e9,#6e8995 45%,#2d4a5d);clip-path:polygon(18% 0,82% 0,100% 50%,82% 100%,18% 100%,0 50%);border:2px solid #d9edf3}
+.txv-dome{position:absolute;left:24px;top:0;width:27px;height:22px;border-radius:50% 50% 20% 20%;background:linear-gradient(120deg,#e9f2f5,#7895a4,#27475a)}
+.txv-bolt{position:absolute;left:32px;top:29px;width:10px;height:10px;border-radius:50%;background:#e5f4f7}
+.hvac-evaporator{left:34%;top:64%;width:140px;height:90px;transform:translateZ(10px) rotateY(-12deg);border:7px solid #83b8cb;border-radius:8px;background:repeating-linear-gradient(90deg,#123b53 0 4px,#67a8c0 5px 7px)}
+.hvac-blower{left:8%;top:8%;width:86px;height:86px;transform:translateZ(70px)}
+.blower-housing{position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle,#102e43 0 22%,#7da8b9 24% 31%,#1c455d 33% 70%,#a8c9d5 72%);border:5px solid #b8d9e4}
+.blower-blade{position:absolute;left:40px;top:8px;width:10px;height:34px;border-radius:100% 0 100% 0;background:linear-gradient(90deg,#d9f0f7,#5d879a);transform-origin:5px 35px;transform:rotate(var(--blade))}
+.blower-hub{position:absolute;left:33px;top:33px;width:24px;height:24px;border-radius:50%;background:radial-gradient(circle,#d8e9ed,#31566a)}
+.hvac-hose{height:9px;border-radius:99px;background:linear-gradient(#d7e7eb,#476c7e);transform-origin:left center;z-index:-1}.hose-flow{display:block;width:100%;height:3px;margin-top:3px;background:#59d8f6;border-radius:99px}.hose-flow.hvac-hot{background:#ff9b61}
+.hose-a{left:21%;top:38%;width:140px;transform:rotate(-15deg) translateZ(10px)}.hose-b{left:55%;top:30%;width:100px;transform:rotate(-8deg) translateZ(5px)}.hose-c{left:72%;top:52%;width:100px;transform:rotate(100deg) translateZ(8px)}.hose-d{left:59%;top:73%;width:100px;transform:rotate(175deg) translateZ(10px)}.hose-e{left:31%;top:72%;width:90px;transform:rotate(160deg) translateZ(5px)}
+.hvac-sensor{position:absolute;width:30px;height:30px;border-radius:50%;border:2px solid #e7fbff;background:#0b8eb8;color:white;font-weight:900;box-shadow:0 0 0 5px #65dfff33,0 5px 12px #001a2a;cursor:pointer;z-index:5}.hvac-sensor.is-selected{background:#f6cf62;color:#17384d;transform:scale(1.15)}
+.hvac-s1{left:43%;top:8%;transform:translateZ(75px)}.hvac-s2{left:57%;top:20%;transform:translateZ(65px)}.hvac-s3{left:20%;top:46%;transform:translateZ(90px)}.hvac-s4{left:49%;top:70%;transform:translateZ(75px)}.hvac-s5{left:13%;top:25%;transform:translateZ(100px)}.hvac-s6{left:82%;top:8%;transform:translateZ(55px)}.hvac-s7{left:85%;top:76%;transform:translateZ(55px)}
+.hvac-orbit-hint,.hvac-stage-status{position:absolute;bottom:12px;font-size:.66rem;color:#cdeefa;background:#061b2acc;border:1px solid #6abbd344;border-radius:8px;padding:6px 9px}.hvac-orbit-hint{left:12px}.hvac-stage-status{right:12px;font-weight:900;letter-spacing:.08em}
+.hvac3d-layout aside{display:flex;flex-direction:column;gap:12px}.hvac3d-parts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.hvac3d-parts button{display:flex;align-items:center;gap:8px;min-width:0;padding:8px;border:1px solid #d0e4ed;border-radius:12px;background:#fff;color:#244b62;font:inherit;font-size:.76rem;font-weight:800;text-align:left;cursor:pointer}.hvac3d-parts button[aria-pressed=true]{border-color:#0783ad;background:#e4f6fc;box-shadow:inset 0 0 0 1px #0783ad}.hvac3d-parts img{width:36px;height:36px;object-fit:contain;flex-shrink:0}
+.hvac3d-info{min-height:110px;padding:16px;border-radius:14px;background:#082d47;color:#dceef5;font-size:.84rem;line-height:1.6}.hvac3d-info strong{display:block;color:#a9edff;font-size:1rem;margin-bottom:6px}
+.hvac-sensor-details{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:8px;margin:16px 0}.hvac-sensor-details button{display:flex;align-items:center;gap:7px;padding:8px;border:1px solid #d0e4ed;border-radius:10px;background:#fff;color:#264c62;font:inherit;font-size:.7rem;text-align:left;cursor:pointer}.hvac-sensor-details b{display:grid;place-items:center;flex:0 0 24px;height:24px;border-radius:50%;background:#087eae;color:#fff}.hvac-sensor-details button[aria-pressed=true]{border-color:#087eae;background:#e7f7fc}
+.hvac3d-controls{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;padding:14px;border:1px solid #d0e4ed;border-radius:14px;background:#f7fbfd}.hvac3d-controls label{display:grid;gap:8px;font-size:.75rem;font-weight:800;color:#31576c}.hvac3d-controls label span{display:flex;justify-content:space-between;gap:4px}.hvac3d-controls input{width:100%;accent-color:#087eae}.hvac3d-controls button{font-size:.78rem;padding:8px}
+.hvac3d-note{font-size:.78rem;color:#587184;margin:14px 0 0}
+.hvac-stage:focus-visible,.hvac-3d button:focus-visible{outline:3px solid #087eae;outline-offset:3px}
+@media(max-width:800px){.hvac3d-layout{grid-template-columns:1fr}.hvac-stage{min-height:390px}.hvac-sensor-details{grid-template-columns:repeat(2,minmax(0,1fr))}.hvac3d-controls{grid-template-columns:repeat(2,minmax(0,1fr))}.hvac3d-head{display:block}.hvac3d-badge{display:inline-block;margin-top:12px}}
+@media(max-width:480px){.hvac-stage{min-height:340px}.hvac-world{width:480px;max-width:115%;left:50%}.hvac3d-parts{grid-template-columns:repeat(2,minmax(0,1fr))}.hvac-sensor-details button{font-size:.68rem}.hvac-orbit-hint{max-width:65%;font-size:.56rem}}
+@media(prefers-reduced-motion:reduce){.hvac-part{transition:none}.hvac-world{will-change:auto}}
