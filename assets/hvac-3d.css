@@ -502,3 +502,51 @@ html[data-theme="night"] [data-topic]:hover {
 .floating-whatsapp:hover, [class*="whatsapp"]:not(.hero-cta a):hover {
   transform: scale(1.06) translateY(-2px) !important;
 }
+
+
+/* ==========================================================================
+   DAY MODE (SIANG) CONTRAST & LEGIBILITY ENHANCEMENTS
+   ========================================================================== */
+html:not([data-theme='night']),
+body:not([data-theme='night']) {
+  color: #1e293b !important;
+}
+
+html:not([data-theme='night']) h1,
+html:not([data-theme='night']) h2,
+html:not([data-theme='night']) h3,
+html:not([data-theme='night']) h4 {
+  color: #0b2545 !important;
+}
+
+html:not([data-theme='night']) p,
+html:not([data-theme='night']) label,
+html:not([data-theme='night']) .hint,
+html:not([data-theme='night']) .help,
+html:not([data-theme='night']) .small,
+html:not([data-theme='night']) form label,
+html:not([data-theme='night']) .field label,
+html:not([data-theme='night']) .assist-help,
+html:not([data-theme='night']) .assist-label {
+  color: #1e3a5f !important;
+  font-weight: 500;
+}
+
+html:not([data-theme='night']) input,
+html:not([data-theme='night']) select,
+html:not([data-theme='night']) textarea {
+  color: #0f172a !important;
+  background-color: #ffffff !important;
+  border: 1.5px solid #94a3b8 !important;
+}
+
+html:not([data-theme='night']) input::placeholder,
+html:not([data-theme='night']) textarea::placeholder {
+  color: #64748b !important;
+  opacity: 1 !important;
+}
+
+html:not([data-theme='night']) .heading p,
+html:not([data-theme='night']) .lead {
+  color: #334155 !important;
+}
