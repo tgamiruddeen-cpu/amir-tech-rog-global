@@ -1,7 +1,83 @@
-/* AMIR TECH ROG GLOBAL — Analisis AI percuma & Saringan Sistem OEM
+/* AMIR TECH ROG GLOBAL 
+
+  function updateClimateNotice() {
+    const setTempSelect = document.getElementById('assistSetTemp');
+    const notice = document.getElementById('amirClimateNotice');
+    if (!setTempSelect || !notice) return;
+    const val = setTempSelect.value;
+    if (val === 'LO') {
+      notice.className = 'amir-climate-notice is-lo';
+      notice.innerHTML = `⚠️ <strong>AMARAN TEKNIKAL KOMPRESOR (SETTING 'LO'):</strong> Pada tetapan 'LO', ECU iklim mengunci kompresor pada beban maksimum 100% (clutch sentiasa engage atau injap ECV 100%) dan membatalkan kitaran cut-off automatik. Ketiadaan kitaran pemotongan ini menyebabkan suhu pelepasan meningkat melampau (>110°C), minyak pelincir terurai (viscosity breakdown), dan merupakan punca utama kompresor cepat jem (seizure) atau rosak pramatang. Nasihat juruteknik: Guna 'LO' 5–10 minit sahaja untuk sejukkan awal, kemudian laraskan semula ke 23°C–25°C.`;
+    } else if (['22', '23', '24', '25'].includes(val)) {
+      notice.className = 'amir-climate-notice is-optimal';
+      notice.innerHTML = `✅ <strong>TETAPAN OPTIMUM (${val}°C):</strong> Tetapan terbaik bagi iklim tropika Malaysia. Sistem iklim akan melakukan kitaran cut-off atau modulasi strok rendah secara berkala sebaik kabin sejuk. Ini melindungi minyak pelincir kompresor, mengurangkan beban enjin, dan memanjangkan jangka hayat kompresor.`;
+    } else if (val) {
+      notice.className = 'amir-climate-notice is-info';
+      notice.innerHTML = `ℹ️ <strong>Tetapan ${val}°C:</strong> Sistem iklim akan memantau penderia suhu kabin dan penyejat untuk mengawal kitaran operasi kompresor secara automatik.`;
+    } else {
+      notice.className = 'amir-climate-notice is-info';
+      notice.innerHTML = `ℹ️ <strong>Kajian Kejuruteraan Kompresor:</strong> Pada tetapan <strong>LO</strong>, kebanyakan kereta tidak menjalankan kitaran cut-off kompresor (100% continuous duty cycle), menyebabkan kompresor mengalami beban melampau dan kepanasan. Tetapan <strong>23°C – 25°C</strong> membolehkan cut-off berkala dan memanjangkan jangka hayat kompresor.`;
+    }
+  }
+
+  function injectClimatePanelSelector() {
+    if (document.getElementById('assistClimatePanel')) return;
+    const ventInput = document.getElementById('assistVentTemp');
+    if (!ventInput) return;
+
+    const parentLabel = ventInput.closest('label');
+    if (!parentLabel || !parentLabel.parentElement) return;
+
+    const wrap = document.createElement('div');
+    wrap.id = 'amirClimateWrap';
+    wrap.className = 'amir-climate-wrap';
+    wrap.innerHTML = `
+      <div style="display:flex;align-items:center;gap:6px;font-size:0.86rem;font-weight:800;color:#075f74">
+        <span>🎛️ Panel Kawalan Suhu & Tetapan Digital (Climate Control)</span>
+        <span style="font-size:0.68rem;padding:2px 7px;border-radius:6px;background:#0284c7;color:#fff;font-weight:900">KAJIAN TEKNIKAL</span>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin-top:4px">
+        <label style="font-size:0.82rem;font-weight:700;color:#1e40af">
+          Jenis Panel Kawalan
+          <select id="assistClimatePanel" name="climatePanel">
+            <option value="digital" selected>Digital / Auto Climate Control (Suhu Boleh Laras °C)</option>
+            <option value="manual">Manual (Tombol Pusingan Biru / Merah)</option>
+          </select>
+        </label>
+        <label style="font-size:0.82rem;font-weight:700;color:#1e40af">
+          Tetapan Suhu pada Panel (Set Temp)
+          <select id="assistSetTemp" name="setTemp">
+            <option value="">-- Pilih Suhu Tetapan Panel --</option>
+            <option value="LO">❄️ LO (Maksimum Sejuk / ~16°C ke bawah) [Risiko Tiada Cut-off]</option>
+            <option value="18">18 °C (Sangat Sejuk)</option>
+            <option value="20">20 °C (Sejuk)</option>
+            <option value="22">22 °C (Nyaman)</option>
+            <option value="23">23 °C (Optimum Kitaran/Jimat Kompresor)</option>
+            <option value="24">24 °C (Optimum Standard Malaysia / Jimat Petrol)</option>
+            <option value="25">25 °C (Optimum Standard Tropika)</option>
+            <option value="26">26 °C (Sederhana)</option>
+            <option value="28">28 °C (Hangat / Jimat Tenaga)</option>
+            <option value="30">30 °C / HI (Pemanas / Minimum Sejuk)</option>
+          </select>
+        </label>
+      </div>
+      <div id="amirClimateNotice" class="amir-climate-notice is-info">
+        ℹ️ <strong>Kajian Kejuruteraan Kompresor:</strong> Pada tetapan <strong>LO</strong>, kebanyakan kereta tidak menjalankan kitaran cut-off kompresor (100% continuous duty cycle), menyebabkan kompresor mengalami beban berterusan dan kepanasan lampau. Laraskan suhu ke <strong>23°C – 25°C</strong> untuk membolehkan cut-off berkala dan memanjangkan jangka hayat kompresor.
+      </div>
+    `;
+
+    parentLabel.insertAdjacentElement('beforebegin', wrap);
+
+    const setTempSelect = document.getElementById('assistSetTemp');
+    if (setTempSelect) {
+      setTempSelect.addEventListener('change', updateClimateNotice);
+    }
+  }
+— Analisis AI percuma & Saringan Sistem OEM
  * Memanggil Supabase Edge Function `ai-diagnosis`.
  * Mengandungi pangkalan data jenis sistem OEM (Denso, Sanden, Patco, Hanon, Calsonic Kansei, Valeo, Keihin, dll).
  * Menambah analisis fitting port HP: Discharge Line (selepas kompresor) vs Liquid Line (selepas kondenser)
+ * Menambah analisis panel digital suhu boleh laras (LO, 18, 20, 22, 23, 24, 25, 26, 28, 30°C) & kesan tiada cut-off kompresor pada tetapan LO
  * mengikut kajian kejuruteraan sistem pendingin hawa automotif (SAE / MACS / Denso Technical Standards).
  * Kunci API kekal di pelayan Supabase; fail ini hanya menggunakan publishable key.
  */
@@ -476,6 +552,8 @@
     ['brand', 'assistBrand'], ['model', 'assistModel'], ['year', 'assistYear'],
     ['engine', 'assistEngine'], ['systemType', 'assistSystemType'], ['systemBrand', 'assistSystemBrand'],
     ['hpPortLocation', 'assistHpPortLocation'],
+    ['climatePanel', 'assistClimatePanel'],
+    ['setTemp', 'assistSetTemp'],
     ['meteringDevice', 'assistMeteringDevice'], ['evaporatorLayout', 'assistEvaporatorLayout'],
     ['issue', 'assistIssue'], ['symptomText', 'assistSymptomText'], ['when', 'assistWhen'],
     ['blower', 'assistBlower'], ['testMode', 'assistTestMode'], ['rpm', 'assistRpm'],
@@ -542,7 +620,7 @@
       oemHpPort: oem.hpPort,
       hpPortFittingLocation: portDesc,
       hpPortType: isLiquid ? 'Liquid Line' : 'Discharge Line',
-      condenserDeltaPNote: isLiquid 
+      condenserDeltaPNote: isLiquid
         ? 'Port HP diukur di Liquid Line (selepas kondenser). Mengikut kajian kejuruteraan HVAC (MACS/Denso), tolok membaca 15-25 psi lebih rendah daripada mampatan pemampat sebenar kerana kejatuhan tekanan dinamik merentasi kondenser (Condenser Pressure Drop). Julat normal pada ambien panas: 150-205 psi.'
         : 'Port HP diukur di Discharge Line (selepas kompresor). Bacaan mengukur tekanan langsung pelepasan gas panas silinder pemampat. Julat normal pada ambien panas: 175-230 psi (Maksimum had selamat: 250 psi).',
       symptom: data.issue,
@@ -668,7 +746,7 @@
         <button type="button" class="amir-ai-retry">Ulang analisis</button>
       </div>
       <div class="amir-ai-body">${renderMarkdown(data.analysis)}</div>
-      <p class="amir-ai-disclaimer">Analisis AI ini bersifat panduan dan mengambil kira spesifikasi pengeluar sistem (Denso, Sanden, Patco, Hanon, dll) serta kedudukan port fitting HP (Discharge Line vs Liquid Line mengikut kajian kejuruteraan MACS/SAE). Pengesahan muktamad memerlukan pemeriksaan fizikal.</p>
+      <p class="amir-ai-disclaimer">Analisis AI ini bersifat panduan dan mengambil kira spesifikasi pengeluar sistem (Denso, Sanden, Patco, Hanon, dll) lokasi port fitting HP (Discharge Line vs Liquid Line), serta impak tetapan suhu panel digital (LO vs 23°C–25°C terhadap kitaran cut-off kompresor mengikut kajian kejuruteraan automotif). Pengesahan muktamad memerlukan pemeriksaan fizikal.</p>
     `;
     const copyButton = $('.amir-ai-copy', output);
     copyButton.addEventListener('click', async () => {
@@ -887,7 +965,17 @@
       // Sisip maklumat OEM & Lokasi Fitting HP ke dalam teks laporan jika belum ada
       if (result.text && !result.text.includes('JENIS SISTEM / PENGELUAR OEM')) {
         const insertAnchor = 'KENDERAAN\n';
-        const oemSection = `JENIS SISTEM / PENGELUAR OEM: ${effectiveBrand}\nSpesifikasi Pemampat: ${oem.compressor} · Minyak: ${oem.oil}\nLokasi Port Fitting HP: ${portDesc}\nNota Kejuruteraan Port HP: ${portPhysics}\nNota Sistem: ${oem.notes}\n`;
+        
+      const currentSetTemp = d.setTemp || (document.getElementById('assistSetTemp') ? document.getElementById('assistSetTemp').value : '');
+      const currentClimatePanel = d.climatePanel || (document.getElementById('assistClimatePanel') ? document.getElementById('assistClimatePanel').value : 'digital');
+      let climateSection = '';
+      if (currentSetTemp === 'LO') {
+        climateSection = `PANEL KAWALAN IKLIM: ${currentClimatePanel === 'manual' ? 'Manual' : 'Digital / Auto Climate Control'}\nTetapan Suhu (Set Temp): LO (Maksimum Sejuk)\nAMARAN KOMPRESOR (TIADA CUT-OFF): Tetapan 'LO' membatalkan cut-off automatik kompresor (100% beban berterusan). Ini punca utama kompresor overheat (>110°C), degradasi minyak pelincir, dan kerosakan mekanikal / jem pramatang. Disyorkan guna 23°C–25°C.\n`;
+      } else if (currentSetTemp) {
+        climateSection = `PANEL KAWALAN IKLIM: ${currentClimatePanel === 'manual' ? 'Manual' : 'Digital / Auto Climate Control'}\nTetapan Suhu (Set Temp): ${currentSetTemp}°C (Mod kitaran berkala aktif)\n`;
+      }
+
+        const oemSection = `JENIS SISTEM / PENGELUAR OEM: ${effectiveBrand}\nSpesifikasi Pemampat: ${oem.compressor} · Minyak: ${oem.oil}\nLokasi Port Fitting HP: ${portDesc}\nNota Kejuruteraan Port HP: ${portPhysics}\nNota Sistem: ${oem.notes}\n` + climateSection;
         if (result.text.includes(insertAnchor)) {
           result.text = result.text.replace(insertAnchor, insertAnchor + oemSection);
         } else {
@@ -903,6 +991,16 @@
         const oemCue = `Sistem ${effectiveBrand} dikesan: sahkan minyak pelincir ${oem.oil} dan pemampat ${oem.compressor}. Port HP: ${oem.hpPort || (isLiquid ? 'Liquid Line' : 'Discharge Line')}.`;
         if (!result.technical.cues.some((c) => c.includes(effectiveBrand))) {
           result.technical.cues.unshift(oemCue);
+        }
+
+        
+        if (currentSetTemp === 'LO') {
+          result.technical.cues.unshift("AMARAN KRITIKAL: TETAPAN SUHU 'LO' (Beban Kompresor 100% Berterusan): Tetapan 'LO' pada panel digital membatalkan kitaran cut-off kompresor automatik. Kompresor dipaksa berkendali tanpa henti. Ini punca utama kenaikan suhu pelepasan melebihi 110°C, pemusnahan kelikatan minyak pelincir (PAG breakdown), dan kompresor cepat jem/rosak pra-matang. Sila laraskan ke 23°C–25°C.");
+          if (result.priorities) {
+            result.priorities.unshift("TETAPAN SUHU 'LO' DIKESAN: Elakkan memandu dengan tetapan 'LO' sepanjang masa. Laraskan ke 23°C–25°C untuk membolehkan kitaran cut-off berkala bagi melindungi kompresor daripada overheat dan kehausan bearing/piston.");
+          }
+        } else if (['22', '23', '24', '25'].includes(currentSetTemp)) {
+          result.technical.cues.push(`TETAPAN SUHU OPTIMUM (${currentSetTemp}°C): Suhu operasi yang ideal bagi iklim tropika Malaysia. Membolehkan kompresor beroperasi dalam mod kitaran sihat (cut-off berkala atau modulasi strok rendah) yang menjimatkan bahan api dan memanjangkan jangka hayat kompresor.`);
         }
 
         if (isLiquid) {
@@ -929,6 +1027,7 @@
 
     injectSystemBrandSelector();
     injectHpPortSelector();
+    injectClimatePanelSelector();
     patchLocalDiagnosis();
 
     // Pantau pertukaran jenama dan model untuk kemaskini sistem OEM & lokasi port HP
