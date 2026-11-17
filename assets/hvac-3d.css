@@ -550,3 +550,162 @@ html:not([data-theme='night']) .heading p,
 html:not([data-theme='night']) .lead {
   color: #334155 !important;
 }
+
+/* ==========================================================================
+   DAY MODE (TEMA SIANG) HIGH CONTRAST & READABILITY POLISH
+   ========================================================================== */
+html:not([data-theme="night"]),
+html[data-theme="day"] {
+  background-color: #f8fafc !important;
+  color: #0f172a !important;
+}
+
+html:not([data-theme="night"]) body,
+html[data-theme="day"] body {
+  background-color: #f8fafc !important;
+  color: #0f172a !important;
+}
+
+/* Day Mode Headings */
+html:not([data-theme="night"]) h1,
+html:not([data-theme="night"]) h2,
+html:not([data-theme="night"]) h3,
+html:not([data-theme="night"]) h4,
+html:not([data-theme="night"]) .heading h2,
+html:not([data-theme="night"]) .section-title,
+html:not([data-theme="night"]) .hvac3d-head h3,
+html:not([data-theme="night"]) #harga h2,
+html:not([data-theme="night"]) #servis h2,
+html:not([data-theme="night"]) #repair h2,
+html:not([data-theme="night"]) #pembantu-digital h2,
+html:not([data-theme="night"]) #pembantu-digital h3,
+html[data-theme="day"] h1,
+html[data-theme="day"] h2,
+html[data-theme="day"] h3,
+html[data-theme="day"] h4,
+html[data-theme="day"] .heading h2,
+html[data-theme="day"] .section-title,
+html[data-theme="day"] .hvac3d-head h3,
+html[data-theme="day"] #harga h2,
+html[data-theme="day"] #servis h2,
+html[data-theme="day"] #repair h2,
+html[data-theme="day"] #pembantu-digital h2,
+html[data-theme="day"] #pembantu-digital h3 {
+  color: #0f172a !important;
+  text-shadow: none !important;
+}
+
+/* Day Mode Paragraphs & Text */
+html:not([data-theme="night"]) p:not(.eyebrow),
+html:not([data-theme="night"]) .lede,
+html:not([data-theme="night"]) .hero-lede,
+html:not([data-theme="night"]) .hvac3d-head p:not(.eyebrow),
+html:not([data-theme="night"]) .section-desc,
+html[data-theme="day"] p:not(.eyebrow),
+html[data-theme="day"] .lede,
+html[data-theme="day"] .hero-lede,
+html[data-theme="day"] .hvac3d-head p:not(.eyebrow),
+html[data-theme="day"] .section-desc {
+  color: #334155 !important;
+}
+
+/* Day Mode Diagnosis Form & Labels - HIGH SPECIFICITY */
+html:not([data-theme="night"]) #pembantu-digital,
+html[data-theme="day"] #pembantu-digital {
+  background: #f1f5f9 !important;
+}
+
+html:not([data-theme="night"]) #pembantu-digital article,
+html[data-theme="day"] #pembantu-digital article {
+  background: #ffffff !important;
+  border: 1px solid #cbd5e1 !important;
+  box-shadow: 0 20px 45px rgba(15, 23, 42, 0.08) !important;
+  color: #0f172a !important;
+}
+
+html:not([data-theme="night"]) #pembantu-digital label,
+html:not([data-theme="night"]) #pembantu-digital .form-label,
+html:not([data-theme="night"]) #pembantu-digital legend,
+html:not([data-theme="night"]) #pembantu-digital span:not(.badge):not(.pill),
+html:not([data-theme="night"]) #pembantu-digital p,
+html[data-theme="day"] #pembantu-digital label,
+html[data-theme="day"] #pembantu-digital .form-label,
+html[data-theme="day"] #pembantu-digital legend,
+html[data-theme="day"] #pembantu-digital span:not(.badge):not(.pill),
+html[data-theme="day"] #pembantu-digital p {
+  color: #0f2738 !important;
+  font-weight: 700 !important;
+}
+
+html:not([data-theme="night"]) select,
+html:not([data-theme="night"]) input[type="text"],
+html:not([data-theme="night"]) input[type="number"],
+html:not([data-theme="night"]) textarea,
+html[data-theme="day"] select,
+html[data-theme="day"] input[type="text"],
+html[data-theme="day"] input[type="number"],
+html[data-theme="day"] textarea {
+  background: #ffffff !important;
+  border: 1.5px solid #94a3b8 !important;
+  color: #0f172a !important;
+}
+
+html:not([data-theme="night"]) select:focus,
+html:not([data-theme="night"]) input:focus,
+html:not([data-theme="night"]) textarea:focus,
+html[data-theme="day"] select:focus,
+html[data-theme="day"] input:focus,
+html[data-theme="day"] textarea:focus {
+  border-color: #0284c7 !important;
+  box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.25) !important;
+  outline: none !important;
+}
+
+/* Day Mode Pricing Section */
+html:not([data-theme="night"]) #harga,
+html[data-theme="day"] #harga {
+  background: #f8fafc !important;
+}
+
+html:not([data-theme="night"]) .pricecard,
+html[data-theme="day"] .pricecard {
+  background: #ffffff !important;
+  border: 1px solid #cbd5e1 !important;
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06) !important;
+  color: #0f172a !important;
+}
+
+html:not([data-theme="night"]) .pricecard b,
+html:not([data-theme="night"]) .pricecard strong,
+html:not([data-theme="night"]) .pricecard .price,
+html[data-theme="day"] .pricecard b,
+html[data-theme="day"] .pricecard strong,
+html[data-theme="day"] .pricecard .price {
+  color: #0284c7 !important;
+}
+
+html:not([data-theme="night"]) .pricecard .row,
+html[data-theme="day"] .pricecard .row {
+  border-color: #e2e8f0 !important;
+  color: #334155 !important;
+}
+
+html:not([data-theme="night"]) table,
+html[data-theme="day"] table {
+  background: #ffffff !important;
+  border: 1px solid #cbd5e1 !important;
+  color: #0f172a !important;
+}
+
+html:not([data-theme="night"]) th,
+html[data-theme="day"] th {
+  background: #f1f5f9 !important;
+  color: #0369a1 !important;
+  border-bottom: 2px solid #cbd5e1 !important;
+}
+
+html:not([data-theme="night"]) td,
+html[data-theme="day"] td {
+  border-bottom: 1px solid #e2e8f0 !important;
+  color: #334155 !important;
+}
