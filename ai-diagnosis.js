@@ -1,6 +1,8 @@
 /* AMIR TECH ROG GLOBAL — Analisis AI percuma & Saringan Sistem OEM
  * Memanggil Supabase Edge Function `ai-diagnosis`.
  * Mengandungi pangkalan data jenis sistem OEM (Denso, Sanden, Patco, Hanon, Calsonic Kansei, Valeo, Keihin, dll).
+ * Menambah analisis fitting port HP: Discharge Line (selepas kompresor) vs Liquid Line (selepas kondenser)
+ * mengikut kajian kejuruteraan sistem pendingin hawa automotif (SAE / MACS / Denso Technical Standards).
  * Kunci API kekal di pelayan Supabase; fail ini hanya menggunakan publishable key.
  */
 (function () {
@@ -27,136 +29,145 @@
       defaultOem: 'Denso',
       compressor: 'Fixed displacement swash plate / rotary vane',
       oil: 'ND-OIL 8 (PAG 46)',
+      hpPort: 'Discharge Line (Selepas Pemampat)',
       notes: 'Sistem standard Denso OEM Jepun/Malaysia. TXV jenis blok.',
       models: {
-        'Myvi': { oem: 'Denso / Sanden', compressor: 'Gen 1-2: Denso 10S11C; Gen 3: Denso / Sanden rotary scroll', oil: 'ND-OIL 8 (PAG 46) / SP-10', notes: 'Sistem asal Denso. Model Gen 3 menggunakan Denso atau Sanden. Periksa magnetic clutch relay dan thermal fuse jika kerap cut-off.' },
-        'Axia': { oem: 'Denso', compressor: 'Denso SV07 / 10S08C padat', oil: 'ND-OIL 8 (PAG 46)', notes: 'Sistem Denso kompak (~300g gas). Sangat sensitif jika kuantiti minyak atau gas terlebih/kurang.' },
-        'Bezza': { oem: 'Denso', compressor: 'Denso 10S08C / SV07', oil: 'ND-OIL 8 (PAG 46)', notes: 'Sistem Denso penjimatan tenaga dengan penderia suhu evaporator digital.' },
-        'Alza': { oem: 'Denso', compressor: 'Denso 10S13C / 10S15C (Dual Evaporator)', oil: 'ND-OIL 8 (PAG 46)', notes: 'Sistem Denso dengan double cooling coil (depan & bumbung belakang). Kuantiti gas ~550g-600g.' },
-        'Ativa': { oem: 'Denso', compressor: 'Denso variable displacement clutchless (DNGA)', oil: 'ND-OIL 8 (PAG 46)', notes: 'Sistem kawalan elektronik pintar platform DNGA Daihatsu/Perodua.' },
-        'Aruz': { oem: 'Denso', compressor: 'Denso 10S15C (Dual cooling)', oil: 'ND-OIL 8 (PAG 46)', notes: 'Sistem Denso kabin 7 tempat duduk dengan blower belakang berasingan.' },
-        'Viva': { oem: 'Denso', compressor: 'Denso SV06 / 10P08', oil: 'ND-OIL 8 (PAG 46)', notes: 'Sistem Denso asas, TXV blok, receiver drier bersepadu pada kondenser.' },
-        'Kelisa': { oem: 'Denso / Sanden', compressor: 'Denso SV06 / Sanden APM', oil: 'ND-OIL 8 (PAG 46)', notes: 'Sistem Denso atau Sanden APM tempatan.' },
-        'Kenari': { oem: 'Denso', compressor: 'Denso SV06 / 10P08', oil: 'ND-OIL 8 (PAG 46)', notes: 'Sistem Denso kompak.' },
-        'Kancil': { oem: 'Denso / Sanden', compressor: 'Denso 10P08 / Sanden SD505 / APM', oil: 'ND-OIL 8 / PAG 100', notes: 'Model lama R12/R134a conversion, expansion valve kotak/flare.' },
-        'Kembara': { oem: 'Denso', compressor: 'Denso 10P08', oil: 'ND-OIL 8 (PAG 46)', notes: 'Sistem pacuan 4 roda kompak Daihatsu Taruna/Terios.' },
-        'Rusa': { oem: 'Denso', compressor: 'Denso 10P / Dual Evaporator', oil: 'ND-OIL 8 (PAG 46)', notes: 'Sistem van komersial dual blower.' }
+        'Myvi': { oem: 'Denso / Sanden', compressor: 'Gen 1-2: Denso 10S11C; Gen 3: Denso / Sanden rotary scroll', oil: 'ND-OIL 8 (PAG 46) / SP-10', hpPort: 'Gen 1-2: Discharge Line; Gen 3: Liquid Line (selepas kondenser)', notes: 'Sistem asal Denso. Model Gen 3 port HP di paip cecair berhampiran bulkhead/kondenser.' },
+        'Axia': { oem: 'Denso', compressor: 'Denso SV07 / 10S08C padat', oil: 'ND-OIL 8 (PAG 46)', hpPort: 'Discharge Line', notes: 'Sistem Denso kompak (~300g gas). Sangat sensitif jika kuantiti minyak atau gas terlebih/kurang.' },
+        'Bezza': { oem: 'Denso', compressor: 'Denso 10S08C / SV07', oil: 'ND-OIL 8 (PAG 46)', hpPort: 'Discharge Line', notes: 'Sistem Denso penjimatan tenaga dengan penderia suhu evaporator digital.' },
+        'Alza': { oem: 'Denso', compressor: 'Denso 10S13C / 10S15C (Dual Evaporator)', oil: 'ND-OIL 8 (PAG 46)', hpPort: 'Discharge Line', notes: 'Sistem Denso dengan double cooling coil (depan & bumbung belakang). Kuantiti gas ~550g-600g.' },
+        'Ativa': { oem: 'Denso', compressor: 'Denso variable displacement clutchless (DNGA)', oil: 'ND-OIL 8 (PAG 46)', hpPort: 'Discharge Line / Manifold kondenser', notes: 'Sistem kawalan elektronik pintar platform DNGA Daihatsu/Perodua.' },
+        'Aruz': { oem: 'Denso', compressor: 'Denso 10S15C (Dual cooling)', oil: 'ND-OIL 8 (PAG 46)', hpPort: 'Discharge Line', notes: 'Sistem Denso kabin 7 tempat duduk dengan blower belakang berasingan.' },
+        'Viva': { oem: 'Denso', compressor: 'Denso SV06 / 10P08', oil: 'ND-OIL 8 (PAG 46)', hpPort: 'Discharge Line', notes: 'Sistem Denso asas, TXV blok, receiver drier bersepadu pada kondenser.' },
+        'Kelisa': { oem: 'Denso / Sanden', compressor: 'Denso SV06 / Sanden APM', oil: 'ND-OIL 8 (PAG 46)', hpPort: 'Discharge Line', notes: 'Sistem Denso atau Sanden APM tempatan.' },
+        'Kenari': { oem: 'Denso', compressor: 'Denso SV06 / 10P08', oil: 'ND-OIL 8 (PAG 46)', hpPort: 'Discharge Line', notes: 'Sistem Denso kompak.' },
+        'Kancil': { oem: 'Denso / Sanden', compressor: 'Denso 10P08 / Sanden SD505 / APM', oil: 'ND-OIL 8 / PAG 100', hpPort: 'Discharge Line', notes: 'Model lama R12/R134a conversion, expansion valve kotak/flare.' },
+        'Kembara': { oem: 'Denso', compressor: 'Denso 10P08', oil: 'ND-OIL 8 (PAG 46)', hpPort: 'Discharge Line', notes: 'Sistem pacuan 4 roda kompak Daihatsu Taruna/Terios.' },
+        'Rusa': { oem: 'Denso', compressor: 'Denso 10P / Dual Evaporator', oil: 'ND-OIL 8 (PAG 46)', hpPort: 'Discharge Line', notes: 'Sistem van komersial dual blower.' }
       }
     },
     'Proton': {
       defaultOem: 'Sanden / Patco',
       compressor: 'Rotary scroll / swash plate',
       oil: 'SP-10 (PAG 46) / PAG 100',
+      hpPort: 'Discharge Line (Hos pelepasan pemampat)',
       notes: 'Sistem pembekal tempatan Patco atau Sanden OEM.',
       models: {
-        'Saga': { oem: 'Patco / Sanden', compressor: 'Iswara: Patco/Sanden SD507; BLM/FLX: Sanden TRSA09/SD7V16; VVT: Patco/Hanon', oil: 'SP-10 / PAG 100', notes: 'Saga lama menggunakan sistem Patco/Sanden. BLM/FLX guna Sanden TRSA09. Saga VVT menggunakan Patco/Hanon. Periksa kelegaan clutch gap (0.35-0.6mm).' },
-        'Wira': { oem: 'Patco / Sanden', compressor: 'Patco Rotary / Sanden SD709 / TR70 / SD7B10', oil: 'PAG 100 / SP-10', notes: 'Sistem OEM Patco Malaysia atau Sanden. Periksa receiver drier dan suis tekanan (pressure switch) 2-pin/4-pin.' },
-        'Waja': { oem: 'Sanden / Mitsubishi', compressor: 'Sanden TRS090 / TRSE07 (Campro) / Mitsubishi (4G18)', oil: 'SP-10 (PAG 46)', notes: 'Kompresor Sanden scroll. Lazim berlaku masalah clutch slipping apabila enjin panas.' },
-        'Persona': { oem: 'Sanden / Patco', compressor: 'Persona lama: Sanden TRSE07; Persona VVT: Sanden/Hanon', oil: 'SP-10 (PAG 46)', notes: 'Sistem Sanden TRSE. Periksa thermal protector dan relay magnetik.' },
-        'Gen-2': { oem: 'Sanden', compressor: 'Sanden TRSE07 / TRSA09 rotary scroll', oil: 'SP-10 (PAG 46)', notes: 'Kompresor Sanden scroll. Kelegaan clutch perlu tepat untuk elak cut-off ketika melahu.' },
-        'Iriz': { oem: 'Sanden / Hanon', compressor: 'Sanden / Hanon variable displacement', oil: 'PAG 46', notes: 'Sistem moden dengan sensor suhu evaporator dan kawalan ECU.' },
-        'Preve': { oem: 'Sanden', compressor: 'Sanden SD7V16 variable displacement', oil: 'SP-10 (PAG 46)', notes: 'Kompresor Sanden variable displacement dengan internal control valve.' },
-        'Suprima S': { oem: 'Sanden', compressor: 'Sanden SD7V16 variable displacement', oil: 'SP-10 (PAG 46)', notes: 'Sistem Sanden sama seperti Preve CFE Turbo.' },
-        'Exora': { oem: 'Sanden', compressor: 'Sanden SD7V16 / TRSE09 (Dual Evaporator)', oil: 'SP-10 (PAG 46)', notes: 'Sistem Sanden dua cooling coil (depan & belakang). Cas gas sekitar ~700-750g.' },
-        'X50': { oem: 'Hanon Systems / Valeo', compressor: 'Hanon variable displacement clutchless ECV', oil: 'PAG 46 (ND-OIL 8)', notes: 'Sistem OEM Hanon Systems / Valeo dengan injap solenoid ECV kawalan PWM. Jangan tambah minyak sebarangan.' },
-        'X70': { oem: 'Hanon Systems / Valeo', compressor: 'Hanon / Valeo clutchless variable displacement', oil: 'PAG 46', notes: 'Sistem Hanon / Valeo dual-zone climate control. Sensitif kepada kebersihan kondenser dan aliran udara.' },
-        'X90': { oem: 'Hanon Systems', compressor: 'Hanon elektrik 48V MHEV / Variable', oil: 'POE / PAG khusus', notes: 'Sistem hibrid ringan 48V. Minyak pemampat mesti mengikut spesifikasi OEM.' },
-        'S70': { oem: 'Hanon Systems / Valeo', compressor: 'Hanon variable displacement', oil: 'PAG 46', notes: 'Sistem kawalan elektronik terkini segmen sedan Proton.' },
-        'Perdana': { oem: 'Denso / Sanden / Keihin', compressor: 'Perdana V6: Mitsubishi/Sanden; Perdana Accord: Denso/Keihin', oil: 'ND-OIL 8 / SP-10', notes: 'Varian berasaskan Honda menggunakan sistem Denso/Keihin.' },
-        'Savvy': { oem: 'Patco / Sanden', compressor: 'Sanden SD7B10 / Patco', oil: 'PAG 100 / SP-10', notes: 'Sistem kompak enjin Renault D4F.' }
+        'Saga': { oem: 'Patco / Sanden', compressor: 'Iswara: Patco/Sanden SD507; BLM/FLX: Sanden TRSA09/SD7V16; VVT: Patco/Hanon', oil: 'SP-10 / PAG 100', hpPort: 'Discharge Line (Hos gas panas)', notes: 'Saga lama menggunakan sistem Patco/Sanden. BLM/FLX guna Sanden TRSA09. Saga VVT menggunakan Patco/Hanon.' },
+        'Wira': { oem: 'Patco / Sanden', compressor: 'Patco Rotary / Sanden SD709 / TR70 / SD7B10', oil: 'PAG 100 / SP-10', hpPort: 'Discharge Line', notes: 'Sistem OEM Patco Malaysia atau Sanden. Periksa receiver drier dan suis tekanan (pressure switch).' },
+        'Waja': { oem: 'Sanden / Mitsubishi', compressor: 'Sanden TRS090 / TRSE07 (Campro) / Mitsubishi (4G18)', oil: 'SP-10 (PAG 46)', hpPort: 'Discharge Line', notes: 'Kompresor Sanden scroll. Lazim berlaku masalah clutch slipping apabila enjin panas.' },
+        'Persona': { oem: 'Sanden / Patco', compressor: 'Persona lama: Sanden TRSE07; Persona VVT: Sanden/Hanon', oil: 'SP-10 (PAG 46)', hpPort: 'Discharge Line', notes: 'Sistem Sanden TRSE. Periksa thermal protector dan relay magnetik.' },
+        'Gen-2': { oem: 'Sanden', compressor: 'Sanden TRSE07 / TRSA09 rotary scroll', oil: 'SP-10 (PAG 46)', hpPort: 'Discharge Line', notes: 'Kompresor Sanden scroll. Kelegaan clutch perlu tepat untuk elak cut-off ketika melahu.' },
+        'Iriz': { oem: 'Sanden / Hanon', compressor: 'Sanden / Hanon variable displacement', oil: 'PAG 46', hpPort: 'Discharge Line', notes: 'Sistem moden dengan sensor suhu evaporator dan kawalan ECU.' },
+        'Preve': { oem: 'Sanden', compressor: 'Sanden SD7V16 variable displacement', oil: 'SP-10 (PAG 46)', hpPort: 'Discharge Line', notes: 'Kompresor Sanden variable displacement dengan internal control valve.' },
+        'Suprima S': { oem: 'Sanden', compressor: 'Sanden SD7V16 variable displacement', oil: 'SP-10 (PAG 46)', hpPort: 'Discharge Line', notes: 'Sistem Sanden sama seperti Preve CFE Turbo.' },
+        'Exora': { oem: 'Sanden', compressor: 'Sanden SD7V16 / TRSE09 (Dual Evaporator)', oil: 'SP-10 (PAG 46)', hpPort: 'Discharge Line', notes: 'Sistem Sanden dua cooling coil (depan & belakang). Cas gas sekitar ~700-750g.' },
+        'X50': { oem: 'Hanon Systems / Valeo', compressor: 'Hanon variable displacement clutchless ECV', oil: 'PAG 46 (ND-OIL 8)', hpPort: 'Liquid Line (Selepas kondenser)', notes: 'Sistem OEM Hanon / Valeo. Port HP terletak pada paip cecair (liquid line) selepas kondenser.' },
+        'X70': { oem: 'Hanon Systems / Valeo', compressor: 'Hanon / Valeo clutchless variable displacement', oil: 'PAG 46', hpPort: 'Liquid Line (Selepas kondenser)', notes: 'Sistem Hanon / Valeo dual-zone climate control. Port HP pada liquid line.' },
+        'X90': { oem: 'Hanon Systems', compressor: 'Hanon elektrik 48V MHEV / Variable', oil: 'POE / PAG khusus', hpPort: 'Liquid Line', notes: 'Sistem hibrid ringan 48V. Minyak pemampat mesti mengikut spesifikasi OEM.' },
+        'S70': { oem: 'Hanon Systems / Valeo', compressor: 'Hanon variable displacement', oil: 'PAG 46', hpPort: 'Liquid Line (Selepas kondenser)', notes: 'Sistem kawalan elektronik terkini segmen sedan Proton.' },
+        'Perdana': { oem: 'Denso / Sanden / Keihin', compressor: 'Perdana V6: Mitsubishi/Sanden; Perdana Accord: Denso/Keihin', oil: 'ND-OIL 8 / SP-10', hpPort: 'Accord platform: Liquid Line; V6: Discharge Line', notes: 'Varian berasaskan Honda menggunakan sistem Denso/Keihin dengan port HP di liquid line.' },
+        'Savvy': { oem: 'Patco / Sanden', compressor: 'Sanden SD7B10 / Patco', oil: 'PAG 100 / SP-10', hpPort: 'Discharge Line', notes: 'Sistem kompak enjin Renault D4F.' }
       }
     },
     'Toyota': {
       defaultOem: 'Denso',
       compressor: 'Denso swash plate fixed / variable',
       oil: 'ND-OIL 8 (PAG 46)',
+      hpPort: 'Discharge Line (Selepas Pemampat)',
       notes: '100% sistem Denso OEM Jepun. Ketahanan tinggi dan TXV blok.',
       models: {
-        'Vios': { oem: 'Denso', compressor: 'NCP42/93: 10S11C (fixed); NCP150: 5SE09C (variable); NGC102: Denso ECV', oil: 'ND-OIL 8 (PAG 46)', notes: 'Sistem 100% Denso OEM. Generasi baharu menggunakan variable displacement dengan solenoid valve.' },
-        'Yaris': { oem: 'Denso', compressor: 'Denso 5SE09C / 10S11C', oil: 'ND-OIL 8 (PAG 46)', notes: 'Sistem Denso OEM. Ketahanan tinggi jika diservis flushing berkala.' },
-        'Corolla Altis': { oem: 'Denso', compressor: 'Denso 6SEU16 / 5SE12 variable clutchless', oil: 'ND-OIL 8 (PAG 46)', notes: 'Sistem Denso clutchless dengan injap kawalan elektronik ECV.' },
-        'Camry': { oem: 'Denso', compressor: 'Denso 6SEU16C / 7SEU17C variable displacement', oil: 'ND-OIL 8 (PAG 46)', notes: 'Sistem Denso luxury dual-zone climate control.' },
-        'Avanza': { oem: 'Denso', compressor: 'Denso 10S11C / 10S13C (Dual Blower)', oil: 'ND-OIL 8 (PAG 46)', notes: 'Sistem Denso dua blower (depan & bumbung belakang). Kuantiti gas ~550g.' },
-        'Innova': { oem: 'Denso', compressor: 'Denso 10S15C / 10S17C (Dual Evaporator)', oil: 'ND-OIL 8 (PAG 46)', notes: 'Sistem Denso tahan lasak kabin besar, kuantiti gas ~650g.' },
-        'Hilux': { oem: 'Denso', compressor: 'Denso 10S15C / 10S17C heavy duty swash plate', oil: 'ND-OIL 8 (PAG 46)', notes: 'Sistem Denso heavy duty untuk pacuan 4 roda.' },
-        'Fortuner': { oem: 'Denso', compressor: 'Denso 10S17C / 10S20C (Dual Evaporator)', oil: 'ND-OIL 8 (PAG 46)', notes: 'Sistem Denso dual cooling coil kabin 7 penumpang.' },
-        'Alphard': { oem: 'Denso', compressor: 'Denso 7SEU17C (Petrol) / Denso Inverter Electric (Hybrid)', oil: 'ND-OIL 8 / ND-OIL 11 (Hybrid)', notes: 'Sistem Denso multi-zone triple cooling coil. Model Hybrid wajib guna minyak ND-OIL 11 POE dielektrik.' },
-        'Vellfire': { oem: 'Denso', compressor: 'Denso 7SEU17C / Denso Inverter Electric', oil: 'ND-OIL 8 / ND-OIL 11 (Hybrid)', notes: 'Sistem Denso multi-zone. Jangan campur minyak PAG pada varian Hybrid.' },
-        'Rush': { oem: 'Denso', compressor: 'Denso 10S13C (Dual Evaporator)', oil: 'ND-OIL 8 (PAG 46)', notes: 'Sistem Denso double blower.' },
-        'Wish': { oem: 'Denso', compressor: 'Denso 6SEU16C variable', oil: 'ND-OIL 8 (PAG 46)', notes: 'Sistem Denso variable clutchless.' }
+        'Vios': { oem: 'Denso', compressor: 'NCP42/93: 10S11C (fixed); NCP150: 5SE09C (variable); NGC102: Denso ECV', oil: 'ND-OIL 8 (PAG 46)', hpPort: 'Discharge Line', notes: 'Sistem 100% Denso OEM. Generasi baharu menggunakan variable displacement dengan solenoid valve.' },
+        'Yaris': { oem: 'Denso', compressor: 'Denso 5SE09C / 10S11C', oil: 'ND-OIL 8 (PAG 46)', hpPort: 'Discharge Line', notes: 'Sistem Denso OEM. Ketahanan tinggi jika diservis flushing berkala.' },
+        'Corolla Altis': { oem: 'Denso', compressor: 'Denso 6SEU16 / 5SE12 variable clutchless', oil: 'ND-OIL 8 (PAG 46)', hpPort: 'Discharge Line / Liquid Line', notes: 'Sistem Denso clutchless dengan injap kawalan elektronik ECV.' },
+        'Camry': { oem: 'Denso', compressor: 'Denso 6SEU16C / 7SEU17C variable displacement', oil: 'ND-OIL 8 (PAG 46)', hpPort: 'Discharge Line / Liquid Line', notes: 'Sistem Denso luxury dual-zone climate control.' },
+        'Avanza': { oem: 'Denso', compressor: 'Denso 10S11C / 10S13C (Dual Blower)', oil: 'ND-OIL 8 (PAG 46)', hpPort: 'Discharge Line', notes: 'Sistem Denso dua blower (depan & bumbung belakang). Kuantiti gas ~550g.' },
+        'Innova': { oem: 'Denso', compressor: 'Denso 10S15C / 10S17C (Dual Evaporator)', oil: 'ND-OIL 8 (PAG 46)', hpPort: 'Discharge Line', notes: 'Sistem Denso tahan lasak kabin besar, kuantiti gas ~650g.' },
+        'Hilux': { oem: 'Denso', compressor: 'Denso 10S15C / 10S17C heavy duty swash plate', oil: 'ND-OIL 8 (PAG 46)', hpPort: 'Discharge Line', notes: 'Sistem Denso heavy duty untuk pacuan 4 roda.' },
+        'Fortuner': { oem: 'Denso', compressor: 'Denso 10S17C / 10S20C (Dual Evaporator)', oil: 'ND-OIL 8 (PAG 46)', hpPort: 'Discharge Line', notes: 'Sistem Denso dual cooling coil kabin 7 penumpang.' },
+        'Alphard': { oem: 'Denso', compressor: 'Denso 7SEU17C (Petrol) / Denso Inverter Electric (Hybrid)', oil: 'ND-OIL 8 / ND-OIL 11 (Hybrid)', hpPort: 'Discharge Line (Depan) / Liquid Line', notes: 'Sistem Denso multi-zone triple cooling coil. Model Hybrid wajib guna minyak ND-OIL 11 POE dielektrik.' },
+        'Vellfire': { oem: 'Denso', compressor: 'Denso 7SEU17C / Denso Inverter Electric', oil: 'ND-OIL 8 / ND-OIL 11 (Hybrid)', hpPort: 'Discharge Line (Depan) / Liquid Line', notes: 'Sistem Denso multi-zone. Jangan campur minyak PAG pada varian Hybrid.' },
+        'Rush': { oem: 'Denso', compressor: 'Denso 10S13C (Dual Evaporator)', oil: 'ND-OIL 8 (PAG 46)', hpPort: 'Discharge Line', notes: 'Sistem Denso double blower.' },
+        'Wish': { oem: 'Denso', compressor: 'Denso 6SEU16C variable', oil: 'ND-OIL 8 (PAG 46)', hpPort: 'Discharge Line', notes: 'Sistem Denso variable clutchless.' }
       }
     },
     'Honda': {
       defaultOem: 'Sanden / Keihin / Denso',
       compressor: 'Scroll / swash plate',
       oil: 'SP-10 (PAG 46) / SE-10Y',
-      notes: 'Sistem gabungan Sanden, Keihin atau Denso mengikut varian.',
+      hpPort: 'Liquid Line (Selepas Kondenser / Sebelum TXV)',
+      notes: 'Sistem gabungan Sanden, Keihin atau Denso. Port HP kebiasaannya pada Liquid Line.',
       models: {
-        'City': { oem: 'Sanden / Keihin / Denso', compressor: 'GD8/GM2: Sanden TRS090/TRSE07; GM6/GN2: Sanden / Denso', oil: 'SP-10 / Denso ND-OIL 8', notes: 'Sistem Sanden / Keihin / Denso. Periksa magnetic clutch relay (lazim cut-off) dan kelegaan clutch plate.' },
-        'Civic': { oem: 'Sanden / Keihin', compressor: 'FD/FB: Sanden TRSE07/TRSA09; FC/FE: Sanden variable / Keihin', oil: 'SP-10 (PAG 46)', notes: 'Sistem Sanden OEM. Gejala sejuk sekejap kemudian panas lazimnya berpunca daripada relay clutch atau jarak clutch terlalu renggang.' },
-        'Jazz / Fit': { oem: 'Sanden / Keihin', compressor: 'Sanden TRSE07 / TRS090 / Keihin', oil: 'SP-10 (PAG 46)', notes: 'Sistem Sanden scroll padat.' },
-        'CR-V': { oem: 'Keihin / Sanden / Denso', compressor: 'Keihin / Sanden scroll', oil: 'SP-10 / SE-10Y', notes: 'Sistem kabin sederhana. Periksa sensor tekanan dan relay magnetic clutch.' },
-        'HR-V': { oem: 'Sanden / Denso', compressor: 'Sanden / Denso variable', oil: 'SP-10 / ND-OIL 8', notes: 'Sistem Sanden/Denso moden.' },
-        'Accord': { oem: 'Denso / Keihin', compressor: 'Denso 10S17C / Keihin scroll', oil: 'ND-OIL 8 (PAG 46)', notes: 'Sistem Denso dual-zone kapasiti tinggi.' }
+        'City': { oem: 'Sanden / Keihin / Denso', compressor: 'GD8/GM2: Sanden TRS090/TRSE07; GM6/GN2: Sanden / Denso', oil: 'SP-10 / Denso ND-OIL 8', hpPort: 'Liquid Line (Paip cecair aluminium selepas kondenser ke firewall)', notes: 'Port HP terletak pada paip cecair (liquid line). Bacaan tolok normal 15-25 psi lebih rendah daripada discharge line.' },
+        'Civic': { oem: 'Sanden / Keihin', compressor: 'FD/FB: Sanden TRSE07/TRSA09; FC/FE: Sanden variable / Keihin', oil: 'SP-10 (PAG 46)', hpPort: 'Liquid Line (Selepas kondenser)', notes: 'Port HP di liquid line. Jangan terkeliru dengan bacaan tekanan yang lebih rendah berbanding discharge line.' },
+        'Jazz / Fit': { oem: 'Sanden / Keihin', compressor: 'Sanden TRSE07 / TRS090 / Keihin', oil: 'SP-10 (PAG 46)', hpPort: 'Liquid Line (Selepas kondenser)', notes: 'Sistem Sanden scroll padat. Port HP di liquid line.' },
+        'CR-V': { oem: 'Keihin / Sanden / Denso', compressor: 'Keihin / Sanden scroll', oil: 'SP-10 / SE-10Y', hpPort: 'Liquid Line (Selepas kondenser)', notes: 'Sistem kabin sederhana. Port HP di liquid line.' },
+        'HR-V': { oem: 'Sanden / Denso', compressor: 'Sanden / Denso variable', oil: 'SP-10 / ND-OIL 8', hpPort: 'Liquid Line (Selepas kondenser)', notes: 'Sistem Sanden/Denso moden dengan port HP di liquid line.' },
+        'Accord': { oem: 'Denso / Keihin', compressor: 'Denso 10S17C / Keihin scroll', oil: 'ND-OIL 8 (PAG 46)', hpPort: 'Liquid Line (Selepas kondenser)', notes: 'Sistem Denso dual-zone kapasiti tinggi.' }
       }
     },
     'Nissan': {
       defaultOem: 'Calsonic Kansei / Marelli / Valeo',
       compressor: 'Variable displacement swash plate with ECV',
       oil: 'PAG 46 (Nissan Type S)',
+      hpPort: 'Discharge Line (Selepas Pemampat)',
       notes: 'Sistem Calsonic Kansei / Marelli atau Valeo.',
       models: {
-        'Almera': { oem: 'Calsonic Kansei / Valeo', compressor: 'Calsonic CR08 / CSV613 variable displacement with ECV', oil: 'PAG 46 (Type S)', notes: 'Sangat terkenal dengan kerosakan Electronic Control Valve (ECV). Gejala: panas ketika berhenti/idle, sejuk semula bila kereta bergerak laju.' },
-        'Grand Livina': { oem: 'Calsonic Kansei / Valeo', compressor: 'Calsonic CR14 / CSV613 (Dual Blower)', oil: 'PAG 46', notes: 'Sistem Calsonic dua blower. Injap kawalan ECV dan magnetic clutch perlu diperiksa teliti.' },
-        'Serena': { oem: 'Calsonic Kansei / Marelli', compressor: 'Calsonic CSV613 (Dual Evaporator)', oil: 'PAG 46 (Nissan Type S)', notes: 'Sistem Calsonic dua evaporator (kabin besar). Model S-Hybrid mempunyai prosedur khas.' },
-        'X-Trail': { oem: 'Calsonic Kansei / Valeo', compressor: 'Calsonic DCS17 / CSV613', oil: 'PAG 46', notes: 'Sistem Calsonic variable displacement.' },
-        'Navara': { oem: 'Calsonic Kansei / Valeo', compressor: 'Calsonic DKS17D heavy duty', oil: 'PAG 46 / PAG 100', notes: 'Sistem Calsonic trak pikap tahan lasak.' },
-        'Sylphy': { oem: 'Calsonic Kansei', compressor: 'Calsonic CR14 / CSV613', oil: 'PAG 46', notes: 'Sistem Calsonic dual-zone climate control.' }
+        'Almera': { oem: 'Calsonic Kansei / Valeo', compressor: 'Calsonic CR08 / CSV613 variable displacement with ECV', oil: 'PAG 46 (Type S)', hpPort: 'Discharge Line', notes: 'Sangat terkenal dengan kerosakan Electronic Control Valve (ECV). Gejala: panas ketika berhenti/idle, sejuk semula bila kereta bergerak laju.' },
+        'Grand Livina': { oem: 'Calsonic Kansei / Valeo', compressor: 'Calsonic CR14 / CSV613 (Dual Blower)', oil: 'PAG 46', hpPort: 'Discharge Line', notes: 'Sistem Calsonic dua blower. Injap kawalan ECV dan magnetic clutch perlu diperiksa teliti.' },
+        'Serena': { oem: 'Calsonic Kansei / Marelli', compressor: 'Calsonic CSV613 (Dual Evaporator)', oil: 'PAG 46 (Nissan Type S)', hpPort: 'Discharge Line', notes: 'Sistem Calsonic dua evaporator (kabin besar). Model S-Hybrid mempunyai prosedur khas.' },
+        'X-Trail': { oem: 'Calsonic Kansei / Valeo', compressor: 'Calsonic DCS17 / CSV613', oil: 'PAG 46', hpPort: 'Discharge Line', notes: 'Sistem Calsonic variable displacement.' },
+        'Navara': { oem: 'Calsonic Kansei / Valeo', compressor: 'Calsonic DKS17D heavy duty', oil: 'PAG 46 / PAG 100', hpPort: 'Discharge Line', notes: 'Sistem Calsonic trak pikap tahan lasak.' },
+        'Sylphy': { oem: 'Calsonic Kansei', compressor: 'Calsonic CR14 / CSV613', oil: 'PAG 46', hpPort: 'Discharge Line', notes: 'Sistem Calsonic dual-zone climate control.' }
       }
     },
     'Mazda': {
       defaultOem: 'Panasonic / Denso / Sanden',
       compressor: 'Variable scroll / swash plate',
       oil: 'PAG 46 (Mazda ATM / ND-OIL 8)',
+      hpPort: 'Discharge Line',
       notes: 'Sistem SkyActiv Panasonic atau Denso.',
       models: {
-        'Mazda 2': { oem: 'Panasonic / Denso', compressor: 'Panasonic / Denso variable', oil: 'PAG 46', notes: 'Sistem Panasonic / Denso kompak.' },
-        'Mazda 3': { oem: 'Panasonic / Denso', compressor: 'Panasonic scroll / Denso 6SEU', oil: 'PAG 46', notes: 'Sistem SkyActiv kawalan elektronik.' },
-        'CX-5': { oem: 'Panasonic / Denso', compressor: 'Panasonic / Denso variable swash plate', oil: 'PAG 46', notes: 'Sistem SkyActiv dual-zone. Sensitif kepada kebersihan kondenser.' }
+        'Mazda 2': { oem: 'Panasonic / Denso', compressor: 'Panasonic / Denso variable', oil: 'PAG 46', hpPort: 'Discharge Line', notes: 'Sistem Panasonic / Denso kompak.' },
+        'Mazda 3': { oem: 'Panasonic / Denso', compressor: 'Panasonic scroll / Denso 6SEU', oil: 'PAG 46', hpPort: 'Discharge Line', notes: 'Sistem SkyActiv kawalan elektronik.' },
+        'CX-5': { oem: 'Panasonic / Denso', compressor: 'Panasonic / Denso variable swash plate', oil: 'PAG 46', hpPort: 'Discharge Line', notes: 'Sistem SkyActiv dual-zone. Sensitif kepada kebersihan kondenser.' }
       }
     },
     'Mitsubishi': {
       defaultOem: 'Mitsubishi Heavy Industries (MHI) / Denso',
       compressor: 'MHI scroll / Denso 10PA',
       oil: 'PAG 46 / PAG 100',
+      hpPort: 'Discharge Line',
       notes: 'Sistem MHI atau Denso Jepun.',
       models: {
-        'Triton': { oem: 'Mitsubishi Heavy Industries (MHI)', compressor: 'MHI scroll / Denso 10PA17C', oil: 'PAG 46 / PAG 100', notes: 'Sistem MHI heavy duty pacuan 4 roda.' },
-        'Lancer': { oem: 'Mitsubishi / Denso', compressor: 'MHI QS90 / Denso 10S', oil: 'PAG 46', notes: 'Sistem MHI / Denso.' },
-        'ASX': { oem: 'Mitsubishi / Denso', compressor: 'MHI scroll variable', oil: 'PAG 46', notes: 'Sistem MHI padat.' },
-        'Xpander': { oem: 'Denso / Mitsubishi', compressor: 'Denso 10S (Dual Blower)', oil: 'ND-OIL 8 (PAG 46)', notes: 'Sistem Denso dua blower untuk kabin 7 tempat duduk.' }
+        'Triton': { oem: 'Mitsubishi Heavy Industries (MHI)', compressor: 'MHI scroll / Denso 10PA17C', oil: 'PAG 46 / PAG 100', hpPort: 'Discharge Line', notes: 'Sistem MHI heavy duty pacuan 4 roda.' },
+        'Lancer': { oem: 'Mitsubishi / Denso', compressor: 'MHI QS90 / Denso 10S', oil: 'PAG 46', hpPort: 'Discharge Line', notes: 'Sistem MHI / Denso.' },
+        'ASX': { oem: 'Mitsubishi / Denso', compressor: 'MHI scroll variable', oil: 'PAG 46', hpPort: 'Discharge Line', notes: 'Sistem MHI padat.' },
+        'Xpander': { oem: 'Denso / Mitsubishi', compressor: 'Denso 10S (Dual Blower)', oil: 'ND-OIL 8 (PAG 46)', hpPort: 'Discharge Line', notes: 'Sistem Denso dua blower untuk kabin 7 tempat duduk.' }
       }
     },
     'Hyundai': {
       defaultOem: 'Hanon Systems (HCC / Halla) / Doowon',
       compressor: 'VS16 / DVE16 variable swash plate',
       oil: 'PAG 46',
+      hpPort: 'Discharge Line / Liquid Line',
       notes: 'Sistem Hanon (Halla) Korea dengan injap kawalan elektronik ECV.',
       models: {
-        'Elantra': { oem: 'Hanon Systems (HCC)', compressor: 'Hanon VS16 variable with ECV', oil: 'PAG 46', notes: 'Sistem Hanon Korea dengan injap kawalan elektronik ECV.' },
-        'Tucson': { oem: 'Hanon Systems (HCC)', compressor: 'Hanon VS16 / RS18', oil: 'PAG 46', notes: 'Sistem Hanon SUV dual climate.' },
-        'Starex': { oem: 'Hanon Systems / Doowon', compressor: 'Doowon / Hanon 10PA / DVE18 (Dual Evaporator)', oil: 'PAG 46 / PAG 100', notes: 'Sistem kapasiti tinggi 11 tempat duduk, kuantiti gas ~850g.' }
+        'Elantra': { oem: 'Hanon Systems (HCC)', compressor: 'Hanon VS16 variable with ECV', oil: 'PAG 46', hpPort: 'Discharge Line', notes: 'Sistem Hanon Korea dengan injap kawalan elektronik ECV.' },
+        'Tucson': { oem: 'Hanon Systems (HCC)', compressor: 'Hanon VS16 / RS18', oil: 'PAG 46', hpPort: 'Discharge Line', notes: 'Sistem Hanon SUV dual climate.' },
+        'Starex': { oem: 'Hanon Systems / Doowon', compressor: 'Doowon / Hanon 10PA / DVE18 (Dual Evaporator)', oil: 'PAG 46 / PAG 46', hpPort: 'Discharge Line', notes: 'Sistem kapasiti tinggi 11 tempat duduk, kuantiti gas ~850g.' }
       }
     },
     'Kia': {
       defaultOem: 'Hanon Systems (HCC / Halla) / Doowon',
       compressor: 'VS16 / DVE16 variable',
       oil: 'PAG 46',
+      hpPort: 'Discharge Line / Liquid Line',
       notes: 'Sistem Hanon / Doowon Korea.',
       models: {
-        'Cerato': { oem: 'Hanon Systems (HCC)', compressor: 'Hanon VS16 variable with ECV', oil: 'PAG 46', notes: 'Sistem Hanon ECV solenoid valve.' },
-        'Sportage': { oem: 'Hanon Systems', compressor: 'Hanon VS16 variable', oil: 'PAG 46', notes: 'Sistem Hanon SUV.' },
-        'Carnival': { oem: 'Hanon Systems / Doowon', compressor: 'Doowon / Hanon dual cooling coil', oil: 'PAG 46', notes: 'Sistem kabin besar multi-zone.' }
+        'Cerato': { oem: 'Hanon Systems (HCC)', compressor: 'Hanon VS16 variable with ECV', oil: 'PAG 46', hpPort: 'Discharge Line', notes: 'Sistem Hanon ECV solenoid valve.' },
+        'Sportage': { oem: 'Hanon Systems', compressor: 'Hanon VS16 variable', oil: 'PAG 46', hpPort: 'Discharge Line', notes: 'Sistem Hanon SUV.' },
+        'Carnival': { oem: 'Hanon Systems / Doowon', compressor: 'Doowon / Hanon dual cooling coil', oil: 'PAG 46', hpPort: 'Discharge Line', notes: 'Sistem kabin besar multi-zone.' }
       }
     }
   };
@@ -177,6 +188,7 @@
             brand: spec.oem,
             compressor: spec.compressor,
             oil: spec.oil,
+            hpPort: spec.hpPort || data.hpPort || 'Discharge Line (Selepas Pemampat)',
             notes: spec.notes
           };
         }
@@ -185,32 +197,33 @@
         brand: data.defaultOem,
         compressor: data.compressor,
         oil: data.oil,
+        hpPort: data.hpPort || 'Discharge Line (Selepas Pemampat)',
         notes: data.notes
       };
     }
 
-    // Padanan umum mengikut jenama lain
     const lowerB = b.toLowerCase();
     if (lowerB.includes('mercedes') || lowerB.includes('bmw') || lowerB.includes('volkswagen') || lowerB.includes('audi') || lowerB.includes('volvo')) {
-      return { brand: 'Denso / Valeo / Mahle-Behr', compressor: 'Clutchless variable displacement', oil: 'PAG 46 / POE', notes: 'Sistem kawalan elektronik kenderaan Eropah.' };
+      return { brand: 'Denso / Valeo / Mahle-Behr', compressor: 'Clutchless variable displacement', oil: 'PAG 46 / POE', hpPort: 'Liquid Line (Selepas Kondenser / Drier)', notes: 'Sistem kawalan elektronik kenderaan Eropah dengan port HP di liquid line.' };
     }
     if (lowerB.includes('ford')) {
-      return { brand: 'Hanon Systems / Visteon', compressor: 'Variable displacement swash plate', oil: 'PAG 46', notes: 'Sistem Hanon/Visteon.' };
+      return { brand: 'Hanon Systems / Visteon', compressor: 'Variable displacement swash plate', oil: 'PAG 46', hpPort: 'Discharge Line / Liquid Line', notes: 'Sistem Hanon/Visteon.' };
     }
     if (lowerB.includes('isuzu')) {
-      return { brand: 'Denso / Zexel / Valeo', compressor: 'Heavy duty swash plate', oil: 'PAG 46 / PAG 100', notes: 'Sistem pacuan lasak Denso / Zexel.' };
+      return { brand: 'Denso / Zexel / Valeo', compressor: 'Heavy duty swash plate', oil: 'PAG 46 / PAG 100', hpPort: 'Discharge Line', notes: 'Sistem pacuan lasak Denso / Zexel.' };
     }
     if (lowerB.includes('suzuki')) {
-      return { brand: 'Denso / Seiko Seiki', compressor: 'Denso padat', oil: 'ND-OIL 8 (PAG 46)', notes: 'Sistem Denso Jepun.' };
+      return { brand: 'Denso / Seiko Seiki', compressor: 'Denso padat', oil: 'ND-OIL 8 (PAG 46)', hpPort: 'Discharge Line', notes: 'Sistem Denso Jepun.' };
     }
     if (lowerB.includes('byd') || lowerB.includes('tesla') || lowerB.includes('ora')) {
-      return { brand: 'Electric Heat Pump / Inverter (Hanon/Denso)', compressor: 'Electric high-voltage scroll inverter', oil: 'POE Dielectric sahaja (ND-OIL 11)', notes: 'Sistem EV Voltan Tinggi. Wajib minyak POE dielektrik tanpa sebarang pencemaran PAG.' };
+      return { brand: 'Electric Heat Pump / Inverter (Hanon/Denso)', compressor: 'Electric high-voltage scroll inverter', oil: 'POE Dielectric sahaja (ND-OIL 11)', hpPort: 'High Pressure Line (Heat Pump Chiller)', notes: 'Sistem EV Voltan Tinggi. Wajib minyak POE dielektrik tanpa sebarang pencemaran PAG.' };
     }
 
     return {
       brand: 'Sistem OEM / Pasaran Tempatan (Denso / Sanden / Patco)',
       compressor: 'Fixed / variable displacement',
       oil: 'PAG 46 / PAG 100',
+      hpPort: 'Discharge Line (Standard)',
       notes: 'Disahkan melalui label spesifikasi atau nombor siri pemampat.'
     };
   }
@@ -272,7 +285,7 @@
       .amir-oem-name{font-weight:850;color:#064d57;font-size:.9rem}
       .amir-oem-detail{color:#355c68;font-size:.79rem;margin:0}
       .amir-oem-detail strong{color:#08636b}
-      .amir-oem-select-wrap{margin-top:8px}
+      .amir-hp-port-wrap{grid-column:1/-1;margin-top:6px;display:block;background:linear-gradient(135deg,#f0f9fa,#f8fdfe);border:1px solid #7dc7cc;border-radius:10px;padding:10px 13px;box-shadow:0 3px 10px rgba(10,135,144,.06)}
 
       @media(max-width:600px){.amir-ai{padding:15px;border-radius:14px}.amir-ai-body{max-height:none}.amir-ai-copy,.amir-ai-retry{flex:1 1 auto}}
     `;
@@ -403,7 +416,7 @@
         </div>
         <span class="amir-ai-free">PERCUMA</span>
       </div>
-      <p class="amir-ai-help">Tekan butang di bawah untuk analisis tambahan: kemungkinan punca, spesifikasi sistem OEM (Denso/Sanden/Patco/dll), langkah ujian dan apa yang patut disemak dahulu — berdasarkan data kenderaan anda.</p>
+      <p class="amir-ai-help">Tekan butang di bawah untuk analisis tambahan: kemungkinan punca, spesifikasi sistem OEM (Denso/Sanden/Patco/dll), analisis port fitting HP (Discharge vs Liquid Line mengikut kajian MACS/Denso), langkah ujian dan apa yang patut disemak dahulu — berdasarkan data kenderaan anda.</p>
       <div class="amir-ai-actions">
         <button type="button" class="amir-ai-run amir-ai-cta">Dapatkan analisis AI percuma</button>
       </div>
@@ -462,6 +475,7 @@
   const FIELD_MAP = [
     ['brand', 'assistBrand'], ['model', 'assistModel'], ['year', 'assistYear'],
     ['engine', 'assistEngine'], ['systemType', 'assistSystemType'], ['systemBrand', 'assistSystemBrand'],
+    ['hpPortLocation', 'assistHpPortLocation'],
     ['meteringDevice', 'assistMeteringDevice'], ['evaporatorLayout', 'assistEvaporatorLayout'],
     ['issue', 'assistIssue'], ['symptomText', 'assistSymptomText'], ['when', 'assistWhen'],
     ['blower', 'assistBlower'], ['testMode', 'assistTestMode'], ['rpm', 'assistRpm'],
@@ -513,17 +527,27 @@
   function buildPayload(result) {
     const data = (result && result.data) || currentData();
     const localText = String((result && result.text) || (currentResult && currentResult.text) || readLocalReport() || '').slice(0, 5000);
-    const oem = lookupOemSystem(data.brand, data.model) || { brand: 'Universal', compressor: '', oil: '', notes: '' };
+    const oem = lookupOemSystem(data.brand, data.model) || { brand: 'Universal', compressor: '', oil: '', hpPort: 'Discharge Line', notes: '' };
     const effectiveSystemBrand = data.systemBrand || oem.brand;
+
+    const hpPortVal = data.hpPortLocation || 'auto';
+    const isLiquid = hpPortVal === 'liquid' || (hpPortVal === 'auto' && String(oem.hpPort || '').toLowerCase().includes('liquid line'));
+    const portDesc = isLiquid ? 'Liquid Line (Selepas Kondenser / Salur Cecair)' : 'Discharge Line (Selepas Pemampat / Salur Pelepasan Gas Panas)';
 
     const caseData = Object.assign({}, data, {
       systemBrand: effectiveSystemBrand,
       oemCompressor: oem.compressor,
       oemOil: oem.oil,
       oemNotes: oem.notes,
+      oemHpPort: oem.hpPort,
+      hpPortFittingLocation: portDesc,
+      hpPortType: isLiquid ? 'Liquid Line' : 'Discharge Line',
+      condenserDeltaPNote: isLiquid 
+        ? 'Port HP diukur di Liquid Line (selepas kondenser). Mengikut kajian kejuruteraan HVAC (MACS/Denso), tolok membaca 15-25 psi lebih rendah daripada mampatan pemampat sebenar kerana kejatuhan tekanan dinamik merentasi kondenser (Condenser Pressure Drop). Julat normal pada ambien panas: 150-205 psi.'
+        : 'Port HP diukur di Discharge Line (selepas kompresor). Bacaan mengukur tekanan langsung pelepasan gas panas silinder pemampat. Julat normal pada ambien panas: 175-230 psi (Maksimum had selamat: 250 psi).',
       symptom: data.issue,
       symptomText: data.symptomText,
-      localScreening: localText + `\n\n[SISTEM AIRCOND OEM: ${effectiveSystemBrand} | Pemampat: ${oem.compressor} | Minyak: ${oem.oil} | ${oem.notes}]`
+      localScreening: localText + `\n\n[SISTEM AIRCOND OEM: ${effectiveSystemBrand} | Pemampat: ${oem.compressor} | Minyak: ${oem.oil} | Port HP Fitting: ${portDesc} | ${oem.notes}]`
     });
     delete caseData.name;
 
@@ -627,19 +651,24 @@
     if (!output) return;
     output.hidden = false;
     const formVals = readForm();
-    const oem = lookupOemSystem(formVals.brand, formVals.model) || { brand: 'Sistem OEM' };
+    const oem = lookupOemSystem(formVals.brand, formVals.model) || { brand: 'Sistem OEM', hpPort: 'Discharge Line' };
     const systemBrandDisplay = formVals.systemBrand || oem.brand;
+
+    const hpPortChoice = formVals.hpPortLocation || 'auto';
+    const isLiquid = hpPortChoice === 'liquid' || (hpPortChoice === 'auto' && String(oem.hpPort || '').toLowerCase().includes('liquid line'));
+    const hpPortLabel = isLiquid ? 'Liquid Line' : 'Discharge Line';
 
     output.innerHTML = `
       <div class="amir-ai-result-head">
         <span class="amir-ai-badge">AI</span>
         <span class="amir-ai-oem-chip">⚙️ ${escapeHtml(systemBrandDisplay)}</span>
+        <span class="amir-ai-oem-chip" style="background:#075f86">📍 Port HP: ${escapeHtml(hpPortLabel)}</span>
         <span class="amir-ai-model">${escapeHtml(modelLabel(data.model))}</span>
         <button type="button" class="amir-ai-copy">Salin</button>
         <button type="button" class="amir-ai-retry">Ulang analisis</button>
       </div>
       <div class="amir-ai-body">${renderMarkdown(data.analysis)}</div>
-      <p class="amir-ai-disclaimer">Analisis AI ini bersifat panduan dan mengambil kira spesifikasi pengeluar sistem (Denso, Sanden, Patco, Hanon, dll). Pengesahan muktamad memerlukan pemeriksaan fizikal.</p>
+      <p class="amir-ai-disclaimer">Analisis AI ini bersifat panduan dan mengambil kira spesifikasi pengeluar sistem (Denso, Sanden, Patco, Hanon, dll) serta kedudukan port fitting HP (Discharge Line vs Liquid Line mengikut kajian kejuruteraan MACS/SAE). Pengesahan muktamad memerlukan pemeriksaan fizikal.</p>
     `;
     const copyButton = $('.amir-ai-copy', output);
     copyButton.addEventListener('click', async () => {
@@ -685,7 +714,7 @@
     }
     if (output) {
       output.hidden = false;
-      output.innerHTML = '<p class="amir-ai-spinner">AI sedang menganalisis data kenderaan anda mengikut spesifikasi OEM. Biasanya 5–30 saat.</p>';
+      output.innerHTML = '<p class="amir-ai-spinner">AI sedang menganalisis data kenderaan anda mengikut spesifikasi OEM & lokasi fitting HP (Discharge / Liquid Line). Biasanya 5–30 saat.</p>';
     }
 
     try {
@@ -696,7 +725,7 @@
     }
   }
 
-  /* Kemas kini paparan maklumat sistem OEM di borang */
+  /* Kemas kini paparan maklumat sistem OEM & Lokasi Fitting HP di borang */
   function updateOemUi() {
     const brandInput = document.getElementById('assistBrand');
     const modelInput = document.getElementById('assistModel');
@@ -731,6 +760,7 @@
       </div>
       <p class="amir-oem-detail"><strong>Pemampat:</strong> ${escapeHtml(oem.compressor)}</p>
       <p class="amir-oem-detail"><strong>Minyak Pelincir:</strong> <code>${escapeHtml(oem.oil)}</code></p>
+      <p class="amir-oem-detail"><strong>Lokasi Port Fitting HP Asal:</strong> <code style="background:#e8f4f7;color:#075f74">${escapeHtml(oem.hpPort || 'Discharge Line')}</code></p>
       <p class="amir-oem-detail" style="color:#08636b;font-style:italic">${escapeHtml(oem.notes)}</p>
     `;
 
@@ -742,6 +772,19 @@
         oem.brand.toLowerCase().includes(opt.value.toLowerCase())
       );
       if (matchOpt) systemBrandSelect.value = matchOpt.value;
+    }
+
+    // Selaraskan assistHpPortLocation jika pengguna belum memilih secara manual
+    const portSelect = document.getElementById('assistHpPortLocation');
+    if (portSelect && !portSelect.dataset.userModified) {
+      const hpPortStr = String(oem.hpPort || '').toLowerCase();
+      if (hpPortStr.includes('liquid line') && !hpPortStr.includes('gen 1-2')) {
+        portSelect.value = 'liquid';
+      } else if (hpPortStr.includes('discharge line')) {
+        portSelect.value = 'discharge';
+      } else {
+        portSelect.value = 'auto';
+      }
     }
   }
 
@@ -775,7 +818,43 @@
     });
   }
 
-  /* Perkayakan fungsi saringan tempatan laman untuk sertakan data sistem OEM */
+  /* Sisip pemilih kedudukan fitting High Pressure (Discharge vs Liquid Line) */
+  function injectHpPortSelector() {
+    if (document.getElementById('assistHpPortLocation')) return;
+    const hpInput = document.getElementById('assistHP');
+    if (!hpInput) return;
+
+    const parentLabel = hpInput.closest('label');
+    if (!parentLabel || !parentLabel.parentElement) return;
+
+    const wrap = document.createElement('label');
+    wrap.className = 'amir-hp-port-wrap';
+    wrap.innerHTML = `
+      <span style="font-size:0.84rem;font-weight:800;color:#075f74;display:flex;align-items:center;gap:6px">
+        📍 Kedudukan Fitting HP (Tolok Tekanan Tinggi)
+        <span style="font-size:0.68rem;padding:2px 6px;border-radius:4px;background:#0a8790;color:#fff;font-weight:900">KAJIAN HVAC</span>
+      </span>
+      <select id="assistHpPortLocation" name="hpPortLocation" style="width:100%;margin-top:5px;padding:8px 10px;border:1px solid #95ccd0;border-radius:7px;background:#fff;font:inherit;font-size:0.86rem;font-weight:750;color:#134354">
+        <option value="auto">⚡ Padankan Automatik mengikut Model & Jenama</option>
+        <option value="discharge">🔴 Discharge Line (Selepas Kompresor / Hos Pelepasan Gas Panas) [Standard]</option>
+        <option value="liquid">🔵 Liquid Line (Selepas Kondenser / Paip Cecair ke Drier & TXV) [Honda, Eropah, X50/X70]</option>
+      </select>
+      <small style="display:block;margin-top:4px;color:#4c6e7a;font-size:0.75rem;line-height:1.4">
+        ℹ️ <strong>Kajian Kejuruteraan (SAE/MACS):</strong> Port di <em>Liquid Line</em> membaca <strong>15–25 psi lebih rendah</strong> daripada <em>Discharge Line</em> kerana kejatuhan tekanan dinamik merentasi kondenser (Condenser Pressure Drop).
+      </small>
+    `;
+
+    parentLabel.insertAdjacentElement('afterend', wrap);
+
+    const sel = document.getElementById('assistHpPortLocation');
+    if (sel) {
+      sel.addEventListener('change', () => {
+        sel.dataset.userModified = '1';
+      });
+    }
+  }
+
+  /* Perkayakan fungsi saringan tempatan laman untuk sertakan data sistem OEM & lokasi port HP */
   function patchLocalDiagnosis() {
     const origAnalyse = window.runAircondDiagnosis;
     if (typeof origAnalyse !== 'function') return;
@@ -789,11 +868,26 @@
       if (!oem) return result;
 
       const effectiveBrand = d.systemBrand || oem.brand;
+      const hpPortVal = d.hpPortLocation || 'auto';
+      let isLiquid = false;
+      if (hpPortVal === 'liquid') {
+        isLiquid = true;
+      } else if (hpPortVal === 'discharge') {
+        isLiquid = false;
+      } else {
+        isLiquid = String(oem.hpPort || '').toLowerCase().includes('liquid line');
+      }
 
-      // Sisip maklumat OEM ke dalam teks laporan jika belum ada
+      const hpNum = parseFloat(d.hp) || 0;
+      const portDesc = isLiquid ? 'Liquid Line (Selepas Kondenser / Salur Cecair)' : 'Discharge Line (Selepas Pemampat / Salur Pelepasan Gas Panas)';
+      const portPhysics = isLiquid
+        ? 'Bacaan tolok di Liquid Line biasanya 15–25 psi lebih rendah daripada mampatan silinder kompresor (Discharge) disebabkan kejatuhan tekanan dinamik merentasi kondenser (Condenser Pressure Drop). Julat normal ambien 30-35°C: 150–205 psi.'
+        : 'Bacaan tolok di Discharge Line mengukur terus tekanan pelepasan gas panas lampau sebelum penyejukan kondenser. Julat normal ambien 30-35°C: 175–230 psi (Maksimum had selamat: 250 psi).';
+
+      // Sisip maklumat OEM & Lokasi Fitting HP ke dalam teks laporan jika belum ada
       if (result.text && !result.text.includes('JENIS SISTEM / PENGELUAR OEM')) {
         const insertAnchor = 'KENDERAAN\n';
-        const oemSection = `JENIS SISTEM / PENGELUAR OEM: ${effectiveBrand}\nSpesifikasi Pemampat: ${oem.compressor} · Minyak: ${oem.oil}\nNota Sistem: ${oem.notes}\n`;
+        const oemSection = `JENIS SISTEM / PENGELUAR OEM: ${effectiveBrand}\nSpesifikasi Pemampat: ${oem.compressor} · Minyak: ${oem.oil}\nLokasi Port Fitting HP: ${portDesc}\nNota Kejuruteraan Port HP: ${portPhysics}\nNota Sistem: ${oem.notes}\n`;
         if (result.text.includes(insertAnchor)) {
           result.text = result.text.replace(insertAnchor, insertAnchor + oemSection);
         } else {
@@ -804,11 +898,23 @@
         if (box) box.textContent = result.text;
       }
 
-      // Sisip cadangan OEM ke dalam petunjuk teknikal tempatan
+      // Sisip petunjuk teknikal OEM & Port Fitting
       if (result.technical && result.technical.cues) {
-        const oemCue = `Sistem ${effectiveBrand} dikesan: sahkan minyak pelincir ${oem.oil} dan pemampat ${oem.compressor}. ${oem.notes}`;
+        const oemCue = `Sistem ${effectiveBrand} dikesan: sahkan minyak pelincir ${oem.oil} dan pemampat ${oem.compressor}. Port HP: ${oem.hpPort || (isLiquid ? 'Liquid Line' : 'Discharge Line')}.`;
         if (!result.technical.cues.some((c) => c.includes(effectiveBrand))) {
           result.technical.cues.unshift(oemCue);
+        }
+
+        if (isLiquid) {
+          result.technical.cues.push(`FITTING HP PADA LIQUID LINE (Selepas Kondenser): Bacaan HP ${hpNum} psi telah mengalami penurunan 15–25 psi merentasi kondenser normal. Jangan tambah gas secara membuta tuli jika bacaan 160–190 psi.`);
+          if (hpNum > 220) {
+            result.technical.cues.push(`AMARAN TEKANAN CECAIR TINGGI: Bacaan ${hpNum} psi di Liquid Line adalah sangat tinggi — semak kebersihan kondenser, fungsi kipas, atau risiko lebihan gas.`);
+          }
+        } else {
+          result.technical.cues.push(`FITTING HP PADA DISCHARGE LINE (Selepas Pemampat): Bacaan HP ${hpNum} psi mengukur mampatan langsung silinder gas panas pemampat.`);
+          if (hpNum > 240) {
+            result.technical.cues.push(`AMARAN TEKANAN PELEPASAN TINGGI: Bacaan ${hpNum} psi pada Discharge Line melebihi had selamat pemampat — semak aliran udara kondenser atau sekatan sistem.`);
+          }
         }
       }
 
@@ -822,9 +928,10 @@
     if (!form && !runButton) return;
 
     injectSystemBrandSelector();
+    injectHpPortSelector();
     patchLocalDiagnosis();
 
-    // Pantau pertukaran jenama dan model untuk kemaskini sistem OEM
+    // Pantau pertukaran jenama dan model untuk kemaskini sistem OEM & lokasi port HP
     const brandInput = document.getElementById('assistBrand');
     const modelInput = document.getElementById('assistModel');
     if (brandInput) {
