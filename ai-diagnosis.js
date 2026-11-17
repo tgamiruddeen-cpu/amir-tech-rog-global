@@ -202,7 +202,7 @@
       <div class="amir-ai-actions">
         <button type="button" class="amir-ai-run amir-ai-cta">Dapatkan analisis AI percuma</button>
       </div>
-      <p class="amir-ai-meta">Biasanya 10–30 saat · kuota percuma terhad</p>
+      <p class="amir-ai-meta">Biasanya 5–30 saat · kuota percuma terhad</p>
       <div class="amir-ai-output" hidden></div>
       <p class="amir-ai-note">AI boleh tersilap dan tidak menggantikan pemeriksaan fizikal. Jangan tambah gas, tukar komponen atau buka sistem refrigerant berdasarkan jawapan AI sahaja.</p>
     `;
@@ -359,20 +359,26 @@
 
   function friendlyError(error) {
     const message = String((error && error.message) || '');
-    if (error && (error.status === 403 || /Origin tidak dibenarkan/i.test(message))) {
+    const status = error && error.status;
+    const serverMessage = message && !/^AI tidak dapat menjana analisis/i.test(message);
+    if (status === 403 || /Origin tidak dibenarkan/i.test(message)) {
       return 'Analisis AI hanya tersedia di laman rasmi https://amirtechrog.my. Jika anda membuka fail secara lokal, uji melalui laman live.';
     }
-    if (error && error.status === 429) {
+    if (status === 429) {
       return 'Kuota analisis AI percuma sedang penuh. Cuba lagi selepas satu jam atau hubungi bengkel melalui WhatsApp.';
     }
-    if (error && error.status === 502) {
-      return 'Servis AI percuma sedang sibuk atau kuota hariannya telah digunakan. Cuba lagi selepas beberapa jam, atau hantar laporan saringan tempatan kepada bengkel melalui WhatsApp.';
-    }
-    if (error && error.status === 503) {
-      if (/belum diaktifkan|OPENROUTER_API_KEY/i.test(message)) {
+    if (status === 503) {
+      if (/belum diaktifkan/i.test(message)) {
         return 'Perkhidmatan AI belum diaktifkan pada pelayan. Sila hubungi pentadbir laman.';
       }
-      return 'Kuota AI percuma untuk hari ini telah digunakan. Cuba lagi selepas 8:00 pagi esok, atau hantar laporan saringan tempatan kepada bengkel melalui WhatsApp.';
+      return 'Kuota AI percuma untuk hari ini telah digunakan. Cuba lagi kemudian, atau hantar laporan saringan tempatan kepada bengkel melalui WhatsApp.';
+    }
+    if (status === 502 || status === 504 || status === 546) {
+      if (serverMessage && /sibuk|masa terlalu lama|respons kosong/i.test(message)) return message;
+      return 'Servis AI percuma sedang sibuk. Cuba lagi sebentar, atau hantar laporan saringan tempatan kepada bengkel melalui WhatsApp.';
+    }
+    if (typeof status === 'number' && status >= 500) {
+      return 'Pelayan AI sedang sibuk. Cuba lagi sebentar.';
     }
     if (error instanceof TypeError || /failed to fetch|networkerror|load failed/i.test(message)) {
       return 'Sambungan ke pelayan AI gagal. Semak sambungan internet anda, kemudian cuba lagi.';
@@ -453,7 +459,7 @@
     }
     if (output) {
       output.hidden = false;
-      output.innerHTML = '<p class="amir-ai-spinner">AI sedang menganalisis data kenderaan anda. Biasanya 10–30 saat.</p>';
+      output.innerHTML = '<p class="amir-ai-spinner">AI sedang menganalisis data kenderaan anda. Biasanya 5–30 saat.</p>';
     }
 
     try {
