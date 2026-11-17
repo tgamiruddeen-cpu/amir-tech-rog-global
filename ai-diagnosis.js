@@ -1,4 +1,4 @@
-/* AMIR TECH ROG GLOBAL 
+// AMIR TECH ROG GLOBAL
 
   function updateClimateNotice() {
     const setTempSelect = document.getElementById('assistSetTemp');
