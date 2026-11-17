@@ -369,7 +369,10 @@
       return 'Servis AI percuma sedang sibuk atau kuota hariannya telah digunakan. Cuba lagi selepas beberapa jam, atau hantar laporan saringan tempatan kepada bengkel melalui WhatsApp.';
     }
     if (error && error.status === 503) {
-      return 'Perkhidmatan AI belum diaktifkan pada pelayan. Sila hubungi pentadbir laman.';
+      if (/belum diaktifkan|OPENROUTER_API_KEY/i.test(message)) {
+        return 'Perkhidmatan AI belum diaktifkan pada pelayan. Sila hubungi pentadbir laman.';
+      }
+      return 'Kuota AI percuma untuk hari ini telah digunakan. Cuba lagi selepas 8:00 pagi esok, atau hantar laporan saringan tempatan kepada bengkel melalui WhatsApp.';
     }
     if (error instanceof TypeError || /failed to fetch|networkerror|load failed/i.test(message)) {
       return 'Sambungan ke pelayan AI gagal. Semak sambungan internet anda, kemudian cuba lagi.';
