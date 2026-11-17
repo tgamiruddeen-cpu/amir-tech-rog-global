@@ -709,3 +709,15 @@ html[data-theme="day"] td {
   border-bottom: 1px solid #e2e8f0 !important;
   color: #334155 !important;
 }
+
+
+/* High contrast for featured video card in all themes */
+.featured-video-card h3,
+html:not([data-theme="night"]) .featured-video-card h3 {
+  color: #ffffff !important;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.7) !important;
+}
+.featured-video-card p,
+html:not([data-theme="night"]) .featured-video-card p {
+  color: #e2e8f0 !important;
+}
