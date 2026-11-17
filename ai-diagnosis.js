@@ -5,6 +5,9 @@
 (function () {
   'use strict';
 
+  if (window.__amirAiLoaded) return;
+  window.__amirAiLoaded = true;
+
   const SUPABASE_URL = 'https://gubkcbnjknvhtntkyrqd.supabase.co';
   const SUPABASE_KEY = 'sb_publishable_Qk4tgU4mN4k5p32lVN3I_w_1VAI7cJP';
   const DEFAULT_ENDPOINT = SUPABASE_URL + '/functions/v1/ai-diagnosis';
