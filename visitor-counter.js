@@ -37,6 +37,22 @@ async function loadVisitorCounter() {
   }
 }
 
+function loadEnhancedStyles() {
+  const existing = document.querySelector('link[href*="hvac-3d.css"]');
+  const targetHref = "./assets/hvac-3d.css?v=20261118-ui1";
+  if (existing) {
+    if (existing.getAttribute("href") !== targetHref) {
+      existing.href = targetHref;
+    }
+  } else {
+    const link = document.createElement("link");
+    link.id = "amir-enhanced-styles";
+    link.rel = "stylesheet";
+    link.href = targetHref;
+    document.head.appendChild(link);
+  }
+}
+
 function loadAiDiagnosisScript() {
   if (document.getElementById("amir-ai-diagnosis-script")) return;
   const script = document.createElement("script");
@@ -46,12 +62,17 @@ function loadAiDiagnosisScript() {
   document.head.appendChild(script);
 }
 
+// Load styles immediately for fast rendering
+loadEnhancedStyles();
+
 if (document.readyState === "loading") {
   document.addEventListener("DOMContentLoaded", () => {
     loadVisitorCounter();
     loadAiDiagnosisScript();
+    loadEnhancedStyles();
   });
 } else {
   loadVisitorCounter();
   loadAiDiagnosisScript();
+  loadEnhancedStyles();
 }
