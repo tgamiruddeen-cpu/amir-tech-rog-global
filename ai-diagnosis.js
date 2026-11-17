@@ -1,6 +1,7 @@
-/* AMIR TECH ROG GLOBAL — Analisis AI percuma
+/* AMIR TECH ROG GLOBAL — Analisis AI percuma & Saringan Sistem OEM
  * Memanggil Supabase Edge Function `ai-diagnosis`.
- * Kunci OpenRouter kekal di Supabase; fail ini hanya menggunakan publishable key.
+ * Mengandungi pangkalan data jenis sistem OEM (Denso, Sanden, Patco, Hanon, Calsonic Kansei, Valeo, Keihin, dll).
+ * Kunci API kekal di pelayan Supabase; fail ini hanya menggunakan publishable key.
  */
 (function () {
   'use strict';
@@ -19,6 +20,200 @@
   let currentResult = null;
   let panel = null;
   let lastRunAt = 0;
+
+  /* Pangkalan data jenis sistem & pengeluar aircond OEM kenderaan di Malaysia */
+  const OEM_SYSTEM_DATABASE = {
+    'Perodua': {
+      defaultOem: 'Denso',
+      compressor: 'Fixed displacement swash plate / rotary vane',
+      oil: 'ND-OIL 8 (PAG 46)',
+      notes: 'Sistem standard Denso OEM Jepun/Malaysia. TXV jenis blok.',
+      models: {
+        'Myvi': { oem: 'Denso / Sanden', compressor: 'Gen 1-2: Denso 10S11C; Gen 3: Denso / Sanden rotary scroll', oil: 'ND-OIL 8 (PAG 46) / SP-10', notes: 'Sistem asal Denso. Model Gen 3 menggunakan Denso atau Sanden. Periksa magnetic clutch relay dan thermal fuse jika kerap cut-off.' },
+        'Axia': { oem: 'Denso', compressor: 'Denso SV07 / 10S08C padat', oil: 'ND-OIL 8 (PAG 46)', notes: 'Sistem Denso kompak (~300g gas). Sangat sensitif jika kuantiti minyak atau gas terlebih/kurang.' },
+        'Bezza': { oem: 'Denso', compressor: 'Denso 10S08C / SV07', oil: 'ND-OIL 8 (PAG 46)', notes: 'Sistem Denso penjimatan tenaga dengan penderia suhu evaporator digital.' },
+        'Alza': { oem: 'Denso', compressor: 'Denso 10S13C / 10S15C (Dual Evaporator)', oil: 'ND-OIL 8 (PAG 46)', notes: 'Sistem Denso dengan double cooling coil (depan & bumbung belakang). Kuantiti gas ~550g-600g.' },
+        'Ativa': { oem: 'Denso', compressor: 'Denso variable displacement clutchless (DNGA)', oil: 'ND-OIL 8 (PAG 46)', notes: 'Sistem kawalan elektronik pintar platform DNGA Daihatsu/Perodua.' },
+        'Aruz': { oem: 'Denso', compressor: 'Denso 10S15C (Dual cooling)', oil: 'ND-OIL 8 (PAG 46)', notes: 'Sistem Denso kabin 7 tempat duduk dengan blower belakang berasingan.' },
+        'Viva': { oem: 'Denso', compressor: 'Denso SV06 / 10P08', oil: 'ND-OIL 8 (PAG 46)', notes: 'Sistem Denso asas, TXV blok, receiver drier bersepadu pada kondenser.' },
+        'Kelisa': { oem: 'Denso / Sanden', compressor: 'Denso SV06 / Sanden APM', oil: 'ND-OIL 8 (PAG 46)', notes: 'Sistem Denso atau Sanden APM tempatan.' },
+        'Kenari': { oem: 'Denso', compressor: 'Denso SV06 / 10P08', oil: 'ND-OIL 8 (PAG 46)', notes: 'Sistem Denso kompak.' },
+        'Kancil': { oem: 'Denso / Sanden', compressor: 'Denso 10P08 / Sanden SD505 / APM', oil: 'ND-OIL 8 / PAG 100', notes: 'Model lama R12/R134a conversion, expansion valve kotak/flare.' },
+        'Kembara': { oem: 'Denso', compressor: 'Denso 10P08', oil: 'ND-OIL 8 (PAG 46)', notes: 'Sistem pacuan 4 roda kompak Daihatsu Taruna/Terios.' },
+        'Rusa': { oem: 'Denso', compressor: 'Denso 10P / Dual Evaporator', oil: 'ND-OIL 8 (PAG 46)', notes: 'Sistem van komersial dual blower.' }
+      }
+    },
+    'Proton': {
+      defaultOem: 'Sanden / Patco',
+      compressor: 'Rotary scroll / swash plate',
+      oil: 'SP-10 (PAG 46) / PAG 100',
+      notes: 'Sistem pembekal tempatan Patco atau Sanden OEM.',
+      models: {
+        'Saga': { oem: 'Patco / Sanden', compressor: 'Iswara: Patco/Sanden SD507; BLM/FLX: Sanden TRSA09/SD7V16; VVT: Patco/Hanon', oil: 'SP-10 / PAG 100', notes: 'Saga lama menggunakan sistem Patco/Sanden. BLM/FLX guna Sanden TRSA09. Saga VVT menggunakan Patco/Hanon. Periksa kelegaan clutch gap (0.35-0.6mm).' },
+        'Wira': { oem: 'Patco / Sanden', compressor: 'Patco Rotary / Sanden SD709 / TR70 / SD7B10', oil: 'PAG 100 / SP-10', notes: 'Sistem OEM Patco Malaysia atau Sanden. Periksa receiver drier dan suis tekanan (pressure switch) 2-pin/4-pin.' },
+        'Waja': { oem: 'Sanden / Mitsubishi', compressor: 'Sanden TRS090 / TRSE07 (Campro) / Mitsubishi (4G18)', oil: 'SP-10 (PAG 46)', notes: 'Kompresor Sanden scroll. Lazim berlaku masalah clutch slipping apabila enjin panas.' },
+        'Persona': { oem: 'Sanden / Patco', compressor: 'Persona lama: Sanden TRSE07; Persona VVT: Sanden/Hanon', oil: 'SP-10 (PAG 46)', notes: 'Sistem Sanden TRSE. Periksa thermal protector dan relay magnetik.' },
+        'Gen-2': { oem: 'Sanden', compressor: 'Sanden TRSE07 / TRSA09 rotary scroll', oil: 'SP-10 (PAG 46)', notes: 'Kompresor Sanden scroll. Kelegaan clutch perlu tepat untuk elak cut-off ketika melahu.' },
+        'Iriz': { oem: 'Sanden / Hanon', compressor: 'Sanden / Hanon variable displacement', oil: 'PAG 46', notes: 'Sistem moden dengan sensor suhu evaporator dan kawalan ECU.' },
+        'Preve': { oem: 'Sanden', compressor: 'Sanden SD7V16 variable displacement', oil: 'SP-10 (PAG 46)', notes: 'Kompresor Sanden variable displacement dengan internal control valve.' },
+        'Suprima S': { oem: 'Sanden', compressor: 'Sanden SD7V16 variable displacement', oil: 'SP-10 (PAG 46)', notes: 'Sistem Sanden sama seperti Preve CFE Turbo.' },
+        'Exora': { oem: 'Sanden', compressor: 'Sanden SD7V16 / TRSE09 (Dual Evaporator)', oil: 'SP-10 (PAG 46)', notes: 'Sistem Sanden dua cooling coil (depan & belakang). Cas gas sekitar ~700-750g.' },
+        'X50': { oem: 'Hanon Systems / Valeo', compressor: 'Hanon variable displacement clutchless ECV', oil: 'PAG 46 (ND-OIL 8)', notes: 'Sistem OEM Hanon Systems / Valeo dengan injap solenoid ECV kawalan PWM. Jangan tambah minyak sebarangan.' },
+        'X70': { oem: 'Hanon Systems / Valeo', compressor: 'Hanon / Valeo clutchless variable displacement', oil: 'PAG 46', notes: 'Sistem Hanon / Valeo dual-zone climate control. Sensitif kepada kebersihan kondenser dan aliran udara.' },
+        'X90': { oem: 'Hanon Systems', compressor: 'Hanon elektrik 48V MHEV / Variable', oil: 'POE / PAG khusus', notes: 'Sistem hibrid ringan 48V. Minyak pemampat mesti mengikut spesifikasi OEM.' },
+        'S70': { oem: 'Hanon Systems / Valeo', compressor: 'Hanon variable displacement', oil: 'PAG 46', notes: 'Sistem kawalan elektronik terkini segmen sedan Proton.' },
+        'Perdana': { oem: 'Denso / Sanden / Keihin', compressor: 'Perdana V6: Mitsubishi/Sanden; Perdana Accord: Denso/Keihin', oil: 'ND-OIL 8 / SP-10', notes: 'Varian berasaskan Honda menggunakan sistem Denso/Keihin.' },
+        'Savvy': { oem: 'Patco / Sanden', compressor: 'Sanden SD7B10 / Patco', oil: 'PAG 100 / SP-10', notes: 'Sistem kompak enjin Renault D4F.' }
+      }
+    },
+    'Toyota': {
+      defaultOem: 'Denso',
+      compressor: 'Denso swash plate fixed / variable',
+      oil: 'ND-OIL 8 (PAG 46)',
+      notes: '100% sistem Denso OEM Jepun. Ketahanan tinggi dan TXV blok.',
+      models: {
+        'Vios': { oem: 'Denso', compressor: 'NCP42/93: 10S11C (fixed); NCP150: 5SE09C (variable); NGC102: Denso ECV', oil: 'ND-OIL 8 (PAG 46)', notes: 'Sistem 100% Denso OEM. Generasi baharu menggunakan variable displacement dengan solenoid valve.' },
+        'Yaris': { oem: 'Denso', compressor: 'Denso 5SE09C / 10S11C', oil: 'ND-OIL 8 (PAG 46)', notes: 'Sistem Denso OEM. Ketahanan tinggi jika diservis flushing berkala.' },
+        'Corolla Altis': { oem: 'Denso', compressor: 'Denso 6SEU16 / 5SE12 variable clutchless', oil: 'ND-OIL 8 (PAG 46)', notes: 'Sistem Denso clutchless dengan injap kawalan elektronik ECV.' },
+        'Camry': { oem: 'Denso', compressor: 'Denso 6SEU16C / 7SEU17C variable displacement', oil: 'ND-OIL 8 (PAG 46)', notes: 'Sistem Denso luxury dual-zone climate control.' },
+        'Avanza': { oem: 'Denso', compressor: 'Denso 10S11C / 10S13C (Dual Blower)', oil: 'ND-OIL 8 (PAG 46)', notes: 'Sistem Denso dua blower (depan & bumbung belakang). Kuantiti gas ~550g.' },
+        'Innova': { oem: 'Denso', compressor: 'Denso 10S15C / 10S17C (Dual Evaporator)', oil: 'ND-OIL 8 (PAG 46)', notes: 'Sistem Denso tahan lasak kabin besar, kuantiti gas ~650g.' },
+        'Hilux': { oem: 'Denso', compressor: 'Denso 10S15C / 10S17C heavy duty swash plate', oil: 'ND-OIL 8 (PAG 46)', notes: 'Sistem Denso heavy duty untuk pacuan 4 roda.' },
+        'Fortuner': { oem: 'Denso', compressor: 'Denso 10S17C / 10S20C (Dual Evaporator)', oil: 'ND-OIL 8 (PAG 46)', notes: 'Sistem Denso dual cooling coil kabin 7 penumpang.' },
+        'Alphard': { oem: 'Denso', compressor: 'Denso 7SEU17C (Petrol) / Denso Inverter Electric (Hybrid)', oil: 'ND-OIL 8 / ND-OIL 11 (Hybrid)', notes: 'Sistem Denso multi-zone triple cooling coil. Model Hybrid wajib guna minyak ND-OIL 11 POE dielektrik.' },
+        'Vellfire': { oem: 'Denso', compressor: 'Denso 7SEU17C / Denso Inverter Electric', oil: 'ND-OIL 8 / ND-OIL 11 (Hybrid)', notes: 'Sistem Denso multi-zone. Jangan campur minyak PAG pada varian Hybrid.' },
+        'Rush': { oem: 'Denso', compressor: 'Denso 10S13C (Dual Evaporator)', oil: 'ND-OIL 8 (PAG 46)', notes: 'Sistem Denso double blower.' },
+        'Wish': { oem: 'Denso', compressor: 'Denso 6SEU16C variable', oil: 'ND-OIL 8 (PAG 46)', notes: 'Sistem Denso variable clutchless.' }
+      }
+    },
+    'Honda': {
+      defaultOem: 'Sanden / Keihin / Denso',
+      compressor: 'Scroll / swash plate',
+      oil: 'SP-10 (PAG 46) / SE-10Y',
+      notes: 'Sistem gabungan Sanden, Keihin atau Denso mengikut varian.',
+      models: {
+        'City': { oem: 'Sanden / Keihin / Denso', compressor: 'GD8/GM2: Sanden TRS090/TRSE07; GM6/GN2: Sanden / Denso', oil: 'SP-10 / Denso ND-OIL 8', notes: 'Sistem Sanden / Keihin / Denso. Periksa magnetic clutch relay (lazim cut-off) dan kelegaan clutch plate.' },
+        'Civic': { oem: 'Sanden / Keihin', compressor: 'FD/FB: Sanden TRSE07/TRSA09; FC/FE: Sanden variable / Keihin', oil: 'SP-10 (PAG 46)', notes: 'Sistem Sanden OEM. Gejala sejuk sekejap kemudian panas lazimnya berpunca daripada relay clutch atau jarak clutch terlalu renggang.' },
+        'Jazz / Fit': { oem: 'Sanden / Keihin', compressor: 'Sanden TRSE07 / TRS090 / Keihin', oil: 'SP-10 (PAG 46)', notes: 'Sistem Sanden scroll padat.' },
+        'CR-V': { oem: 'Keihin / Sanden / Denso', compressor: 'Keihin / Sanden scroll', oil: 'SP-10 / SE-10Y', notes: 'Sistem kabin sederhana. Periksa sensor tekanan dan relay magnetic clutch.' },
+        'HR-V': { oem: 'Sanden / Denso', compressor: 'Sanden / Denso variable', oil: 'SP-10 / ND-OIL 8', notes: 'Sistem Sanden/Denso moden.' },
+        'Accord': { oem: 'Denso / Keihin', compressor: 'Denso 10S17C / Keihin scroll', oil: 'ND-OIL 8 (PAG 46)', notes: 'Sistem Denso dual-zone kapasiti tinggi.' }
+      }
+    },
+    'Nissan': {
+      defaultOem: 'Calsonic Kansei / Marelli / Valeo',
+      compressor: 'Variable displacement swash plate with ECV',
+      oil: 'PAG 46 (Nissan Type S)',
+      notes: 'Sistem Calsonic Kansei / Marelli atau Valeo.',
+      models: {
+        'Almera': { oem: 'Calsonic Kansei / Valeo', compressor: 'Calsonic CR08 / CSV613 variable displacement with ECV', oil: 'PAG 46 (Type S)', notes: 'Sangat terkenal dengan kerosakan Electronic Control Valve (ECV). Gejala: panas ketika berhenti/idle, sejuk semula bila kereta bergerak laju.' },
+        'Grand Livina': { oem: 'Calsonic Kansei / Valeo', compressor: 'Calsonic CR14 / CSV613 (Dual Blower)', oil: 'PAG 46', notes: 'Sistem Calsonic dua blower. Injap kawalan ECV dan magnetic clutch perlu diperiksa teliti.' },
+        'Serena': { oem: 'Calsonic Kansei / Marelli', compressor: 'Calsonic CSV613 (Dual Evaporator)', oil: 'PAG 46 (Nissan Type S)', notes: 'Sistem Calsonic dua evaporator (kabin besar). Model S-Hybrid mempunyai prosedur khas.' },
+        'X-Trail': { oem: 'Calsonic Kansei / Valeo', compressor: 'Calsonic DCS17 / CSV613', oil: 'PAG 46', notes: 'Sistem Calsonic variable displacement.' },
+        'Navara': { oem: 'Calsonic Kansei / Valeo', compressor: 'Calsonic DKS17D heavy duty', oil: 'PAG 46 / PAG 100', notes: 'Sistem Calsonic trak pikap tahan lasak.' },
+        'Sylphy': { oem: 'Calsonic Kansei', compressor: 'Calsonic CR14 / CSV613', oil: 'PAG 46', notes: 'Sistem Calsonic dual-zone climate control.' }
+      }
+    },
+    'Mazda': {
+      defaultOem: 'Panasonic / Denso / Sanden',
+      compressor: 'Variable scroll / swash plate',
+      oil: 'PAG 46 (Mazda ATM / ND-OIL 8)',
+      notes: 'Sistem SkyActiv Panasonic atau Denso.',
+      models: {
+        'Mazda 2': { oem: 'Panasonic / Denso', compressor: 'Panasonic / Denso variable', oil: 'PAG 46', notes: 'Sistem Panasonic / Denso kompak.' },
+        'Mazda 3': { oem: 'Panasonic / Denso', compressor: 'Panasonic scroll / Denso 6SEU', oil: 'PAG 46', notes: 'Sistem SkyActiv kawalan elektronik.' },
+        'CX-5': { oem: 'Panasonic / Denso', compressor: 'Panasonic / Denso variable swash plate', oil: 'PAG 46', notes: 'Sistem SkyActiv dual-zone. Sensitif kepada kebersihan kondenser.' }
+      }
+    },
+    'Mitsubishi': {
+      defaultOem: 'Mitsubishi Heavy Industries (MHI) / Denso',
+      compressor: 'MHI scroll / Denso 10PA',
+      oil: 'PAG 46 / PAG 100',
+      notes: 'Sistem MHI atau Denso Jepun.',
+      models: {
+        'Triton': { oem: 'Mitsubishi Heavy Industries (MHI)', compressor: 'MHI scroll / Denso 10PA17C', oil: 'PAG 46 / PAG 100', notes: 'Sistem MHI heavy duty pacuan 4 roda.' },
+        'Lancer': { oem: 'Mitsubishi / Denso', compressor: 'MHI QS90 / Denso 10S', oil: 'PAG 46', notes: 'Sistem MHI / Denso.' },
+        'ASX': { oem: 'Mitsubishi / Denso', compressor: 'MHI scroll variable', oil: 'PAG 46', notes: 'Sistem MHI padat.' },
+        'Xpander': { oem: 'Denso / Mitsubishi', compressor: 'Denso 10S (Dual Blower)', oil: 'ND-OIL 8 (PAG 46)', notes: 'Sistem Denso dua blower untuk kabin 7 tempat duduk.' }
+      }
+    },
+    'Hyundai': {
+      defaultOem: 'Hanon Systems (HCC / Halla) / Doowon',
+      compressor: 'VS16 / DVE16 variable swash plate',
+      oil: 'PAG 46',
+      notes: 'Sistem Hanon (Halla) Korea dengan injap kawalan elektronik ECV.',
+      models: {
+        'Elantra': { oem: 'Hanon Systems (HCC)', compressor: 'Hanon VS16 variable with ECV', oil: 'PAG 46', notes: 'Sistem Hanon Korea dengan injap kawalan elektronik ECV.' },
+        'Tucson': { oem: 'Hanon Systems (HCC)', compressor: 'Hanon VS16 / RS18', oil: 'PAG 46', notes: 'Sistem Hanon SUV dual climate.' },
+        'Starex': { oem: 'Hanon Systems / Doowon', compressor: 'Doowon / Hanon 10PA / DVE18 (Dual Evaporator)', oil: 'PAG 46 / PAG 100', notes: 'Sistem kapasiti tinggi 11 tempat duduk, kuantiti gas ~850g.' }
+      }
+    },
+    'Kia': {
+      defaultOem: 'Hanon Systems (HCC / Halla) / Doowon',
+      compressor: 'VS16 / DVE16 variable',
+      oil: 'PAG 46',
+      notes: 'Sistem Hanon / Doowon Korea.',
+      models: {
+        'Cerato': { oem: 'Hanon Systems (HCC)', compressor: 'Hanon VS16 variable with ECV', oil: 'PAG 46', notes: 'Sistem Hanon ECV solenoid valve.' },
+        'Sportage': { oem: 'Hanon Systems', compressor: 'Hanon VS16 variable', oil: 'PAG 46', notes: 'Sistem Hanon SUV.' },
+        'Carnival': { oem: 'Hanon Systems / Doowon', compressor: 'Doowon / Hanon dual cooling coil', oil: 'PAG 46', notes: 'Sistem kabin besar multi-zone.' }
+      }
+    }
+  };
+
+  function lookupOemSystem(brand, model) {
+    const b = String(brand || '').trim();
+    const m = String(model || '').trim().toLowerCase();
+    if (!b) return null;
+
+    const brandEntry = Object.keys(OEM_SYSTEM_DATABASE).find((key) => key.toLowerCase() === b.toLowerCase());
+    if (brandEntry) {
+      const data = OEM_SYSTEM_DATABASE[brandEntry];
+      if (m && data.models) {
+        const matchedModelKey = Object.keys(data.models).find((k) => m.includes(k.toLowerCase()) || k.toLowerCase().includes(m));
+        if (matchedModelKey) {
+          const spec = data.models[matchedModelKey];
+          return {
+            brand: spec.oem,
+            compressor: spec.compressor,
+            oil: spec.oil,
+            notes: spec.notes
+          };
+        }
+      }
+      return {
+        brand: data.defaultOem,
+        compressor: data.compressor,
+        oil: data.oil,
+        notes: data.notes
+      };
+    }
+
+    // Padanan umum mengikut jenama lain
+    const lowerB = b.toLowerCase();
+    if (lowerB.includes('mercedes') || lowerB.includes('bmw') || lowerB.includes('volkswagen') || lowerB.includes('audi') || lowerB.includes('volvo')) {
+      return { brand: 'Denso / Valeo / Mahle-Behr', compressor: 'Clutchless variable displacement', oil: 'PAG 46 / POE', notes: 'Sistem kawalan elektronik kenderaan Eropah.' };
+    }
+    if (lowerB.includes('ford')) {
+      return { brand: 'Hanon Systems / Visteon', compressor: 'Variable displacement swash plate', oil: 'PAG 46', notes: 'Sistem Hanon/Visteon.' };
+    }
+    if (lowerB.includes('isuzu')) {
+      return { brand: 'Denso / Zexel / Valeo', compressor: 'Heavy duty swash plate', oil: 'PAG 46 / PAG 100', notes: 'Sistem pacuan lasak Denso / Zexel.' };
+    }
+    if (lowerB.includes('suzuki')) {
+      return { brand: 'Denso / Seiko Seiki', compressor: 'Denso padat', oil: 'ND-OIL 8 (PAG 46)', notes: 'Sistem Denso Jepun.' };
+    }
+    if (lowerB.includes('byd') || lowerB.includes('tesla') || lowerB.includes('ora')) {
+      return { brand: 'Electric Heat Pump / Inverter (Hanon/Denso)', compressor: 'Electric high-voltage scroll inverter', oil: 'POE Dielectric sahaja (ND-OIL 11)', notes: 'Sistem EV Voltan Tinggi. Wajib minyak POE dielektrik tanpa sebarang pencemaran PAG.' };
+    }
+
+    return {
+      brand: 'Sistem OEM / Pasaran Tempatan (Denso / Sanden / Patco)',
+      compressor: 'Fixed / variable displacement',
+      oil: 'PAG 46 / PAG 100',
+      notes: 'Disahkan melalui label spesifikasi atau nombor siri pemampat.'
+    };
+  }
 
   function injectStyle() {
     if (document.getElementById('amir-ai-style')) return;
@@ -46,8 +241,9 @@
       .amir-ai-output[hidden]{display:none!important}
       .amir-ai-result-head{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin-bottom:10px}
       .amir-ai-badge{display:inline-flex;align-items:center;min-height:26px;padding:3px 9px;border-radius:999px;background:#075f86;color:#fff;font-size:.7rem;font-weight:900;letter-spacing:.08em}
+      .amir-ai-oem-chip{display:inline-flex;align-items:center;min-height:26px;padding:3px 10px;border-radius:999px;background:#0a8790;color:#fff;font-size:.72rem;font-weight:850;letter-spacing:.04em}
       .amir-ai-model{color:#416273;font-size:.78rem;font-weight:700}
-      .amir-ai-copy,.amir-ai-retry{border:1px solid #9bc9ce;border-radius:9px;background:#fff;color:#075f74;font:inherit;font-size:.78rem;font-weight:800;padding:7px 11px;cursor:pointer}
+      .amir-ai-copy,.amir-ai-retry{border:1px solid #9bc9ce;border-radius:999px;background:#fff;color:#075f74;font:inherit;font-size:.78rem;font-weight:800;padding:6px 14px;cursor:pointer}
       .amir-ai-copy:hover,.amir-ai-retry:hover{background:#e6f7f5}
       .amir-ai-body{font-size:.93rem;line-height:1.72;color:#23475b;max-height:68vh;overflow:auto;padding-right:6px;overscroll-behavior:contain}
       .amir-ai-body h4{margin:18px 0 6px;color:#075f74;font-size:1rem;line-height:1.35}
@@ -68,6 +264,16 @@
       .amir-ai-spinner{display:inline-flex;align-items:center;gap:9px;color:#075f74;font-size:.86rem;font-weight:750}
       .amir-ai-spinner:before{content:"";width:15px;height:15px;border:2px solid #9bc9ce;border-top-color:#075f86;border-radius:50%;animation:amirAiSpin .8s linear infinite}
       @keyframes amirAiSpin{to{transform:rotate(360deg)}}
+
+      /* Lencana & Kad Maklumat Sistem OEM di borang */
+      .amir-oem-badge{margin:10px 0 12px;padding:10px 14px;border-radius:12px;background:linear-gradient(135deg,#e8f8f7,#f3fbff);border:1px solid #7dc7cc;color:#094e5b;font-size:.82rem;line-height:1.55;display:flex;flex-direction:column;gap:4px;box-shadow:0 3px 10px rgba(10,135,144,.08)}
+      .amir-oem-badge-head{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+      .amir-oem-tag{display:inline-flex;align-items:center;padding:2px 8px;border-radius:6px;background:#0a8790;color:#fff;font-size:.7rem;font-weight:900;letter-spacing:.05em}
+      .amir-oem-name{font-weight:850;color:#064d57;font-size:.9rem}
+      .amir-oem-detail{color:#355c68;font-size:.79rem;margin:0}
+      .amir-oem-detail strong{color:#08636b}
+      .amir-oem-select-wrap{margin-top:8px}
+
       @media(max-width:600px){.amir-ai{padding:15px;border-radius:14px}.amir-ai-body{max-height:none}.amir-ai-copy,.amir-ai-retry{flex:1 1 auto}}
     `;
     document.head.append(style);
@@ -98,7 +304,6 @@
     return html + '</table></div>';
   }
 
-  /* Minimal, safe Markdown renderer for the AI response (headings, bold, lists, tables). */
   function renderMarkdown(markdown) {
     const lines = String(markdown || '').replace(/\r\n?/g, '\n').split('\n');
     const output = [];
@@ -193,12 +398,12 @@
       <div class="amir-ai-head">
         <span class="amir-ai-orb" aria-hidden="true"></span>
         <div>
-          <p class="amir-ai-eyebrow">AI percuma · pendapat kedua</p>
+          <p class="amir-ai-eyebrow">AI percuma · analisis mendalam</p>
           <h3>Mahu pendapat kedua daripada AI?</h3>
         </div>
         <span class="amir-ai-free">PERCUMA</span>
       </div>
-      <p class="amir-ai-help">Tekan butang di bawah untuk analisis tambahan: kemungkinan punca, langkah ujian dan apa yang patut disemak dahulu — berdasarkan data yang anda isi tadi.</p>
+      <p class="amir-ai-help">Tekan butang di bawah untuk analisis tambahan: kemungkinan punca, spesifikasi sistem OEM (Denso/Sanden/Patco/dll), langkah ujian dan apa yang patut disemak dahulu — berdasarkan data kenderaan anda.</p>
       <div class="amir-ai-actions">
         <button type="button" class="amir-ai-run amir-ai-cta">Dapatkan analisis AI percuma</button>
       </div>
@@ -253,11 +458,10 @@
     element.hidden = false;
   }
 
-  /* Field IDs used by the live diagnosis form. Reading them directly keeps this
-     script independent from the page's internal analyse() function. */
+  /* Field IDs used by the live diagnosis form */
   const FIELD_MAP = [
     ['brand', 'assistBrand'], ['model', 'assistModel'], ['year', 'assistYear'],
-    ['engine', 'assistEngine'], ['systemType', 'assistSystemType'],
+    ['engine', 'assistEngine'], ['systemType', 'assistSystemType'], ['systemBrand', 'assistSystemBrand'],
     ['meteringDevice', 'assistMeteringDevice'], ['evaporatorLayout', 'assistEvaporatorLayout'],
     ['issue', 'assistIssue'], ['symptomText', 'assistSymptomText'], ['when', 'assistWhen'],
     ['blower', 'assistBlower'], ['testMode', 'assistTestMode'], ['rpm', 'assistRpm'],
@@ -309,19 +513,27 @@
   function buildPayload(result) {
     const data = (result && result.data) || currentData();
     const localText = String((result && result.text) || (currentResult && currentResult.text) || readLocalReport() || '').slice(0, 5000);
+    const oem = lookupOemSystem(data.brand, data.model) || { brand: 'Universal', compressor: '', oil: '', notes: '' };
+    const effectiveSystemBrand = data.systemBrand || oem.brand;
+
     const caseData = Object.assign({}, data, {
+      systemBrand: effectiveSystemBrand,
+      oemCompressor: oem.compressor,
+      oemOil: oem.oil,
+      oemNotes: oem.notes,
       symptom: data.issue,
       symptomText: data.symptomText,
-      localScreening: localText
+      localScreening: localText + `\n\n[SISTEM AIRCOND OEM: ${effectiveSystemBrand} | Pemampat: ${oem.compressor} | Minyak: ${oem.oil} | ${oem.notes}]`
     });
     delete caseData.name;
+
     return {
       brand: data.brand,
       model: data.model,
       year: data.year,
       issue: data.issue,
       caseData: caseData,
-      localFindings: localText
+      localFindings: caseData.localScreening
     };
   }
 
@@ -401,19 +613,33 @@
     }
   }
 
+  function modelLabel(model) {
+    const raw = String(model || '').trim();
+    if (!raw) return 'AI percuma';
+    if (raw.startsWith('groq:')) return 'AI percuma · Groq';
+    if (raw.startsWith('gemini:')) return 'AI percuma · Google';
+    const short = raw.replace(/:free$/, '').split('/').pop();
+    return 'AI percuma · ' + short;
+  }
+
   function renderSuccess(element, data) {
     const output = $('.amir-ai-output', element);
     if (!output) return;
     output.hidden = false;
+    const formVals = readForm();
+    const oem = lookupOemSystem(formVals.brand, formVals.model) || { brand: 'Sistem OEM' };
+    const systemBrandDisplay = formVals.systemBrand || oem.brand;
+
     output.innerHTML = `
       <div class="amir-ai-result-head">
         <span class="amir-ai-badge">AI</span>
-        <span class="amir-ai-model">${escapeHtml(data.model || 'OpenRouter · model percuma')}</span>
+        <span class="amir-ai-oem-chip">⚙️ ${escapeHtml(systemBrandDisplay)}</span>
+        <span class="amir-ai-model">${escapeHtml(modelLabel(data.model))}</span>
         <button type="button" class="amir-ai-copy">Salin</button>
         <button type="button" class="amir-ai-retry">Ulang analisis</button>
       </div>
       <div class="amir-ai-body">${renderMarkdown(data.analysis)}</div>
-      <p class="amir-ai-disclaimer">Analisis AI ini bersifat panduan. Pengesahan muktamad memerlukan pemeriksaan fizikal dan spesifikasi pengeluar (OEM).</p>
+      <p class="amir-ai-disclaimer">Analisis AI ini bersifat panduan dan mengambil kira spesifikasi pengeluar sistem (Denso, Sanden, Patco, Hanon, dll). Pengesahan muktamad memerlukan pemeriksaan fizikal.</p>
     `;
     const copyButton = $('.amir-ai-copy', output);
     copyButton.addEventListener('click', async () => {
@@ -459,7 +685,7 @@
     }
     if (output) {
       output.hidden = false;
-      output.innerHTML = '<p class="amir-ai-spinner">AI sedang menganalisis data kenderaan anda. Biasanya 5–30 saat.</p>';
+      output.innerHTML = '<p class="amir-ai-spinner">AI sedang menganalisis data kenderaan anda mengikut spesifikasi OEM. Biasanya 5–30 saat.</p>';
     }
 
     try {
@@ -470,10 +696,146 @@
     }
   }
 
+  /* Kemas kini paparan maklumat sistem OEM di borang */
+  function updateOemUi() {
+    const brandInput = document.getElementById('assistBrand');
+    const modelInput = document.getElementById('assistModel');
+    if (!brandInput) return;
+
+    const brand = brandInput.value ? brandInput.value.trim() : '';
+    const model = modelInput && modelInput.value ? modelInput.value.trim() : '';
+    if (!brand) {
+      const existingBadge = document.getElementById('amirOemBadge');
+      if (existingBadge) existingBadge.remove();
+      return;
+    }
+
+    const oem = lookupOemSystem(brand, model);
+    if (!oem) return;
+
+    let badge = document.getElementById('amirOemBadge');
+    if (!badge) {
+      badge = document.createElement('div');
+      badge.id = 'amirOemBadge';
+      badge.className = 'amir-oem-badge';
+      const targetContainer = modelInput?.closest('label') || brandInput.closest('label');
+      if (targetContainer && targetContainer.parentElement) {
+        targetContainer.insertAdjacentElement('afterend', badge);
+      }
+    }
+
+    badge.innerHTML = `
+      <div class="amir-oem-badge-head">
+        <span class="amir-oem-tag">SISTEM AIRCOND OEM</span>
+        <span class="amir-oem-name">${escapeHtml(oem.brand)}</span>
+      </div>
+      <p class="amir-oem-detail"><strong>Pemampat:</strong> ${escapeHtml(oem.compressor)}</p>
+      <p class="amir-oem-detail"><strong>Minyak Pelincir:</strong> <code>${escapeHtml(oem.oil)}</code></p>
+      <p class="amir-oem-detail" style="color:#08636b;font-style:italic">${escapeHtml(oem.notes)}</p>
+    `;
+
+    // Pastikan nilai assistSystemBrand selaras jika dropdown wujud
+    const systemBrandSelect = document.getElementById('assistSystemBrand');
+    if (systemBrandSelect && !systemBrandSelect.dataset.userModified) {
+      const matchOpt = Array.from(systemBrandSelect.options).find((opt) =>
+        opt.value.toLowerCase().includes(oem.brand.toLowerCase()) ||
+        oem.brand.toLowerCase().includes(opt.value.toLowerCase())
+      );
+      if (matchOpt) systemBrandSelect.value = matchOpt.value;
+    }
+  }
+
+  function injectSystemBrandSelector() {
+    if (document.getElementById('assistSystemBrand')) return;
+    const systemTypeSelect = document.getElementById('assistSystemType');
+    if (!systemTypeSelect || !systemTypeSelect.parentElement) return;
+
+    const label = document.createElement('label');
+    label.innerHTML = `Jenama sistem A/C (OEM)
+      <select id="assistSystemBrand" name="systemBrand">
+        <option value="">Padankan automatik mengikut model</option>
+        <option value="Denso">Denso (Jepun / Perodua, Toyota, Honda)</option>
+        <option value="Sanden">Sanden (Jepun / Proton, Perodua, Honda)</option>
+        <option value="Patco">Patco (Malaysia OEM / Proton Saga, Wira, Satria, Iswara)</option>
+        <option value="Hanon Systems">Hanon Systems / HCC (Proton X50, X70, Hyundai, Kia, Ford)</option>
+        <option value="Valeo">Valeo (Perancis / Proton X50/X70, Eropah, Nissan)</option>
+        <option value="Calsonic Kansei">Calsonic Kansei / Marelli (Nissan Almera, Livina, Serena)</option>
+        <option value="Keihin">Keihin (Jepun / Honda City, Civic, Jazz)</option>
+        <option value="Mitsubishi (MHI)">Mitsubishi Heavy Industries / MHI</option>
+        <option value="Delphi / Mahle">Delphi / Mahle / Behr (Continental / Universal)</option>
+        <option value="Lain-lain / Khas">Lain-lain / Sistem Khas</option>
+      </select>
+      <small class="hint">Dipadankan automatik bila jenama/model dipilih, atau pilih manual jika pernah ditukar.</small>`;
+
+    systemTypeSelect.parentElement.insertAdjacentElement('beforebegin', label);
+
+    const newSelect = document.getElementById('assistSystemBrand');
+    newSelect?.addEventListener('change', () => {
+      newSelect.dataset.userModified = '1';
+    });
+  }
+
+  /* Perkayakan fungsi saringan tempatan laman untuk sertakan data sistem OEM */
+  function patchLocalDiagnosis() {
+    const origAnalyse = window.runAircondDiagnosis;
+    if (typeof origAnalyse !== 'function') return;
+
+    window.runAircondDiagnosis = function () {
+      const result = origAnalyse.apply(this, arguments);
+      if (!result || !result.data) return result;
+
+      const d = result.data;
+      const oem = lookupOemSystem(d.brand, d.model);
+      if (!oem) return result;
+
+      const effectiveBrand = d.systemBrand || oem.brand;
+
+      // Sisip maklumat OEM ke dalam teks laporan jika belum ada
+      if (result.text && !result.text.includes('JENIS SISTEM / PENGELUAR OEM')) {
+        const insertAnchor = 'KENDERAAN\n';
+        const oemSection = `JENIS SISTEM / PENGELUAR OEM: ${effectiveBrand}\nSpesifikasi Pemampat: ${oem.compressor} · Minyak: ${oem.oil}\nNota Sistem: ${oem.notes}\n`;
+        if (result.text.includes(insertAnchor)) {
+          result.text = result.text.replace(insertAnchor, insertAnchor + oemSection);
+        } else {
+          result.text = oemSection + '\n' + result.text;
+        }
+
+        const box = document.getElementById('diagnosisResult');
+        if (box) box.textContent = result.text;
+      }
+
+      // Sisip cadangan OEM ke dalam petunjuk teknikal tempatan
+      if (result.technical && result.technical.cues) {
+        const oemCue = `Sistem ${effectiveBrand} dikesan: sahkan minyak pelincir ${oem.oil} dan pemampat ${oem.compressor}. ${oem.notes}`;
+        if (!result.technical.cues.some((c) => c.includes(effectiveBrand))) {
+          result.technical.cues.unshift(oemCue);
+        }
+      }
+
+      return result;
+    };
+  }
+
   function bindSite() {
     const form = document.getElementById('assistForm');
     const runButton = document.getElementById('runDiagnosis');
     if (!form && !runButton) return;
+
+    injectSystemBrandSelector();
+    patchLocalDiagnosis();
+
+    // Pantau pertukaran jenama dan model untuk kemaskini sistem OEM
+    const brandInput = document.getElementById('assistBrand');
+    const modelInput = document.getElementById('assistModel');
+    if (brandInput) {
+      brandInput.addEventListener('input', updateOemUi);
+      brandInput.addEventListener('change', updateOemUi);
+    }
+    if (modelInput) {
+      modelInput.addEventListener('input', updateOemUi);
+      modelInput.addEventListener('change', updateOemUi);
+    }
+    updateOemUi();
 
     const revealIfReady = () => {
       const data = currentData();
@@ -481,7 +843,6 @@
       reveal(null);
     };
 
-    // The site's own handler runs first, then this reveals the AI panel.
     document.addEventListener('click', (event) => {
       if (!event.target.closest('#runDiagnosis')) return;
       setTimeout(revealIfReady, 60);
@@ -515,7 +876,6 @@
     init();
   }
 
-  // Used by the optional scan wizard after it renders a fresh summary.
   window.AmirAi = {
     mount(result) {
       currentResult = result || currentResult;
@@ -524,6 +884,7 @@
       element.hidden = false;
       resetOutput();
     },
+    lookupOem: lookupOemSystem,
     buildPayload: buildPayload,
     request: requestAi,
     run: runAi
