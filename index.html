@@ -897,16 +897,16 @@ nav?.querySelectorAll('a').forEach(link=>link.addEventListener('click',()=>{if(n
 
 <div class="video-gate-backdrop" id="videoGateBackdrop" hidden>
   <section class="video-gate-dialog" role="dialog" aria-modal="true" aria-labelledby="videoGateTitle" aria-label="Update video kerja">
-    
+
     <h3 id="videoGateTitle">Update video kerja</h3>
-    
+
     <form id="videoGateForm">
       <label for="videoGatePassword">Kata laluan</label>
       <input id="videoGatePassword" name="password" type="password" autocomplete="current-password" inputmode="text" placeholder="Masukkan kata laluan" required>
       <p class="video-gate-message" id="videoGateMessage" role="status" aria-live="polite"></p>
       <div class="video-gate-actions"><button class="video-gate-unlock" type="submit">Buka</button><button class="video-gate-cancel" id="videoGateCancel" type="button">Batal</button></div>
     </form>
-    
+
   </section>
 </div>
 <script>
@@ -1289,5 +1289,5 @@ const hadiths=[{text:'Sebaik-baik kamu ialah orang yang paling baik akhlaknya.',
 const renderHadith=()=>{const p=getParts(),day=Math.floor(Date.UTC(Number(p.year),Number(p.month)-1,Number(p.day))/86400000),item=hadiths[((day%hadiths.length)+hadiths.length)%hadiths.length];setText('dailyHadith',`“${item.text}”`);setText('hadithSource',item.source);setText('hadithDate',formatDate());const link=document.getElementById('hadithSourceLink');if(link)link.href=item.url};renderHadith();window.setInterval(renderHadith,60*1000);
 })();
 </script><script src="./assets/hvac-3d.js" defer></script>
-<script src="./visitor-counter.js?v=20261105-counter" defer></script>
+<script src="./visitor-counter.js?v=20261118-ai7" defer></script>
 </body></html>
