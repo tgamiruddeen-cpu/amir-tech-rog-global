@@ -357,7 +357,7 @@
       return 'Kuota analisis AI percuma sedang penuh. Cuba lagi selepas satu jam atau hubungi bengkel melalui WhatsApp.';
     }
     if (error && error.status === 502) {
-      return 'Pelayan AI tidak memberi jawapan sebentar tadi. Cuba sekali lagi; jika masih gagal, hubungi bengkel melalui WhatsApp.';
+      return 'Servis AI percuma sedang sibuk atau kuota hariannya telah digunakan. Cuba lagi selepas beberapa jam, atau hantar laporan saringan tempatan kepada bengkel melalui WhatsApp.';
     }
     if (error && error.status === 503) {
       return 'Perkhidmatan AI belum diaktifkan pada pelayan. Sila hubungi pentadbir laman.';
@@ -373,7 +373,8 @@
     if (!output) return;
     output.hidden = false;
     output.innerHTML = '<p class="amir-ai-error">' + escapeHtml(friendlyError(error)) + '</p>' +
-      '<div class="amir-ai-actions"><button type="button" class="amir-ai-run">Cuba lagi</button></div>';
+      '<div class="amir-ai-actions"><button type="button" class="amir-ai-run">Cuba lagi</button>' +
+      '<a class="amir-ai-copy" href="https://wa.me/60133133519" target="_blank" rel="noopener" style="text-decoration:none;display:inline-flex;align-items:center">WhatsApp bengkel</a></div>';
     $('.amir-ai-run', output).addEventListener('click', runAi);
     const runButton = $('.amir-ai-run', element);
     if (runButton && runButton !== output.querySelector('.amir-ai-run')) {
