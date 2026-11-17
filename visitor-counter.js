@@ -41,7 +41,7 @@ if (document.readyState === "loading") {
   if (document.getElementById("amir-ai-loader")) return;
   var script = document.createElement("script");
   script.id = "amir-ai-loader";
-  script.src = "./ai-diagnosis.js?v=20261117-ai";
+  script.src = "./ai-diagnosis.js?v=20261118-ai";
   script.defer = true;
   document.head.appendChild(script);
 })();

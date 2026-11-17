@@ -25,7 +25,7 @@
     const style = document.createElement('style');
     style.id = 'amir-ai-style';
     style.textContent = `
-      .amir-ai{margin:18px 0 0;padding:clamp(16px,2.6vw,22px);border:1px solid #82c9cc;border-radius:18px;background:linear-gradient(145deg,#f5fffd,#eaf7ff);color:#17384a;box-shadow:0 14px 34px rgba(16,68,84,.12);font-family:inherit;text-align:left}
+      .amir-ai{margin:18px 0 0;padding:clamp(16px,2.6vw,22px);border:1px solid #4fb3bd;border-radius:18px;background:linear-gradient(145deg,#f2fffd,#e6f4ff);color:#17384a;box-shadow:0 16px 38px rgba(16,68,84,.16);font-family:inherit;text-align:left}
       .amir-ai[hidden]{display:none!important}
       .amir-ai *{box-sizing:border-box}
       .amir-ai-head{display:flex;gap:12px;align-items:flex-start}
@@ -33,11 +33,15 @@
       @keyframes amirAiPulse{0%{box-shadow:0 0 0 0 rgba(10,154,164,.45)}70%{box-shadow:0 0 0 9px rgba(10,154,164,0)}100%{box-shadow:0 0 0 0 rgba(10,154,164,0)}}
       .amir-ai-eyebrow{margin:0 0 4px;font-size:.71rem;font-weight:900;letter-spacing:.12em;color:#087d86;text-transform:uppercase}
       .amir-ai h3{margin:0;font-size:clamp(1.08rem,2.2vw,1.32rem);line-height:1.3;color:#123e57}
+      .amir-ai-free{display:inline-flex;align-items:center;margin-left:auto;padding:4px 10px;border-radius:999px;background:#0a9aa4;color:#fff;font-size:.66rem;font-weight:900;letter-spacing:.1em;white-space:nowrap;box-shadow:0 6px 16px rgba(10,154,164,.3)}
       .amir-ai-help{margin:10px 0 0;color:#416273;font-size:.88rem;line-height:1.62}
       .amir-ai-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:15px}
       .amir-ai-run{border:0;border-radius:12px;padding:12px 18px;background:linear-gradient(135deg,#0a8790,#075f86);color:#fff;font:inherit;font-weight:850;cursor:pointer;box-shadow:0 8px 20px rgba(7,95,134,.22);transition:transform .15s ease,box-shadow .15s ease}
       .amir-ai-run:hover{transform:translateY(-1px);box-shadow:0 10px 24px rgba(7,95,134,.3)}
       .amir-ai-run[disabled]{opacity:.65;cursor:wait;transform:none}
+      .amir-ai-cta{width:100%;font-size:1rem;padding:15px 22px;border-radius:13px;box-shadow:0 12px 26px rgba(7,95,134,.28)}
+      .amir-ai-cta:hover{box-shadow:0 14px 30px rgba(7,95,134,.36)}
+      .amir-ai-meta{display:flex;align-items:center;justify-content:center;gap:7px;margin:9px 0 0;color:#5b7482;font-size:.75rem;font-weight:700}
       .amir-ai-output{margin-top:16px;border-top:1px solid #cfe5e8;padding-top:14px}
       .amir-ai-output[hidden]{display:none!important}
       .amir-ai-result-head{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin-bottom:10px}
@@ -189,14 +193,16 @@
       <div class="amir-ai-head">
         <span class="amir-ai-orb" aria-hidden="true"></span>
         <div>
-          <p class="amir-ai-eyebrow">Analisis AI percuma · OpenRouter</p>
-          <h3>Pandangan kedua daripada AI</h3>
+          <p class="amir-ai-eyebrow">AI percuma · pendapat kedua</p>
+          <h3>Mahu pendapat kedua daripada AI?</h3>
         </div>
+        <span class="amir-ai-free">PERCUMA</span>
       </div>
-      <p class="amir-ai-help">Dapatkan analisis tambahan selepas saringan tempatan. AI membaca data kenderaan dan bacaan yang anda isi, kemudian mencadangkan punca serta langkah ujian. Kuota percuma terhad; gunakan bila perlu.</p>
+      <p class="amir-ai-help">Tekan butang di bawah untuk analisis tambahan: kemungkinan punca, langkah ujian dan apa yang patut disemak dahulu — berdasarkan data yang anda isi tadi.</p>
       <div class="amir-ai-actions">
-        <button type="button" class="amir-ai-run">Tambah analisis AI percuma</button>
+        <button type="button" class="amir-ai-run amir-ai-cta">Dapatkan analisis AI percuma</button>
       </div>
+      <p class="amir-ai-meta">Biasanya 10–30 saat · kuota percuma terhad</p>
       <div class="amir-ai-output" hidden></div>
       <p class="amir-ai-note">AI boleh tersilap dan tidak menggantikan pemeriksaan fizikal. Jangan tambah gas, tukar komponen atau buka sistem refrigerant berdasarkan jawapan AI sahaja.</p>
     `;
@@ -236,7 +242,7 @@
     const runButton = $('.amir-ai-run', panel);
     if (runButton) {
       runButton.disabled = false;
-      runButton.textContent = 'Tambah analisis AI percuma';
+      runButton.textContent = 'Dapatkan analisis AI percuma';
     }
   }
 
@@ -382,7 +388,7 @@
     const runButton = $('.amir-ai-run', element);
     if (runButton && runButton !== output.querySelector('.amir-ai-run')) {
       runButton.disabled = false;
-      runButton.textContent = 'Tambah analisis AI percuma';
+      runButton.textContent = 'Dapatkan analisis AI percuma';
     }
   }
 
@@ -414,7 +420,7 @@
     const runButton = $('.amir-ai-run', element);
     if (runButton) {
       runButton.disabled = false;
-      runButton.textContent = 'Tambah analisis AI percuma';
+      runButton.textContent = 'Dapatkan analisis AI percuma';
     }
     output.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   }
