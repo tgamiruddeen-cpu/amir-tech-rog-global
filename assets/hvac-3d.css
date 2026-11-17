@@ -48,3 +48,457 @@
 @media(max-width:800px){.hvac3d-layout{grid-template-columns:1fr}.hvac-stage{min-height:390px}.hvac-sensor-details{grid-template-columns:repeat(2,minmax(0,1fr))}.hvac3d-controls{grid-template-columns:repeat(2,minmax(0,1fr))}.hvac3d-head{display:block}.hvac3d-badge{display:inline-block;margin-top:12px}}
 @media(max-width:480px){.hvac-stage{min-height:340px}.hvac-world{width:480px;max-width:115%;left:50%}.hvac3d-parts{grid-template-columns:repeat(2,minmax(0,1fr))}.hvac-sensor-details button{font-size:.68rem}.hvac-orbit-hint{max-width:65%;font-size:.56rem}}
 @media(prefers-reduced-motion:reduce){.hvac-part{transition:none}.hvac-world{will-change:auto}}
+
+/* ==========================================================================
+   AMIR TECH ROG GLOBAL — ULTRA POLISH & MODERN UI/UX ENHANCEMENTS
+   Aesthetic visual polish, high-contrast typography, neat layout & modern cards
+   ========================================================================== */
+
+/* --- 1. Global Reset, Contrast & Typography --- */
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* Islamic / Songket watermark opacity softening to prevent text clash */
+html[data-theme="night"] {
+  background-color: #070e17 !important;
+}
+.site-bg-pattern, [class*="songket"], [class*="islamic"],
+.motif-overlay, .islamic-arch, .songket-grid {
+  opacity: 0.035 !important;
+}
+
+/* Base Headings & Hierarchy */
+h1, h2, h3, h4, .heading h2, .section-title {
+  letter-spacing: -0.025em !important;
+  font-weight: 800 !important;
+  line-height: 1.25 !important;
+}
+
+/* Night Mode Colors & Typography (High Contrast Fixes) */
+html[data-theme="night"] h1,
+html[data-theme="night"] h2,
+html[data-theme="night"] h3,
+html[data-theme="night"] .heading h2,
+html[data-theme="night"] .hvac3d-head h3,
+html[data-theme="night"] #harga h2,
+html[data-theme="night"] #servis h2,
+html[data-theme="night"] #repair h2,
+html[data-theme="night"] #pembantu-digital h2,
+html[data-theme="night"] #pembantu-digital h3,
+html[data-theme="night"] .section-title {
+  color: #f8fafc !important;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.6) !important;
+}
+
+/* Day Mode Colors & Typography (Eliminates Pale Washed-out Text) */
+html:not([data-theme="night"]) h1,
+html:not([data-theme="night"]) h2,
+html:not([data-theme="night"]) h3,
+html:not([data-theme="night"]) .heading h2,
+html:not([data-theme="night"]) .hvac3d-head h3,
+html:not([data-theme="night"]) #harga h2,
+html:not([data-theme="night"]) #servis h2,
+html:not([data-theme="night"]) #repair h2,
+html:not([data-theme="night"]) #pembantu-digital h2,
+html:not([data-theme="night"]) #pembantu-digital h3 {
+  color: #0f172a !important;
+}
+
+/* Eyebrows / Micro-Pills / Section Badges */
+.eyebrow, .topline-tag, .badge-pill {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  font-size: 0.72rem !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.08em !important;
+  text-transform: uppercase !important;
+  padding: 5px 14px !important;
+  border-radius: 9999px !important;
+}
+
+html[data-theme="night"] .eyebrow,
+html[data-theme="night"] .topline-tag {
+  color: #38bdf8 !important;
+  background: rgba(56, 189, 248, 0.12) !important;
+  border: 1px solid rgba(56, 189, 248, 0.28) !important;
+}
+
+html:not([data-theme="night"]) .eyebrow,
+html:not([data-theme="night"]) .topline-tag {
+  color: #0284c7 !important;
+  background: #e0f2fe !important;
+  border: 1px solid #bae6fd !important;
+}
+
+/* Paragraphs & Descriptions */
+html[data-theme="night"] p:not(.eyebrow),
+html[data-theme="night"] .lede,
+html[data-theme="night"] .hero-lede,
+html[data-theme="night"] .hvac3d-head p:not(.eyebrow),
+html[data-theme="night"] .section-desc {
+  color: #cbd5e1 !important;
+  line-height: 1.65 !important;
+}
+
+html:not([data-theme="night"]) p:not(.eyebrow),
+html:not([data-theme="night"]) .lede,
+html:not([data-theme="night"]) .hero-lede,
+html:not([data-theme="night"]) .hvac3d-head p:not(.eyebrow),
+html:not([data-theme="night"]) .section-desc {
+  color: #334155 !important;
+  line-height: 1.65 !important;
+}
+
+/* --- 2. Header & Navigation Polish --- */
+.site-header, header {
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+}
+
+html[data-theme="night"] .site-header,
+html[data-theme="night"] header {
+  background: rgba(7, 14, 23, 0.88) !important;
+  border-bottom: 1px solid rgba(56, 189, 248, 0.15) !important;
+}
+
+/* --- 3. Hero Section CTA & Location Card Polish --- */
+.hero-cta {
+  display: flex !important;
+  gap: 14px !important;
+  flex-wrap: wrap !important;
+  align-items: center !important;
+  margin: 24px 0 !important;
+}
+
+/* Primary WhatsApp CTA */
+a[href*="wa.me"]:not(.floating-whatsapp):not([class*="floating"]) {
+  background: linear-gradient(135deg, #10b981, #059669) !important;
+  color: #ffffff !important;
+  font-weight: 800 !important;
+  border-radius: 14px !important;
+  padding: 14px 26px !important;
+  box-shadow: 0 8px 24px -4px rgba(16, 185, 129, 0.45) !important;
+  text-decoration: none !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+}
+
+a[href*="wa.me"]:not(.floating-whatsapp):not([class*="floating"]):hover {
+  transform: translateY(-3px) !important;
+  box-shadow: 0 12px 28px -2px rgba(16, 185, 129, 0.6) !important;
+}
+
+/* Secondary CTA (Lihat Servis) */
+a[href="#servis"], a[href="#repair"], a[href="#harga"] {
+  border-radius: 14px !important;
+  font-weight: 700 !important;
+  transition: all 0.2s ease !important;
+}
+
+/* Location Card */
+.location-card, [class*="alamat"] {
+  border-radius: 18px !important;
+  border: 1px solid rgba(56, 189, 248, 0.2) !important;
+  backdrop-filter: blur(8px) !important;
+}
+
+/* --- 4. Service Cards Grid Polish (#servis) --- */
+.services-grid article, .cards article, .service-card {
+  border-radius: 20px !important;
+  padding: 26px 22px !important;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: space-between !important;
+}
+
+html[data-theme="night"] .services-grid article,
+html[data-theme="night"] .cards article,
+html[data-theme="night"] .service-card {
+  background: linear-gradient(145deg, #0e1c2e, #091320) !important;
+  border: 1px solid rgba(56, 189, 248, 0.18) !important;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35) !important;
+}
+
+html[data-theme="night"] .services-grid article:hover,
+html[data-theme="night"] .cards article:hover,
+html[data-theme="night"] .service-card:hover {
+  transform: translateY(-5px) !important;
+  border-color: rgba(56, 189, 248, 0.45) !important;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.55), 0 0 20px rgba(56, 189, 248, 0.15) !important;
+}
+
+/* --- 5. 3D Interactive Model Section Polish (.hvac-3d) --- */
+html[data-theme="night"] .hvac-3d {
+  background: linear-gradient(145deg, #0b1726, #070e17) !important;
+  border: 1px solid rgba(56, 189, 248, 0.25) !important;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.55) !important;
+  color: #f1f5f9 !important;
+  border-radius: 24px !important;
+}
+
+html[data-theme="night"] .hvac3d-badge {
+  background: rgba(56, 189, 248, 0.15) !important;
+  color: #38bdf8 !important;
+  border: 1px solid rgba(56, 189, 248, 0.3) !important;
+}
+
+html[data-theme="night"] .hvac3d-parts button,
+html[data-theme="night"] .hvac-sensor-details button,
+html[data-theme="night"] .system-mode button,
+html[data-theme="night"] .hvac3d-controls button {
+  background: #0f1f33 !important;
+  color: #e2e8f0 !important;
+  border: 1px solid #1e3a53 !important;
+  border-radius: 12px !important;
+  transition: all 0.2s ease !important;
+}
+
+html[data-theme="night"] .hvac3d-parts button:hover,
+html[data-theme="night"] .hvac-sensor-details button:hover,
+html[data-theme="night"] .system-mode button:hover {
+  background: #162e4a !important;
+  border-color: #38bdf8 !important;
+  color: #ffffff !important;
+}
+
+html[data-theme="night"] .hvac3d-parts button[aria-pressed="true"],
+html[data-theme="night"] .system-mode button[aria-pressed="true"],
+html[data-theme="night"] .hvac-sensor-details button[aria-pressed="true"] {
+  background: linear-gradient(135deg, #0284c7, #0369a1) !important;
+  border-color: #38bdf8 !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 14px rgba(2, 132, 199, 0.45) !important;
+}
+
+html[data-theme="night"] .hvac3d-controls {
+  background: #09131f !important;
+  border: 1px solid #192d42 !important;
+  border-radius: 16px !important;
+}
+
+html[data-theme="night"] .hvac3d-controls label {
+  color: #94a3b8 !important;
+}
+
+html[data-theme="night"] .hvac3d-info {
+  background: linear-gradient(145deg, #0b1a2e, #06111e) !important;
+  border: 1px solid rgba(56, 189, 248, 0.22) !important;
+  border-radius: 16px !important;
+  color: #e2e8f0 !important;
+}
+
+/* --- 6. Pricing Section Polish (#harga) --- */
+#harga {
+  position: relative !important;
+  overflow: hidden !important;
+  padding: 60px 0 !important;
+}
+
+html[data-theme="night"] #harga {
+  background: linear-gradient(180deg, #070e17, #0b1726 50%, #070e17) !important;
+}
+
+html[data-theme="night"] .pricecard,
+html[data-theme="night"] .price-card {
+  background: linear-gradient(145deg, #0e1c2e, #091421) !important;
+  border: 1px solid rgba(56, 189, 248, 0.2) !important;
+  border-radius: 20px !important;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.35) !important;
+  color: #f1f5f9 !important;
+  transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease !important;
+}
+
+html[data-theme="night"] .pricecard:hover {
+  transform: translateY(-4px) !important;
+  border-color: #38bdf8 !important;
+  box-shadow: 0 20px 42px rgba(0, 0, 0, 0.5), 0 0 20px rgba(56, 189, 248, 0.15) !important;
+}
+
+html[data-theme="night"] .pricecard b,
+html[data-theme="night"] .pricecard strong,
+html[data-theme="night"] .pricecard .price {
+  color: #38bdf8 !important;
+}
+
+html[data-theme="night"] .pricecard .row {
+  border-color: rgba(255, 255, 255, 0.08) !important;
+  color: #cbd5e1 !important;
+}
+
+/* Modern Pricing Table Container */
+.price-table-container, .table-wrap, table {
+  border-radius: 16px !important;
+  overflow: hidden !important;
+  border-collapse: separate !important;
+  border-spacing: 0 !important;
+}
+
+html[data-theme="night"] table {
+  background: #0a1524 !important;
+  border: 1px solid #1a2f47 !important;
+  color: #e2e8f0 !important;
+}
+
+html[data-theme="night"] th {
+  background: #0f2238 !important;
+  color: #38bdf8 !important;
+  font-weight: 800 !important;
+  text-transform: uppercase !important;
+  font-size: 0.78rem !important;
+  letter-spacing: 0.05em !important;
+  padding: 14px 16px !important;
+  border-bottom: 2px solid #1e3a5a !important;
+}
+
+html[data-theme="night"] td {
+  padding: 14px 16px !important;
+  border-bottom: 1px solid #132438 !important;
+  color: #cbd5e1 !important;
+}
+
+html[data-theme="night"] tr:hover td {
+  background: rgba(56, 189, 248, 0.06) !important;
+}
+
+/* --- 7. Aircond Diagnosis Tool (#pembantu-digital) --- */
+#pembantu-digital {
+  position: relative !important;
+  padding: 50px 0 !important;
+}
+
+html[data-theme="night"] #pembantu-digital article,
+html[data-theme="night"] .ai-assistant-card {
+  background: linear-gradient(145deg, #0c1827, #070f1a) !important;
+  border: 1px solid rgba(56, 189, 248, 0.25) !important;
+  border-radius: 24px !important;
+  box-shadow: 0 25px 65px rgba(0, 0, 0, 0.55) !important;
+  padding: clamp(20px, 4vw, 36px) !important;
+}
+
+/* Form Inputs & Select Controls */
+select, input[type="text"], input[type="number"], textarea, .form-control {
+  border-radius: 12px !important;
+  padding: 12px 14px !important;
+  font-size: 0.95rem !important;
+  font-family: inherit !important;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease !important;
+}
+
+html[data-theme="night"] select,
+html[data-theme="night"] input[type="text"],
+html[data-theme="night"] input[type="number"],
+html[data-theme="night"] textarea {
+  background: #091421 !important;
+  border: 1.5px solid #1b3147 !important;
+  color: #f1f5f9 !important;
+}
+
+html[data-theme="night"] select:focus,
+html[data-theme="night"] input:focus,
+html[data-theme="night"] textarea:focus {
+  border-color: #38bdf8 !important;
+  box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.25) !important;
+  outline: none !important;
+}
+
+html:not([data-theme="night"]) select,
+html:not([data-theme="night"]) input[type="text"],
+html:not([data-theme="night"]) input[type="number"],
+html:not([data-theme="night"]) textarea {
+  background: #ffffff !important;
+  border: 1.5px solid #cbd5e1 !important;
+  color: #0f172a !important;
+}
+
+html:not([data-theme="night"]) select:focus,
+html:not([data-theme="night"]) input:focus,
+html:not([data-theme="night"]) textarea:focus {
+  border-color: #0284c7 !important;
+  box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.2) !important;
+  outline: none !important;
+}
+
+/* Quick Symptom Buttons */
+.quick-topics button, [data-topic] {
+  border-radius: 9999px !important;
+  padding: 8px 18px !important;
+  font-weight: 700 !important;
+  font-size: 0.85rem !important;
+  transition: all 0.2s ease !important;
+  border: 1px solid #1d354d !important;
+}
+
+html[data-theme="night"] .quick-topics button,
+html[data-theme="night"] [data-topic] {
+  background: #0d1e30 !important;
+  color: #cbd5e1 !important;
+}
+
+html[data-theme="night"] .quick-topics button:hover,
+html[data-theme="night"] [data-topic]:hover {
+  background: #162f4c !important;
+  border-color: #38bdf8 !important;
+  color: #ffffff !important;
+  transform: translateY(-2px);
+}
+
+/* Action Buttons (Analisa kerosakan aircond & AI Run) */
+#runDiagnosis, button.btn-primary, .amir-ai-run {
+  border-radius: 14px !important;
+  padding: 14px 28px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.02em !important;
+  font-size: 1rem !important;
+  cursor: pointer !important;
+  transition: all 0.25s ease !important;
+  border: none !important;
+}
+
+#runDiagnosis {
+  background: linear-gradient(135deg, #0284c7, #0369a1) !important;
+  color: #ffffff !important;
+  box-shadow: 0 6px 22px rgba(2, 132, 199, 0.45) !important;
+}
+
+#runDiagnosis:hover {
+  background: linear-gradient(135deg, #0369a1, #075985) !important;
+  box-shadow: 0 10px 28px rgba(2, 132, 199, 0.65) !important;
+  transform: translateY(-2px) !important;
+}
+
+.amir-ai-run {
+  background: linear-gradient(135deg, #7c3aed, #4f46e5) !important;
+  color: #ffffff !important;
+  box-shadow: 0 6px 22px rgba(124, 58, 237, 0.45) !important;
+}
+
+.amir-ai-run:hover {
+  background: linear-gradient(135deg, #6d28d9, #4338ca) !important;
+  box-shadow: 0 10px 28px rgba(124, 58, 237, 0.65) !important;
+  transform: translateY(-2px) !important;
+}
+
+/* Diagnosis Report Boxes */
+#diagnosisResult, .amir-ai-box {
+  border-radius: 20px !important;
+  border: 1px solid rgba(56, 189, 248, 0.25) !important;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4) !important;
+  padding: 24px !important;
+}
+
+/* Floating WhatsApp Button */
+.floating-whatsapp, [class*="whatsapp"]:not(.hero-cta a) {
+  filter: drop-shadow(0 8px 22px rgba(16, 185, 129, 0.45)) !important;
+  transition: transform 0.25s ease !important;
+}
+.floating-whatsapp:hover, [class*="whatsapp"]:not(.hero-cta a):hover {
+  transform: scale(1.06) translateY(-2px) !important;
+}
