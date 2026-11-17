@@ -437,7 +437,7 @@ html.motion-user-opt-in .ai-orb,html.motion-user-opt-in .hero .eyebrow:before{an
 }
 </script>
 
-<link rel="stylesheet" href="./assets/hvac-3d.css">
+<link rel="stylesheet" href="./assets/hvac-3d.css?v=20261118-ui1">
 </head>
 <body>
 <a class="skip-link" href="#home">Langkau ke kandungan utama</a>
@@ -1289,5 +1289,5 @@ const hadiths=[{text:'Sebaik-baik kamu ialah orang yang paling baik akhlaknya.',
 const renderHadith=()=>{const p=getParts(),day=Math.floor(Date.UTC(Number(p.year),Number(p.month)-1,Number(p.day))/86400000),item=hadiths[((day%hadiths.length)+hadiths.length)%hadiths.length];setText('dailyHadith',`“${item.text}”`);setText('hadithSource',item.source);setText('hadithDate',formatDate());const link=document.getElementById('hadithSourceLink');if(link)link.href=item.url};renderHadith();window.setInterval(renderHadith,60*1000);
 })();
 </script><script src="./assets/hvac-3d.js" defer></script>
-<script src="./visitor-counter.js?v=20261118-ai7" defer></script>
+<script src="./20261118-ui1" defer></script>
 </body></html>
