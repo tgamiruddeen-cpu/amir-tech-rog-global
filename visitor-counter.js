@@ -34,3 +34,14 @@ if (document.readyState === "loading") {
 } else {
   loadVisitorCounter();
 }
+
+// Pemuat analisis AI percuma.
+// Fail ai-diagnosis.js hanya menggunakan Supabase publishable key; kunci OpenRouter kekal di pelayan.
+(function () {
+  if (document.getElementById("amir-ai-loader")) return;
+  var script = document.createElement("script");
+  script.id = "amir-ai-loader";
+  script.src = "./ai-diagnosis.js?v=20261117-ai";
+  script.defer = true;
+  document.head.appendChild(script);
+})();
