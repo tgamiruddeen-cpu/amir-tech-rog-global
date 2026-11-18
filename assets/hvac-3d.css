@@ -675,6 +675,14 @@ html[data-theme="day"] .pricecard {
   color: #0f172a !important;
 }
 
+
+/* Aircond 4K Cinema Hero High Contrast Override */
+.aircond-4k-cinema-hero,html:not([data-theme="night"]) .aircond-4k-cinema-hero{background:radial-gradient(ellipse at 50% 10%,#0e263d 0%,#060a12 75%) !important}
+.aircond-4k-cinema-hero .aircond-4k-title,html:not([data-theme="night"]) .aircond-4k-cinema-hero .aircond-4k-title{color:#ffffff !important}
+.aircond-4k-cinema-hero .aircond-4k-desc,html:not([data-theme="night"]) .aircond-4k-cinema-hero .aircond-4k-desc{color:#cce3f5 !important}
+.aircond-4k-cinema-hero .aircond-4k-title em,html:not([data-theme="night"]) .aircond-4k-cinema-hero .aircond-4k-title em{background:linear-gradient(100deg,#7de3ff 0%,#fff0c4 40%,#e8c36b 100%) !important;-webkit-background-clip:text !important;background-clip:text !important;-webkit-text-fill-color:transparent !important}
+
+
 html:not([data-theme="night"]) .pricecard b,
 html:not([data-theme="night"]) .pricecard strong,
 html:not([data-theme="night"]) .pricecard .price,
